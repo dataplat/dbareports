@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
@@ -21,23 +21,5 @@
  ORDER BY Environment,DatabaseCount desc
   </CommandText>
     </Query>
-    <Fields>
-      <Field Name="Environment">
-        <DataField>Environment</DataField>
-        <rd:TypeName>System.String</rd:TypeName>
-      </Field>
-      <Field Name="ServerName">
-        <DataField>ServerName</DataField>
-        <rd:TypeName>System.String</rd:TypeName>
-      </Field>
-      <Field Name="DatabaseCount">
-        <DataField>DatabaseCount</DataField>
-        <rd:TypeName>System.Int32</rd:TypeName>
-      </Field>
-      <Field Name="RebootTime">
-        <DataField>RebootTime</DataField>
-        <rd:TypeName>System.DateTime</rd:TypeName>
-      </Field>
-    </Fields>
   </DataSet>
 </SharedDataSet>

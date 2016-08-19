@@ -64,6 +64,14 @@
       <Name>SuspectPages.rsd</Name>
       <FullPath>SuspectPages.rsd</FullPath>
     </ProjectItem>
+    <ProjectItem>
+      <Name>OperatingSystem.rsd</Name>
+      <FullPath>OperatingSystem.rsd</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>SqlEdition.rsd</Name>
+      <FullPath>SqlEdition.rsd</FullPath>
+    </ProjectItem>
   </DataSets>
   <Reports>
     <ProjectItem>

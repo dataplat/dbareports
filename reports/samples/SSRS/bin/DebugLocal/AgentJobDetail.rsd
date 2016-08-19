@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <Description />
+  <DataSet Name="AgentJobDetail">
+    <Query>
+      <DataSourceReference>DBA Database</DataSourceReference>
+      <CommandText>SELECT        AJD.Date, IL.ServerName, AJD.Category, AJD.JobName, AJD.Description, AJD.Status, AJD.LastRunTime, AJD.Outcome, AJD.IsEnabled, IL.Environment
+FROM            Info.AgentJobDetail AS AJD INNER JOIN
+                         InstanceList AS IL ON AJD.InstanceID = IL.InstanceID
+WHERE        (AJD.Date &gt; DATEADD(Day, - 1, GETDATE())) AND (AJD.LastRunTime &gt; DATEADD(Day, - 7, GETDATE())) AND (AJD.IsEnabled = 1) AND (IL.Inactive = 0)</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="Date">
+        <DataField>Date</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="ServerName">
+        <DataField>ServerName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Category">
+        <DataField>Category</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="JobName">
+        <DataField>JobName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Description">
+        <DataField>Description</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Status">
+        <DataField>Status</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="LastRunTime">
+        <DataField>LastRunTime</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="Outcome">
+        <DataField>Outcome</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="IsEnabled">
+        <DataField>IsEnabled</DataField>
+        <rd:TypeName>System.Boolean</rd:TypeName>
+      </Field>
+      <Field Name="Environment">
+        <DataField>Environment</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>DBA Database</DataSourceReference>
+      <DataSetParameters>
+        <DataSetParameter Name="@Domains">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@EnvironmentRole">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+        <DataSetParameter Name="@Decommissioned">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+      </DataSetParameters>
+      <CommandText>select OperatingSystem,count(OperatingSystem)as Quantity
+from [dbo].[InstanceList] IL
+LEFT JOIN [Info].[SQLInfo] SI
+ON  IL.InstanceID = SI.InstanceID
+JOIN [Info].[ServerInfo] OS
+ON  OS.ServerName = IL.ServerName 
+WHERE
+  OS.Domain in (@Domains)
+AND
+  IL.Environment in (@EnvironmentRole)
+AND
+ IL.Inactive = (@Decommissioned)
+ group by OperatingSystem
+order by OperatingSystem desc</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="OperatingSystem">
+        <DataField>OperatingSystem</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Quantity">
+        <DataField>Quantity</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>
