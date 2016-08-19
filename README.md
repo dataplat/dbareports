@@ -1,5 +1,5 @@
 # DBA Reports
-This repo contains the PowerShell module SSRS and PowerBi samples for you to gather, store and report on information about your SQL Server estate
+This repo contains the PowerShell module SSRS and PowerBi samples for you to gather, store and report on information about your SQL Server estate. You can find more details on the website https://dbareports.io 
 
 ## Installer
 We’ve tried to make the installation experience as simple as possible. Executing Install-DBAreports does the following:
