@@ -1,0 +1,85 @@
+diff --git a/Tables/dbo.InstanceList.sql b/Tables/dbo.InstanceList.sql
+index 74de72f..63bc1f7 100644
+--- a/Tables/dbo.InstanceList.sql
++++ b/Tables/dbo.InstanceList.sql
+@@ -1,6 +1,8 @@
+ CREATE TABLE [dbo].[InstanceList]
+ (
+ [InstanceID] [int] NOT NULL IDENTITY(1, 1),
++[ServerID] [int] NOT NULL,
++[Name] [nvarchar] (50) COLLATE Latin1_General_CI_AS NULL,
+ [ComputerName] [nvarchar] (50) COLLATE Latin1_General_CI_AS NOT NULL,
+ [ServerName] [nvarchar] (50) COLLATE Latin1_General_CI_AS NOT NULL,
+ [InstanceName] [nvarchar] (50) COLLATE Latin1_General_CI_AS NOT NULL,
+@@ -14,3 +16,5 @@
+ GO
+ ALTER TABLE [dbo].[InstanceList] ADD CONSTRAINT [PK_InstanceList_ID] PRIMARY KEY CLUSTERED  ([InstanceID]) ON [PRIMARY]
+ GO
++ALTER TABLE [dbo].[InstanceList] ADD CONSTRAINT [FK_InstanceList_ServerInfo] FOREIGN KEY ([ServerID]) REFERENCES [info].[ServerInfo] ([ServerID])
++GO
+diff --git a/Tables/info.DiskSpace.sql b/Tables/info.DiskSpace.sql
+index b034142..6dd18e0 100644
+--- a/Tables/info.DiskSpace.sql
++++ b/Tables/info.DiskSpace.sql
+@@ -2,7 +2,7 @@
+ (
+ [DiskSpaceID] [int] NOT NULL IDENTITY(1, 1),
+ [Date] [datetime] NOT NULL,
+-[InstanceID] [int] NOT NULL,
++[ServerID] [int] NOT NULL,
+ [DiskName] [nvarchar] (50) COLLATE Latin1_General_CI_AS NULL,
+ [Label] [nvarchar] (50) COLLATE Latin1_General_CI_AS NULL,
+ [Capacity] [decimal] (7, 2) NULL,
+@@ -12,5 +12,5 @@
+ GO
+ ALTER TABLE [info].[DiskSpace] ADD CONSTRAINT [PK_DiskSpace_1] PRIMARY KEY CLUSTERED  ([DiskSpaceID]) ON [PRIMARY]
+ GO
+-ALTER TABLE [info].[DiskSpace] ADD CONSTRAINT [FK_DiskSpace_InstanceList] FOREIGN KEY ([InstanceID]) REFERENCES [dbo].[InstanceList] ([InstanceID]) ON DELETE CASCADE
++ALTER TABLE [info].[DiskSpace] ADD CONSTRAINT [FK_DiskSpace_ServerInfo] FOREIGN KEY ([ServerID]) REFERENCES [info].[ServerInfo] ([ServerID])
+ GO
+diff --git a/Tables/info.ServerInfo.sql b/Tables/info.ServerInfo.sql
+new file mode 100644
+index 0000000..4674aa5
+--- /dev/null
++++ b/Tables/info.ServerInfo.sql
+@@ -0,0 +1,16 @@
++CREATE TABLE [info].[ServerInfo]
++(
++[ServerID] [int] NOT NULL IDENTITY(1, 1),
++[DateChecked] [datetime] NULL,
++[ServerName] [nvarchar] (50) COLLATE Latin1_General_CI_AS NULL,
++[DNSHostName] [nvarchar] (50) COLLATE Latin1_General_CI_AS NULL,
++[Domain] [nvarchar] (30) COLLATE Latin1_General_CI_AS NULL,
++[OperatingSystem] [nvarchar] (100) COLLATE Latin1_General_CI_AS NULL,
++[NoProcessors] [tinyint] NULL,
++[IPAddress] [nvarchar] (15) COLLATE Latin1_General_CI_AS NULL,
++[RAM] [int] NULL,
++[InstanceID] [int] NOT NULL
++) ON [PRIMARY]
++GO
++ALTER TABLE [info].[ServerInfo] ADD CONSTRAINT [PK__ServerOS__50A5926BC7005F29] PRIMARY KEY CLUSTERED  ([ServerID]) ON [PRIMARY]
++GO
+diff --git a/Tables/info.ServerOSInfo.sql b/Tables/info.ServerOSInfo.sql
+deleted file mode 100644
+index 1482947..0000000
+--- a/Tables/info.ServerOSInfo.sql
++++ /dev/null
+@@ -1,18 +0,0 @@
+-CREATE TABLE [info].[ServerOSInfo]
+-(
+-[ServerOSInfoID] [int] NOT NULL IDENTITY(1, 1),
+-[DateChecked] [datetime] NULL,
+-[ServerName] [nvarchar] (50) COLLATE Latin1_General_CI_AS NULL,
+-[DNSHostName] [nvarchar] (50) COLLATE Latin1_General_CI_AS NULL,
+-[Domain] [nvarchar] (30) COLLATE Latin1_General_CI_AS NULL,
+-[OperatingSystem] [nvarchar] (100) COLLATE Latin1_General_CI_AS NULL,
+-[NoProcessors] [tinyint] NULL,
+-[IPAddress] [nvarchar] (15) COLLATE Latin1_General_CI_AS NULL,
+-[RAM] [int] NULL,
+-[InstanceID] [int] NOT NULL
+-) ON [PRIMARY]
+-GO
+-ALTER TABLE [info].[ServerOSInfo] ADD CONSTRAINT [PK__ServerOS__50A5926BC7005F29] PRIMARY KEY CLUSTERED  ([ServerOSInfoID]) ON [PRIMARY]
+-GO
+-ALTER TABLE [info].[ServerOSInfo] ADD CONSTRAINT [FK_ServerOSInfo_InstanceList] FOREIGN KEY ([InstanceID]) REFERENCES [dbo].[InstanceList] ([InstanceID]) ON DELETE CASCADE
+-GO

@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DatabaseInformation Version="2">
+  <ScriptFileEncoding>UTF8</ScriptFileEncoding>
+  <DefaultCollation>Latin1_General_CI_AS</DefaultCollation>
+  <DefaultSchema>dbo</DefaultSchema>
+  <DefaultUser>dbo</DefaultUser>
+  <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  <DatabaseVersion>13</DatabaseVersion>
+  <IsAzure>False</IsAzure>
+  <MaxDataFileSize>10485760</MaxDataFileSize>
+  <WriteToFileOptions>
+    <Prefixes>
+      <None>
+      </None>
+      <Table>Tables</Table>
+      <StoredProcedure>Stored Procedures</StoredProcedure>
+      <View>Views</View>
+      <Default>Defaults</Default>
+      <FullTextCatalog>Storage\Full Text Catalogs</FullTextCatalog>
+      <Function>Functions</Function>
+      <Role>Security\Roles</Role>
+      <Rule>Rules</Rule>
+      <User>Security\Users</User>
+      <UserDefinedType>Types\User-defined Data Types</UserDefinedType>
+      <Trigger>
+      </Trigger>
+      <DdlTrigger>Database Triggers</DdlTrigger>
+      <Assembly>Assemblies</Assembly>
+      <Synonym>Synonyms</Synonym>
+      <XmlSchemaCollection>Types\XML Schema Collections</XmlSchemaCollection>
+      <MessageType>Service Broker\Message Types</MessageType>
+      <Contract>Service Broker\Contracts</Contract>
+      <Queue>Service Broker\Queues</Queue>
+      <Service>Service Broker\Services</Service>
+      <Route>Service Broker\Routes</Route>
+      <EventNotification>Service Broker\Event Notifications</EventNotification>
+      <PartitionScheme>Storage\Partition Schemes</PartitionScheme>
+      <PartitionFunction>Storage\Partition Functions</PartitionFunction>
+      <Field>
+      </Field>
+      <Index>
+      </Index>
+      <Schema>Security\Schemas</Schema>
+      <ServiceBinding>Service Broker\Remote Service Bindings</ServiceBinding>
+      <Certificate>Security\Certificates</Certificate>
+      <SymmetricKey>Security\Symmetric Keys</SymmetricKey>
+      <AsymmetricKey>Security\Asymmetric Keys</AsymmetricKey>
+      <CheckConstraint>
+      </CheckConstraint>
+      <FullTextStoplist>Storage\Full Text Stoplists</FullTextStoplist>
+      <ExtendedProperty>Extended Properties</ExtendedProperty>
+      <Data>Data</Data>
+      <Sequence>Sequences</Sequence>
+      <SearchPropertyList>Search Property Lists</SearchPropertyList>
+      <SecurityPolicy>Security Policies</SecurityPolicy>
+    </Prefixes>
+    <DataWriteAllFilesInOneDirectory>True</DataWriteAllFilesInOneDirectory>
+  </WriteToFileOptions>
+  <DataFileSet>
+    <Count>0</Count>
+  </DataFileSet>
+</DatabaseInformation>

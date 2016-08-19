@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="">
+    <Query>
+      <DataSourceReference>DBA Database</DataSourceReference>
+      <CommandText>SELECT 
+	  CAST([ScriptRunTime] as date) as Date
+      ,COUNT([DLU].[DatabaseID])
+  FROM [DBADatabase].[Info].[DatabaseLastUsed] DLU
+WHERE[lasRead] = '1900-01-01 00:00:00.000'
+AND [lastwrite] = '1900-01-01 00:00:00.000'
+GROUP BY CAST([ScriptRunTime] as date) </CommandText>
+    </Query>
+    <Fields>
+      <Field Name="Date">
+        <DataField>Date</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="ID">
+        <DataField />
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

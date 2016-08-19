@@ -1,0 +1,10 @@
+{
+  "About this file": "This is a Redgate SQL Source Control metadata file. It controls the order that changes are deployed in. Learn more: http://www.red-gate.com/SOC4/order-file-more-info",
+  "Deployment order": [
+    {"Description":"Changes before migration script 'Covers changes to: InstanceList, DiskSpace, ServerInfo, ServerOSInfo. Script created at 2016-08-16 21:33.'","Type":"Compare","Id":"2016-08-16-213422 4h auto"},
+    {"Description":"Migration script 'Covers changes to: InstanceList, DiskSpace, ServerInfo, ServerOSInfo. Script created at 2016-08-16 21:33.'","Type":"Migration","Id":"2016-08-16-213422 4i user"},
+    {"Description":"Changes before migration script 'ServerChanges'","Type":"Compare","Id":"2016-08-16-223404 4j auto"},
+    {"Description":"Migration script 'ServerChanges'","Type":"Migration","Id":"2016-08-16-223404 4k user"},
+  ],
+  "Conflict in this file?": "If there’s a conflict in this file, you probably want to keep both changes. Learn more: http://www.red-gate.com/SOC4/order-file-more-info"
+}

@@ -1,0 +1,11 @@
+{
+  "Id": "fa266eb0-a1df-4611-b979-c89f6237684c",
+  "Name": "ServerChanges",
+  "ObjectIds": [
+    {
+      "Name": "ServerInfo",
+      "Owner": "info",
+      "ObjectType": "Table"
+    }
+  ]
+}

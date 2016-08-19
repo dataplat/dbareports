@@ -1,0 +1,26 @@
+{
+  "Id": "c85052d3-cb51-488e-a265-08b4971913a7",
+  "Name": "Covers changes to: InstanceList, DiskSpace, ServerInfo, ServerOSInfo. Script created at 2016-08-16 21:33.",
+  "ObjectIds": [
+    {
+      "Name": "InstanceList",
+      "Owner": "dbo",
+      "ObjectType": "Table"
+    },
+    {
+      "Name": "DiskSpace",
+      "Owner": "info",
+      "ObjectType": "Table"
+    },
+    {
+      "Name": "ServerInfo",
+      "Owner": "info",
+      "ObjectType": "Table"
+    },
+    {
+      "Name": "ServerOSInfo",
+      "Owner": "info",
+      "ObjectType": "Table"
+    }
+  ]
+}
