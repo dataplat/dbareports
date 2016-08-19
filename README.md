@@ -16,7 +16,7 @@ We’ve tried to make the installation experience as simple as possible. Executi
 * Automatically schedules each job
 * Writes a client config file to your local PowerShell directory so that you don’t have to specify your dbareports server and database each time you run a command
 
-![Alt Text](https://dbareports.io/wp-content/uploads/2016/07/jobs.png "Agents")
+![Alt Text](https://dbareports.io/wp-content/uploads/2016/07/agents.png "Agents")
 ##Experience
 Adding and modifying SQL Servers is performed through PowerShell commands, while PowerBI and SSRS are used to visualize the data that the Agent Jobs collect.
 ##Goals
