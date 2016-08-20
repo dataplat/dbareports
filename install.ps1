@@ -36,9 +36,9 @@ if ($path.length -eq 0)
 
 Write-Output "Installing module to $path"
 
-# THIS WILL CHANGE ONCE IT'S IN YOUR REPOSITORY, ROB
+
 Remove-Module dbareports -ErrorAction SilentlyContinue
-$url = 'https://github.com/ctrlbold/dbareports/archive/master.zip'
+$url = 'https://github.com/sqldbawithabeard/dbareports/archive/master.zip'
 
 $temp = ([System.IO.Path]::GetTempPath()).TrimEnd("\")
 $zipfile = "$temp\dbareports.zip"
@@ -97,7 +97,7 @@ Move-Item -Path "$temp\dbareports-master\*" $path
 Remove-Item -Path "$temp\dbareports-master"
 Remove-Item -Path $zipfile
 
-Write-Output "Done! Please report any bugs to Rob."
+Write-Output "Done! Please report any bugs to Rob. You can do this via GitHub or better still via the SQL Server Community Slack in the #dbareports channel. Auto invite link https://sqlpas.io/slack"
 if ((Get-Command -Module dbareports).count -eq 0) { Import-Module "$path\dbareports.psd1" -Force }
 Get-Command -Module dbareports
 Write-Output "`n`nIf you experience any function missing errors after update, please restart PowerShell or reload your profile."
