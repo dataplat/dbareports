@@ -40,6 +40,9 @@ Prompts for comfirmation for actions
 .PARAMETER WhatIf
 Scripts out the actions that would be taken
 
+.PARAMETER ProxyAccount
+A dynamic parameter
+
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
 Copyright (C) 2016 Rob Sewell
@@ -72,6 +75,7 @@ This will add a Job called 'Agent Job to gather information' which will log to '
 		[string]$Subsystem = 'PowerShell',
 		[parameter(Mandatory = $false)]
 		[object]$JobCredential,
+        [parameter(Mandatory = $false)]
 		[switch]$Force
 	)
 	
