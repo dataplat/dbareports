@@ -2,16 +2,13 @@
 {
 <#
 .SYNOPSIS 
-
+Gets all of the dbareports SQL Agent Job information using the config file
 
 .DESCRIPTION
+Gets all of the dbareports SQL Agent Job information using the config file
 
-
-.PARAMETER 
-
-
-.PARAMETER 
-	
+.PARAMETER Force
+Displays all of the information rather than the  default information
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -29,15 +26,8 @@ https://dbareports.io/Verb-SqlNoun
 .EXAMPLE
 Verb-SqlNoun
 Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
+  
 
-
-.EXAMPLE   
-Verb-SqlNoun -WhatIf
-Shows what would happen if the command were executed.
-	
-.EXAMPLE   
-Verb-SqlNoun -Policy 'xp_cmdshell must be disabled'
-Does this 
 #>
 	[CmdletBinding()]
 	Param (
