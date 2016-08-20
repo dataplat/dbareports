@@ -2,23 +2,20 @@
 {
 <#
 .SYNOPSIS 
-
-
+Adds an instance or an array of instances to the dbareports database using the config file
 .DESCRIPTION
-
+This command will add a SQL Instance or an array of instances to the dbareports database using the config file generated at install or via the dbrclient command
 
 .PARAMETER SqlInstance
-
+The instance or array of instances to add
 .PARAMETER SqlInstanceCredential
-
+The credential to connect to the dbareports database
 .PARAMETER Port
-
+The Port of the Instance to be added (if not specified then this is gathered)
 .PARAMETER Environment
-
+The terminology that you and your users use to define the environment the instance is in. Suggested examples are Prod or Production, Test, UAT, QA, PreProd, ProductionSupport,Development, etc
 .PARAMETER Location
-
-.PARAMETER Force
-
+The terminology that you and your users use to define the location of the instance. It could be the town or city that the data centre is in or the name of the office etc
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -50,8 +47,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then does XYZ
 		[object]$SqlInstanceCredential,
 		[int]$Port,
 		[string]$Environment,
-		[string]$Location,
-		[switch]$Force
+		[string]$Location
 	)
 	
 	BEGIN
