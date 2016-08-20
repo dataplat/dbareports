@@ -21,12 +21,24 @@ The Job Category. This will be created if it does not exist. Defaults to dbarepo
 	
 .PARAMETER Command
 The command that the single job step will run
+
+.PARAMETER OwnerLoginName
+The account that shall be the Owner of the Agent Job
 	
 .PARAMETER Subsystem
 THe subsystem that the single job step will use. Defaults to PowerShell. Options are 'ActiveScripting', 'AnalysisCommand', 'AnalysisQuery', 'CmdExec', 'Distribution', 'LogReader', 'Merge', 'PowerShell', 'QueueReader', 'Snapshot', 'Ssis', 'TransactSql'
 		
+.PARAMETER JobCredential
+The Job Credential Object
+
 .PARAMETER Force
 If a job of the same name exists it will be dropped and created with the script
+
+.PARAMETER Confirm
+Prompts for comfirmation for actions
+
+.PARAMETER WhatIf
+Scripts out the actions that would be taken
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
