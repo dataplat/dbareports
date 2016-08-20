@@ -46,6 +46,8 @@ Does this
 #>
 	[CmdletBinding(SupportsShouldProcess = $true)]
 	Param (
+        [parameter(Mandatory = $True)]
+        $SQLInstance,
 		[parameter(Mandatory = $false)]
 		[switch]$ToScreen,
 		[parameter(Mandatory = $false)]
@@ -77,8 +79,12 @@ Does this
 		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
 		$source = $sourceserver.DomainInstanceName
 		
-		$InstanceName = $psboundparameters.Instance
-		$ServerName = $psboundparameters.ServerName
+		$InstanceName = $SQLInstance.Split('\')[1]
+		$ServerName = $SQLInstance.Split('\')[0]
+        if ($InstanceName -eq $Null)
+        {
+        $InstanceName = 'MSSQLSERVER'
+        }
 	}
 	
 	PROCESS
@@ -89,7 +95,7 @@ Does this
 		
 		$OSSQL = "/*OS Info*/
 				SELECT DISTINCT OS.* FROM $installdatabase.dbo.InstanceList IL
-				JOIN $installdatabase.info.ServerOSInfo OS
+				JOIN $installdatabase.info.ServerInfo OS
 				ON IL.ServerName = OS.ServerName
 				WHERE IL.ServerName = '$servername'"
 		
