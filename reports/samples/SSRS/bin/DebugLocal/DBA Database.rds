@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DBA Database">
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data Source=hmdbs02;Initial Catalog=DBADatabase</ConnectString>
+  </ConnectionProperties>
+  <DataSourceID>0a0b4e1b-ebc8-45e1-9576-5b8f937a36aa</DataSourceID>
+</RptDataSource>
