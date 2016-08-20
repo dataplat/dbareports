@@ -1,8 +1,26 @@
 ﻿# Runs a quick check against the servers returned from the $query
 # ONLY CHECKS DEFAULT INSTANCES
 
-$CentralDBAServer = ''
-$CentralDatabaseName = ''
+	[Alias("ServerInstance", "SqlInstance")]
+	[object]$SqlServer = "--installserver--"
+	[string]$InstallDatabase = "--installdb--"
+
+if(Get-module pester)
+{
+    try
+    {
+    Import-Module pester
+    }
+    catch
+    {
+    Write-Warning "Failed to import module pester. The Beard is sad. Quitting"
+    }
+}
+else
+{
+Write-Warning "Can't find the module pester. The Beard is sad (and disappointed). Quitting"
+}
+
 $Query = " SELECT [ServerName] ,[InstanceName] ,[Port] FROM [dbo].[InstanceList] Where Inactive = 0  AND NotContactable = 0 "
 
 try
