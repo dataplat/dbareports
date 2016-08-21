@@ -100,7 +100,7 @@ PROCESS
 		$update = $true
 		
 		$row = $table | Where-Object { $_.Servername -eq $SqlserverName }
-		$key = $row.ServerOSInfoID
+		$key = $row.ServerID
 		
 		if ($key.count -eq 0)
 		{
