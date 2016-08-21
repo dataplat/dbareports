@@ -38,7 +38,7 @@ If a job of the same name exists it will be dropped and created with the script
 Prompts for comfirmation for actions
 
 .PARAMETER WhatIf
-Scripts out the actions that would be taken
+Writes out the actions that would be taken
 
 .PARAMETER ProxyAccount
 A dynamic parameter
