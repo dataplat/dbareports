@@ -5,18 +5,25 @@
 Gets all of the information in the dbareports database about an instance
 
 .DESCRIPTION
+Gets all of the information in the dbareports database about an instance and displays it the screen or into a text file
 
+.PARAMETER SQLInstance
+The Server\Instance name to gather information about
 
 .PARAMETER ToScreen
-Outputs results to screen default parameter
+Outputs results to screen. This is default parameter
 
+.PARAMETER FilePath
+An optional filepath to have a text file with the information. File will be named \DBAReports_$ServerName" + "_" + $InstanceName + "_" + $Date + ".txt"
 
-.PARAMETER 
+.PARAMETER Quiet
+An optional parameter that will not display the output to the screen
 
+.PARAMETER Confirm
+Will prompt for confirmation
 
-.PARAMETER 
-
-	
+.PARAMETER WhatIf
+Writes out the actions that would be taken
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
