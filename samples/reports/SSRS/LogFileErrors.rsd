@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
@@ -7,25 +7,7 @@
       ,[ErrorMsg]
       ,[Line]
 	  ,[Matches]
-  FROM [DBADatabase].[Info].[LogFileErrorMessages]</CommandText>
+  FROM [dbareports].[Info].[LogFileErrorMessages]</CommandText>
     </Query>
-    <Fields>
-      <Field Name="FileName">
-        <DataField>FileName</DataField>
-        <rd:TypeName>System.String</rd:TypeName>
-      </Field>
-      <Field Name="ErrorMsg">
-        <DataField>ErrorMsg</DataField>
-        <rd:TypeName>System.String</rd:TypeName>
-      </Field>
-      <Field Name="Line">
-        <DataField>Line</DataField>
-        <rd:TypeName>System.Int32</rd:TypeName>
-      </Field>
-      <Field Name="Matches">
-        <DataField>Matches</DataField>
-        <rd:TypeName>System.String</rd:TypeName>
-      </Field>
-    </Fields>
   </DataSet>
 </SharedDataSet>

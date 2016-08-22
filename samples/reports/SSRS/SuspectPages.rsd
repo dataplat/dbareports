@@ -12,7 +12,7 @@
       ,SP.[EventType]
       ,SP.[Error_count]
       ,SP.[last_update_date]
-  FROM [DBADatabase].[Info].[SuspectPages] SP
+  FROM [dbareports].[Info].[SuspectPages] SP
   JOIN [Info].[Databases] D
   ON SP.DatabaseID = D.DatabaseID
   JOIN dbo.InstanceList IL

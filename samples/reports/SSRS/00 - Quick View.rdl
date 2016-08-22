@@ -1613,7 +1613,7 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>5.36702in</Height>
+        <Height>4.20741in</Height>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1754,7 +1754,7 @@ Click For More info</Value>
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="Textbox10">
+            <Textbox Name="Copyright">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
@@ -1781,7 +1781,6 @@ Click For More info</Value>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <rd:DefaultName>Textbox10</rd:DefaultName>
               <ActionInfo>
                 <Actions>
                   <Action>
