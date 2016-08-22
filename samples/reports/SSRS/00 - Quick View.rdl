@@ -212,7 +212,7 @@
               <Border>
                 <Style>None</Style>
               </Border>
-              <BackgroundColor>#012456</BackgroundColor>
+              <BackgroundColor>#2a4494</BackgroundColor>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -503,7 +503,7 @@
               <Border>
                 <Style>None</Style>
               </Border>
-              <BackgroundColor>LightBlue</BackgroundColor>
+              <BackgroundColor>#78a1bb</BackgroundColor>
             </Style>
           </GaugePanel>
           <Textbox Name="Textbox2">
@@ -553,7 +553,7 @@
               <Border>
                 <Style>None</Style>
               </Border>
-              <BackgroundColor>#012456</BackgroundColor>
+              <BackgroundColor>#2a4494</BackgroundColor>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -844,7 +844,7 @@
               <Border>
                 <Style>None</Style>
               </Border>
-              <BackgroundColor>LightBlue</BackgroundColor>
+              <BackgroundColor>#78a1bb</BackgroundColor>
             </Style>
           </GaugePanel>
           <Tablix Name="Tablix3">
@@ -887,7 +887,7 @@
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#012456</BackgroundColor>
+                            <BackgroundColor>#2a4494</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -922,7 +922,7 @@
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#012456</BackgroundColor>
+                            <BackgroundColor>#2a4494</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1078,7 +1078,7 @@
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#012456</BackgroundColor>
+                            <BackgroundColor>#2a4494</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1113,7 +1113,7 @@
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#012456</BackgroundColor>
+                            <BackgroundColor>#2a4494</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1148,7 +1148,7 @@
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#012456</BackgroundColor>
+                            <BackgroundColor>#2a4494</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1183,7 +1183,7 @@
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#012456</BackgroundColor>
+                            <BackgroundColor>#2a4494</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>

@@ -538,7 +538,7 @@
                 <Style>Solid</Style>
                 <Width>2pt</Width>
               </Border>
-              <BackgroundColor>#c6daf8</BackgroundColor>
+              <BackgroundColor>#78a1bb</BackgroundColor>
               <BackgroundGradientType>TopBottom</BackgroundGradientType>
               <BackgroundGradientEndColor>#e6eefc</BackgroundGradientEndColor>
             </Style>

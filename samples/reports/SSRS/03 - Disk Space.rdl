@@ -1168,7 +1168,7 @@
               <Border>
                 <Style>None</Style>
               </Border>
-              <BackgroundColor>CornflowerBlue</BackgroundColor>
+              <BackgroundColor>#78a1bb</BackgroundColor>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -1205,7 +1205,7 @@
               <Border>
                 <Style>None</Style>
               </Border>
-              <BackgroundColor>CornflowerBlue</BackgroundColor>
+              <BackgroundColor>#78a1bb</BackgroundColor>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
