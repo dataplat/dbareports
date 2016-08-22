@@ -4,19 +4,19 @@
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
       <CommandText>SELECT 
-       IL.ServerName
-	   ,D.Name
-      ,SP.[DateChecked]
-      ,SP.[FileName]
-      ,SP.[Page_id]
-      ,SP.[EventType]
-      ,SP.[Error_count]
-      ,SP.[last_update_date]
-  FROM [dbareports].[Info].[SuspectPages] SP
-  JOIN [Info].[Databases] D
-  ON SP.DatabaseID = D.DatabaseID
-  JOIN dbo.InstanceList IL
-  ON IL.InstanceID = D.InstanceID</CommandText>
+IL.Name
+,D.Name
+,SP.[DateChecked]
+,SP.[FileName]
+,SP.[Page_id]
+,SP.[EventType]
+,SP.[Error_count]
+,SP.[last_update_date]
+FROM [dbareports].[Info].[SuspectPages] SP
+JOIN [dbareports].[Info].[Databases] D
+ON SP.DatabaseID = D.DatabaseID
+JOIN [dbareports].dbo.InstanceList IL
+ON IL.InstanceID = D.InstanceID</CommandText>
     </Query>
   </DataSet>
 </SharedDataSet>
