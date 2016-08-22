@@ -1,25 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
       <CommandText>SELECT 
-      
 	  IL.Environment
 	  ,IL.ServerName
-	  ,COUNT(DLU.DatabaseID) as DatabaseCount
-	  ,[RebootTime]      
-  FROM [DBADatabase].[Info].[DatabaseLastUsed] DLU
-  JOIN info.Databases d
-  ON DLU.Databaseid = D.databaseid
+	  ,COUNT(D.DatabaseID) as DatabaseCount
+	  ,LastReboot    
+  FROM info.Databases d
   JOIN dbo.InstanceList IL
   ON 
   D.InstanceID = IL.InstanceID
-  WHERE DLU.ScriptRunTime &gt; DATEADD(Day,-6,GetDate())
+  WHERE D.DateChecked &gt; DATEADD(Day,-6,GetDate())
   AND [lastwrite] = '1900-01-01 00:00:00.000'
-  AND [lasRead] = '1900-01-01 00:00:00.000' 
- GROUP BY IL.ServerName,IL.Environment,DLU.RebootTime
+  AND [lastRead] = '1900-01-01 00:00:00.000' 
+ GROUP BY IL.ServerName,IL.Environment,D.LastReboot
  ORDER BY Environment,DatabaseCount desc
+  
   </CommandText>
     </Query>
     <Fields>
@@ -35,8 +33,8 @@
         <DataField>DatabaseCount</DataField>
         <rd:TypeName>System.Int32</rd:TypeName>
       </Field>
-      <Field Name="RebootTime">
-        <DataField>RebootTime</DataField>
+      <Field Name="LastReboot">
+        <DataField>LastReboot</DataField>
         <rd:TypeName>System.DateTime</rd:TypeName>
       </Field>
     </Fields>

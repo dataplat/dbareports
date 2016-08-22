@@ -19,12 +19,11 @@
           </QueryParameter>
         </QueryParameters>
         <CommandText>
-          SELECT        cast(AJD.Date as Date) as Date, IL.ServerName, AJD.Category, AJD.JobName, AJD.Description, AJD.Status, AJD.LastRunTime, AJD.Outcome, AJD.IsEnabled, IL.Environment
+          SELECT        AJD.Date, IL.ServerName, AJD.Category, AJD.JobName, AJD.Description, AJD.Status, AJD.LastRunTime, AJD.Outcome, AJD.IsEnabled, IL.Environment
           FROM            Info.AgentJobDetail AS AJD INNER JOIN
           InstanceList AS IL ON AJD.InstanceID = IL.InstanceID
-          WHERE        (cast(AJD.Date as Date) &gt; DATEADD(Day, - 1, DATE)) AND (AJD.LastRunTime &gt; DATEADD(Day, - 7, GETDATE())) AND (AJD.IsEnabled = 1) AND (IL.Inactive = 0) AND
+          WHERE        (AJD.Date &gt; DATEADD(Day, - 1, GETDATE())) AND (AJD.LastRunTime &gt; DATEADD(Day, - 7, GETDATE())) AND (AJD.IsEnabled = 1) AND (IL.Inactive = 0) AND
           (IL.ServerName = @Server)
-          Group by cast(AJD.Date as Date) ,IL.ServerName, AJD.Category, AJD.JobName, AJD.Description, AJD.Status, AJD.LastRunTime, AJD.Outcome, AJD.IsEnabled, IL.Environment
         </CommandText>
       </Query>
       <Fields>
@@ -90,21 +89,21 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>7.49558cm</Width>
+                  <Width>7.85859cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>10.69704cm</Width>
+                  <Width>11.06005cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.40242cm</Width>
+                  <Width>3.76543cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.79142cm</Width>
+                  <Width>4.15443cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.6cm</Height>
+                  <Height>0.6882cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -257,7 +256,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.6cm</Height>
+                  <Height>0.6882cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -430,8 +429,8 @@
             </SortExpressions>
             <Top>0cm</Top>
             <Left>0cm</Left>
-            <Height>1.2cm</Height>
-            <Width>25.38646cm</Width>
+            <Height>1.37639cm</Height>
+            <Width>26.83849cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -439,15 +438,15 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>0.47244in</Height>
+        <Height>0.54189in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
-          <BackgroundColor>Gainsboro</BackgroundColor>
+          <BackgroundColor>LightSteelBlue</BackgroundColor>
         </Style>
       </Body>
-      <Width>9.99467in</Width>
+      <Width>10.56634in</Width>
       <Page>
         <PageHeader>
           <Height>1.31305cm</Height>
@@ -461,12 +460,11 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Agent Job Results for </Value>
+                      <Value>Suspect Pages for Server </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>Underline</TextDecoration>
+                        <FontSize>26pt</FontSize>
+                        <TextDecoration>None</TextDecoration>
                         <Color>LightGrey</Color>
                       </Style>
                     </TextRun>
@@ -474,29 +472,7 @@
                       <Value>=Parameters!ServerName.Value</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>Underline</TextDecoration>
-                        <Color>LightGrey</Color>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value xml:space="preserve"> 
-</Value>
-                      <Style>
-                        <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>Underline</TextDecoration>
-                        <Color>LightGrey</Color>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>If failures not showing the job didnt run today</Value>
-                      <Style>
-                        <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>14pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
+                        <FontSize>26pt</FontSize>
                         <TextDecoration>None</TextDecoration>
                         <Color>LightGrey</Color>
                       </Style>
@@ -506,7 +482,7 @@
 </Value>
                       <Style>
                         <FontSize>20pt</FontSize>
-                        <TextDecoration>Underline</TextDecoration>
+                        <TextDecoration>None</TextDecoration>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -518,13 +494,12 @@
               <rd:DefaultName>Textbox21</rd:DefaultName>
               <Top>0cm</Top>
               <Left>0cm</Left>
-              <Height>0.9937cm</Height>
-              <Width>25.38646cm</Width>
+              <Height>1.31305cm</Height>
+              <Width>26.83849cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
-                <BackgroundColor>#012456</BackgroundColor>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -545,7 +520,7 @@
               <Top>0cm</Top>
               <Left>0cm</Left>
               <Height>1.31305cm</Height>
-              <Width>5.11303cm</Width>
+              <Width>5.13949cm</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -562,7 +537,7 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>6.58722mm</Height>
+          <Height>6.58723mm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -586,8 +561,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>ExecutionTime</rd:DefaultName>
-              <Top>0mm</Top>
-              <Left>107.69861mm</Left>
+              <Top>0.23711mm</Top>
+              <Left>118.01736mm</Left>
               <Height>6.35mm</Height>
               <Width>25mm</Width>
               <Style>
@@ -636,9 +611,9 @@
                 </Actions>
               </ActionInfo>
               <Top>0cm</Top>
-              <Left>18.19262cm</Left>
+              <Left>18.91864cm</Left>
               <Height>0.65872cm</Height>
-              <Width>7.1836cm</Width>
+              <Width>7.91985cm</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>

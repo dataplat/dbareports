@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
       <CommandText>SELECT 
       COUNT([ServerName]) as NoOfServers
       ,[OperatingSystem]
-  FROM [DBADatabase].[Info].[ServerOSInfo]
+  FROM [dbareports].[Info].[ServerInfo]
   GROUP BY OperatingSystem
   ORDER BY NoOfServers desc</CommandText>
     </Query>
