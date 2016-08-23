@@ -222,7 +222,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			$tablenames = $sourceserver.Databases[$InstallDatabase].Tables.Name
 			try
 			{
-				$first = 'info.serverinfo.sql' , 'dbo.InstanceList.sql', 'info.Databases.sql', 'dbo.Clients.sql'
+				$first = 'info.serverinfo.sql', 'dbo.InstanceList.sql', 'info.Databases.sql', 'dbo.Clients.sql'
 				
 				foreach ($filename in $first)
 				{
@@ -443,7 +443,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			{
 				#$JobFilePath = [regex]::Escape($InstallPath)
 				$JobFilePath = $InstallPath
-				$JobCommand = "."
+				$JobCommand = "powershell.exe -ExecutionPolicy Bypass . "
 			}
 			
 			$diskusage = @{
@@ -791,7 +791,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 					catch
 					{
 						Write-Warning "$File failed to execute"
-                        break
+						break
 					}
 				}
 			}
