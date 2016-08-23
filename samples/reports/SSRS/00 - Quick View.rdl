@@ -181,6 +181,13 @@
                       <Color>LightGrey</Color>
                     </Style>
                   </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
                   <TextRun>
                     <Value>
                       Click for more information
@@ -515,6 +522,13 @@
                       <Color>LightGrey</Color>
                     </Style>
                   </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
                   <TextRun>
                     <Value>
                       Click for more information
@@ -1012,7 +1026,7 @@
             <Top>6.69078cm</Top>
             <Left>1.05516cm</Left>
             <Height>1.2cm</Height>
-            <Width>14.90833cm</Width>
+            <Width>14.90832cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -1475,7 +1489,7 @@
             <Top>8.88683cm</Top>
             <Left>1.05516cm</Left>
             <Height>1.8cm</Height>
-            <Width>14.90834cm</Width>
+            <Width>14.90833cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border>
@@ -1612,20 +1626,18 @@
       <Width>11.24064in</Width>
       <Page>
         <PageHeader>
-          <Height>1.34938cm</Height>
+          <Height>0.53084in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Textbox Name="Textbox16">
+            <Textbox Name="textbox1">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>
-                        SQL DBA Front Page
-                      </Value>
+                      <Value>SQL DBA Front Page - </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
                         <FontSize>24pt</FontSize>
@@ -1637,19 +1649,7 @@
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>12pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <Format>d MMMM yyyy</Format>
-                        <Color>LightGrey</Color>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>
-                        Click For More info
-                      </Value>
-                      <Style>
-                        <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>12pt</FontSize>
+                        <FontSize>24pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Format>d MMMM yyyy</Format>
                         <Color>LightGrey</Color>
@@ -1661,14 +1661,12 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <rd:DefaultName>Textbox16</rd:DefaultName>
-              <Left>5.13949cm</Left>
-              <Height>1.3141cm</Height>
-              <Width>23.41173cm</Width>
+              <rd:DefaultName>textbox1</rd:DefaultName>
+              <Top>0cm</Top>
+              <Left>5.11096cm</Left>
+              <Height>0.38153in</Height>
+              <Width>9.17184in</Width>
               <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
                 <BackgroundColor>#012456</BackgroundColor>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -1676,7 +1674,7 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Image Name="Image2">
+            <Image Name="Image3">
               <Source>Embedded</Source>
               <Value>dbareports1</Value>
               <Sizing>FitProportional</Sizing>
@@ -1687,9 +1685,9 @@
                   </Action>
                 </Actions>
               </ActionInfo>
-              <Top>0.03528cm</Top>
+              <Top>0cm</Top>
               <Left>0cm</Left>
-              <Height>1.31305cm</Height>
+              <Height>1.34833cm</Height>
               <Width>5.13949cm</Width>
               <ZIndex>1</ZIndex>
               <Style>
@@ -1707,44 +1705,10 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>6.5872mm</Height>
+          <Height>6.5874mm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Textbox Name="ExecutionTime">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Globals!ExecutionTime</Value>
-                      <Style>
-                        <FontFamily>Segoe UI Light</FontFamily>
-                        <Color>LightGrey</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>ExecutionTime</rd:DefaultName>
-              <Top>0.23715mm</Top>
-              <Left>143.41736mm</Left>
-              <Height>6.35mm</Height>
-              <Width>25mm</Width>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Textbox Name="Textbox10">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -1780,11 +1744,10 @@
                   </Action>
                 </Actions>
               </ActionInfo>
-              <Top>0cm</Top>
-              <Left>23.04707cm</Left>
+              <Top>0.00001cm</Top>
+              <Left>23.86185cm</Left>
               <Height>0.65872cm</Height>
-              <Width>5.50415cm</Width>
-              <ZIndex>1</ZIndex>
+              <Width>4.68938cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
