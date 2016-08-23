@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
@@ -11,9 +11,39 @@
       ,[Capacity]
       ,[FreeSpace]
       ,[Percentage]
-  FROM [dbareports].[Info].[DiskSpace]
+  FROM [Info].[DiskSpace]
 wHERE Date &gt; DATEADD(Day, - 1, GETDATE()) 
 AND Percentage &lt;= 10</CommandText>
     </Query>
+    <Fields>
+      <Field Name="Date">
+        <DataField>Date</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="Server">
+        <DataField>Server</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="DiskName">
+        <DataField>DiskName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Label">
+        <DataField>Label</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Capacity">
+        <DataField>Capacity</DataField>
+        <rd:TypeName>System.Decimal</rd:TypeName>
+      </Field>
+      <Field Name="FreeSpace">
+        <DataField>FreeSpace</DataField>
+        <rd:TypeName>System.Decimal</rd:TypeName>
+      </Field>
+      <Field Name="Percentage">
+        <DataField>Percentage</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+    </Fields>
   </DataSet>
 </SharedDataSet>
