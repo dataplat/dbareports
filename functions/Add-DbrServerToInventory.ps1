@@ -102,12 +102,12 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then does XYZ
 		{
 			try
 			{
-				$smoserver = Connect-SqlServer -SqlServer $Server -SqlCredential $SqlInstanceCredential
+				$smoserver = Connect-SqlServer -SqlServer "TCP:$Server" -SqlCredential $SqlInstanceCredential
 				$ComputerName = $smoserver.ComputerNamePhysicalNetBIOS
 				$ServerName = $smoserver.NetName
 				$isclustered = $smoserver.IsClustered
 				$InstanceName = $smoserver.InstanceName
-				$name = $smoserver.Name
+				$name = $smoserver.Name.Replace("TCP:","")
 				$NotContactable = $False
 				
 				if ($InstanceName.length -eq 0)
