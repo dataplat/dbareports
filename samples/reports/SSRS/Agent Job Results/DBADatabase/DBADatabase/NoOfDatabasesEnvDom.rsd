@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
@@ -7,12 +7,12 @@
 	COUNT([DatabaseID]) as NoOfDatabases
 	,COUNT(DISTINCT (IL.InstanceID)) as NoOfServers
 	,IL.Environment
-	,SOI.Domain
-  FROM [DBADatabase].[Info].[Databases] d
+	,SI.Domain
+  FROM [dbareports].[Info].[Databases] d
   JOIN [dbo].[InstanceList] IL
   ON D.InstanceID = IL.instanceid
-  JOIN [Info].[ServerOSInfo] SOI
-  ON IL.ServerName = SOI.ServerName
+  JOIN [Info].[ServerInfo] SI
+  ON IL.ServerName = SI.ServerName
   GROUP BY Domain,Environment</CommandText>
     </Query>
     <Fields>

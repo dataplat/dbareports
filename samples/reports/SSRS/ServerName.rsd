@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
-      <CommandText>SELECT [ServerName]  FROM [DBADatabase].[dbo].[InstanceList] WHERE Inactive = 0 AND NotContactable = 0 ORDER BY ServerName</CommandText>
+      <CommandText>SELECT [ServerName]  FROM [dbo].[InstanceList] WHERE Inactive = 0 AND NotContactable = 0 ORDER BY ServerName</CommandText>
     </Query>
     <Fields>
       <Field Name="ServerName">

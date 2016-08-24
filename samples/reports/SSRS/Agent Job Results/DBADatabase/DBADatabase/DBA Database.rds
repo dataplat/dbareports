@@ -2,7 +2,7 @@
 <RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DBA Database">
   <ConnectionProperties>
     <Extension>SQL</Extension>
-    <ConnectString>Data Source=hmdbs02;Initial Catalog=DBADatabase</ConnectString>
+    <ConnectString>Data Source=dcsqldba01;Initial Catalog=dbareports</ConnectString>
     <IntegratedSecurity>true</IntegratedSecurity>
     <Prompt>Specify a user name and password for data source DBA Database</Prompt>
   </ConnectionProperties>
