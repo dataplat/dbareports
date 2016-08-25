@@ -102,7 +102,15 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then does XYZ
 		{
 			try
 			{
-				$smoserver = Connect-SqlServer -SqlServer "TCP:$Server" -SqlCredential $SqlInstanceCredential
+			    try
+                {
+                    $smoserver = Connect-SqlServer -SqlServer "TCP:$Server" -SqlCredential $SqlInstanceCredential 
+				}
+                catch
+                {
+                    Write-Output "TCP connection failed for $Server trying again without"
+                    $smoserver = Connect-SqlServer -SqlServer "$Server" -SqlCredential $SqlInstanceCredential
+                }
 				$ComputerName = $smoserver.ComputerNamePhysicalNetBIOS
 				$ServerName = $smoserver.NetName
 				$isclustered = $smoserver.IsClustered
