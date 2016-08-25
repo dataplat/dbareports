@@ -75,7 +75,7 @@ PROCESS
 	foreach ($server in $servers)
 	{
 		$ServerName = $server.ServerName
-		$ServerId = $server.ServerId
+		$ServerId = $server.InstanceId
 		$date = Get-Date
 		
 		Write-Output "Processing $ServerName"
@@ -120,8 +120,8 @@ PROCESS
 					$update = $false
 				}
 				
-				$total = "{0:n2}" -f ($disk.Capacity/1gb)
-				$free = "{0:n2}" -f ($disk.Freespace/1gb)
+				$total = "{0:f2}" -f ($disk.Capacity/1gb)
+				$free = "{0:f2}" -f ($disk.Freespace/1gb)
 				$percentfree = "{0:n0}" -f (($disk.Freespace / $disk.Capacity) * 100)
 				
 				# to see results as they come in, skip $null=
