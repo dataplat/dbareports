@@ -75,7 +75,7 @@ PROCESS
 	foreach ($server in $servers)
 	{
 		$ServerName = $server.ServerName
-		$ServerId = $server.InstanceId
+		$ServerId = $server.ServerId
 		$date = Get-Date
 		
 		Write-Output "Processing $ServerName"
