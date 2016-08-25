@@ -31,12 +31,11 @@ You should have received a copy of the GNU General Public License along with thi
 [CmdletBinding()]
 Param (
 	[Alias("ServerInstance", "SqlInstance")]
-	[object]$SqlServer = "ROB-SURFACEBOOK",
+	[object]$SqlServer = "--installserver--",
 	[object]$SqlCredential,
 	# this will come much later
-
-	[string]$InstallDatabase = "testdbareports",
-	[string]$LogFileFolder = "C:\temp\dbareports\logs"
+	[string]$InstallDatabase = "--installdb--",
+	[string]$LogFileFolder = "--logdir--"
 )
 
 BEGIN
@@ -101,7 +100,7 @@ PROCESS
 		$update = $true
 		
 		$row = $table | Where-Object { $_.Servername -eq $SqlserverName }
-		$key = $row.ServerOSInfoID
+		$key = $row.ServerID
 		
 		if ($key.count -eq 0)
 		{
