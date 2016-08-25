@@ -3,7 +3,7 @@
  Script to scrape the PowerShell log files and enter into DBA Database for Reporting
 
 .DESCRIPTION
-
+This script will scrape the log files int eh log folder and add errors and warnings to the dbareports database for easy reporting
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)

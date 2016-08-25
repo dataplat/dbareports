@@ -136,15 +136,21 @@ PROCESS
 				$Inactive = 0
 			}
             $DBName = $db.Name
-			$DBCCInfoSQL = "DBCC DBInfo('') With TableResults;"
-            $dbccresults = $server.ConnectionContext.ExecuteWithResults($DBCCInfoSQL).Tables
-            $LastDBCCDate = $dbccresults.rows.Where{$_.Field -eq 'dbi_dbccLastKnownGood'}.value 
-             
+            if($DB.status -ne 'Normal')
+            {
+			    $DBCCInfoSQL = "DBCC DBInfo('$DBName') With TableResults;"
+                $dbccresults = $server.ConnectionContext.ExecuteWithResults($DBCCInfoSQL).Tables
+                $LastDBCCDate = $dbccresults.rows.Where{$_.Field -eq 'dbi_dbccLastKnownGood'}[0].value 
+            }
+            else
+            {
+            $LastDBCCDate = $null
+            }
 			$lastusedinfo = $dblastused | Where-Object { $_.dbname -eq $db.name }
 			$lastread = $lastusedinfo.last_read
 			$lastwrite = $lastusedinfo.last_write
 			
-			$datatable.rows.Add(
+			$null = $datatable.rows.Add(
 				$key,
 				$InstanceID,
 				$db.Name,
