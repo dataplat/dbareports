@@ -8,6 +8,7 @@ test_script:
 # Finalize pass - collect and upload results
   - ps: . .\Tests\appveyor.pester.ps1 -Finalize
 # Notify Slack Channel
-- provider: Slack
+notifications:
+  - provider: Slack
   incoming_webhook:
     secure: KZIBT1mQ9haiVMAWAMGDKBafVzZc2HT886BPd9hF7IjspFRFeI90d/tlkyXCc7lFDH127pcvKHmrx8zSdqqfJjurMfdErxGU3oqdI6MtQM4=
