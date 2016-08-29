@@ -10,5 +10,5 @@ test_script:
 # Notify Slack Channel
 notifications:
   - provider: Slack
-  incoming_webhook:
-    secure: KZIBT1mQ9haiVMAWAMGDKBafVzZc2HT886BPd9hF7IjspFRFeI90d/tlkyXCc7lFDH127pcvKHmrx8zSdqqfJjurMfdErxGU3oqdI6MtQM4=
+    incoming_webhook:
+      secure: KZIBT1mQ9haiVMAWAMGDKBafVzZc2HT886BPd9hF7IjspFRFeI90d/tlkyXCc7lFDH127pcvKHmrx8zSdqqfJjurMfdErxGU3oqdI6MtQM4=
