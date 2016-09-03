@@ -329,7 +329,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				
 				$tvptable = $alltables | Where-Object { $_.Schema -eq $schema -and $_.Name -eq $tablename }
 				
-				if ($tvptable -eq $null)
+				if ($null -eq $tvptable)
 				{
 					Write-Warning "Can't find $schema.$tablename. Moving on."
 					Continue
@@ -380,7 +380,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				}
 				
 				$pkcolumn = Get-IdentityColumn $table
-				if ($pkcolumn -eq $null)
+				if ($null -eq $pkcolumn)
 				{
 					Write-Warning "No IDENTITY column found on $tablename. Skipping."
 					Continue
@@ -662,14 +662,14 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		{
 			$execaccount = $sourceserver.JobServer.ServiceAccount
 			
-			if ($ProxyAccount -ne $null -and $ProxyAccount -ne "None")
+			if ($null -ne $ProxyAccount -and $ProxyAccount -ne "None")
 			{
 				$proxydetails = $sourceserver.JobServer.ProxyAccounts[$ProxyAccount]
 				$execaccount = $proxydetails.CredentialIdentity
 			}
 			
 			$db = $sourceserver.Databases[$InstallDatabase]
-			if ($execaccount -ne $null -and $db.Users[$execaccount] -eq $null)
+			if ($null -ne $execaccount -and $null -eq $db.Users[$execaccount] )
 			{
 				Write-Output "Adding $execaccount to $InstallDatabase as db_owner"
 				try
@@ -911,7 +911,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		{
 			$securepassword = $SqlCredential.Password
 			
-			if ($securepassword -ne $null)
+			if ($null -ne $securepassword)
 			{
 				$securepassword = $securepassword | ConvertFrom-SecureString
 			}
@@ -932,7 +932,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		{
 			$dbrproxy = $sourceserver.JobServer.ProxyAccounts | Where-Object { $_.Name -like "*dbareports*" }
 			
-			if ($dbrproxy -eq $null -and $Force -eq $false)
+			if ($null -eq $dbrproxy -and $Force -eq $false)
 			{
 				$netbiosname = $sourceserver.ComputerNamePhysicalNetBIOS
 				
@@ -956,7 +956,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 					
 					$dbrproxy = $sourceserver.JobServer.ProxyAccounts | Where-Object { $_.Name -eq "PowerShell Proxy Account for dbareports" }
 					
-					if ($dbrproxy -ne $null)
+					if ($null -ne $dbrproxy)
 					{
 						$ProxyAccount = $dbrproxy.Name
 					}
@@ -966,7 +966,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 					}
 				}
 			}
-			elseif ($dbrproxy -ne $null)
+			elseif ($null -ne $dbrproxy)
 			{
 				$proxyname = $dbrproxy.Name
 				
