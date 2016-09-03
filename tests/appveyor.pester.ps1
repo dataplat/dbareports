@@ -18,9 +18,8 @@ param([switch]$Finalize)
         "`n`tSTATUS: Testing with PowerShell $PSVersion`n"
     
         Import-Module Pester
-        Install-Module -Name PSScriptAnalyzer 
         Invoke-Pester -Path "$ProjectRoot\Tests" -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile" -PassThru |
-            Export-Clixml -Path "$ProjectRoot\PesterResults$PSVersion.xml"
+        Export-Clixml -Path "$ProjectRoot\PesterResults$PSVersion.xml"
     }
 
 #If finalize is specified, check for failures and 
