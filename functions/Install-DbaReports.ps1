@@ -20,7 +20,7 @@ Installs the following on the specified SQL server:
 - If no InstallDirectory is specified, the SQL Server's backup directory will be used by default
 - If no LogFileDirectory is specified, InstallDirectory\logs will be used 
 
-Installs the following on the local client:
+Installs the following on the local client
 	
 	Config file at Documents\WindowsPowerShell\Modules\dbareports\dbareports-config.json
 	
@@ -121,14 +121,12 @@ https://dbareports.io/Install-DbaReports
 .EXAMPLE
 Install-DBAreports -SqlServer sql2016
 
+Installs the dbareports database on SQL2016 and uses all defaults
 
 .EXAMPLE
 Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 
-
-.EXAMPLE
-Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
-
+Installs the dbareports database on the server sql2016 and the powershell script files at \\fileshare\share\sql
 
 #>
 	[CmdletBinding()]
