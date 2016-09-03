@@ -132,6 +132,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 
 #>
 	[CmdletBinding()]
+    [OutputType([String])]  
 	Param (
 		[parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[Alias("ServerInstance", "SqlInstance")]
@@ -893,7 +894,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$sql = "create database [$InstallDatabase]"
 				$dbexists = $sourceserver.ConnectionContext.ExecuteNonQuery($sql)
 				$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-				$jobserver = $sourceserver.jobserver
+				##$jobserver = $sourceserver.jobserver
 			}
 			catch
 			{
