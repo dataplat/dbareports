@@ -137,7 +137,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		[parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[Alias("ServerInstance", "SqlInstance")]
 		[object]$SqlServer,
-		[object]$SqlCredential,
+		[PSCredential]$SqlCredential,
 		[Alias("Database")]
 		[string]$InstallDatabase = "dbareports",
 		[string]$InstallPath,
@@ -433,7 +433,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$jobprefix = "$jobprefix - dbareports"
 			}
 			
-			if ($ProxyAccount -eq $null) { $ProxyAccount = "None" }
+			if ($null -eq $ProxyAccount) { $ProxyAccount = "None" }
 			
 			if ($InstallPath.StartsWith("\\"))
 			{
