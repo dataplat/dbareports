@@ -1,7 +1,19 @@
-$Here = 'Git:\dbareports\functions'
+#Thank you Warren http://ramblingcookiemonster.github.io/Testing-DSC-with-Pester-and-AppVeyor/
+
+if(-not $PSScriptRoot)
+{
+    $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
+}
+$Verbose = @{}
+if($env:APPVEYOR_REPO_BRANCH -and $env:APPVEYOR_REPO_BRANCH -notlike "master")
+{
+    $Verbose.add("Verbose",$True)
+}
+
+Import-Module $PSScriptRoot\..\functions\Install-dbareports.ps1 -Force
+
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace('.Tests.', '.')
-. "$here\$sut"
-"$here\$sut"
+
 Import-Module PSScriptAnalyzer
 $Rules = (Get-ScriptAnalyzerRule).Where{$_.RuleName -ne 'PSUseSingularNouns'}
 $Name = $sut.Split('.')[0]
@@ -84,19 +96,103 @@ Context "Test parameter help for $Name" {
 	} 
 } 
     Describe "$Name Tests"{
-              Context 'Function' {
+              Context "$Name Parameters" {
               BeforeAll {
               $Name= Get-Command $Name
               }
               It 'Has Cmdlet Binding set to true' {
               $Name.CmdletBinding |should Be True
               }
-              It 'Has a sqlerver Parameter'{
+              It 'Has a sqlserver Parameter'{
               ($Name.Parameters['sqlserver']) | Should Be $true
               }
               It 'sqlserver Parameter shoud be an object' {
               $Name.Parameters['sqlserver'].ParameterType | Should Be System.Object
               }
+              It 'has a sqlcredential Parameter' {
+              ($Name.Parameters['SqlCredential']) | Should Be $true
+              }
+              It 'SqlCredential Parameter should be PSCredential' {
+              $Name.Parameters['SqlCredential'].ParameterType | Should be PSCredential
+              }
+              It 'has an InstallDatabase parameter' {
+              ($Name.Parameters['InstallDatabase']) | Should Be $True
+              }
+              It 'InstallDatabase Parameter should be a string' {
+              $Name.Parameters['InstallDatabase'].ParameterType | Should Be string
+              }
+              It 'has a InstallPath Parameter' {
+              ($Name.Parameters['InstallPath']) | Should Be $true
+              }
+              It 'InstallPath Parameter should be a string' {
+              $Name.Parameters['InstallPath'].ParameterType | Should Be string
+              }
+              It 'has a JobPrefix Parameter' {
+              ($Name.Parameters['JobPrefix']) | Should Be $true
+              }
+              It 'JobPrefix Parameter should be a string' {
+              $Name.Parameters['JobPrefix'].ParameterType | Should Be string
+              }
+              It 'has a LogFileFolder Parameter' {
+              ($Name.Parameters['LogFileFolder']) | Should Be $true
+              }
+              It 'LogFileFolder Parameter should be a string' {
+              $Name.Parameters['LogFileFolder'].ParameterType | Should Be string
+              }
+              It 'has a LogFileRetention Parameter' {
+              ($Name.Parameters['LogFileRetention']) | Should Be $true
+              }
+              It 'LogFileRetention Parameter should be an int' {
+              $Name.Parameters['LogFileRetention'].ParameterType | Should Be int
+              }
+              It 'has a ReportsFolder Parameter' {
+              ($Name.Parameters['ReportsFolder']) | Should Be $true
+              }
+              It 'ReportsFolder Parameter should be a string' {
+              $Name.Parameters['ReportsFolder'].ParameterType | Should Be string
+              }
+              It 'has a NoDatabaseObjects Parameter' {
+              ($Name.Parameters['NoDatabaseObjects']) | Should Be $true
+              }
+              It 'NoDatabaseObjects Parameter should be a switch' {
+              $Name.Parameters['NoDatabaseObjects'].ParameterType | Should Be switch
+              }
+              It 'has a NoJobs Parameter' {
+              ($Name.Parameters['NoJobs']) | Should Be $true
+              }
+              It 'NoJobs Parameter should be a switch' {
+              $Name.Parameters['NoJobs'].ParameterType | Should Be switch
+              }
+              It 'has a NoPsFileCopy Parameter' {
+              ($Name.Parameters['NoPsFileCopy']) | Should Be $true
+              }
+              It 'NoPsFileCopy Parameter should be a switch' {
+              $Name.Parameters['NoPsFileCopy'].ParameterType | Should Be switch
+              }
+              It 'has a NoJobSchedule Parameter' {
+              ($Name.Parameters['NoJobSchedule']) | Should Be $true
+              }
+              It 'NoJobSchedule Parameter should be a switch' {
+              $Name.Parameters['NoJobSchedule'].ParameterType | Should Be switch
+              }
+              It 'has a NoConfig Parameter' {
+              ($Name.Parameters['NoConfig']) | Should Be $true
+              }
+              It 'NoConfig Parameter should be a switch' {
+              $Name.Parameters['NoConfig'].ParameterType | Should Be switch
+              }
+              It 'has a JobCategory Parameter' {
+              ($Name.Parameters['JobCategory']) | Should Be $true
+              }
+              It 'JobCategory Parameter should be a string' {
+              $Name.Parameters['JobCategory'].ParameterType | Should Be string
+              }
+              It 'has a TimeSpan Parameter' {
+              ($Name.Parameters['TimeSpan']) | Should Be $true
+              }
+              It 'TimeSpan Parameter should be a timespan' {
+              $Name.Parameters['TimeSpan'].ParameterType | Should Be timespan
+              }  
               }
               Context 'Output' {
 
