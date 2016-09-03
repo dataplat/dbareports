@@ -1,4 +1,18 @@
-. Git:\dbareports\functions\SharedFunctions.ps1
+#Thank you Warren http://ramblingcookiemonster.github.io/Testing-DSC-with-Pester-and-AppVeyor/
+
+if(-not $PSScriptRoot)
+{
+    $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
+}
+$Verbose = @{}
+if($env:APPVEYOR_REPO_BRANCH -and $env:APPVEYOR_REPO_BRANCH -notlike "master")
+{
+    $Verbose.add("Verbose",$True)
+}
+
+Import-Module $PSScriptRoot\..\functions\SharedFunctions.ps1 -Force
+
+$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace('.Tests.', '.')
 
 ### Get-Config Tests
 
@@ -51,7 +65,7 @@ Describe 'Get-Config Tests' {
     It "installdatabase variable should exist" {
         Get-variable installdatabase | SHould Not Be NUllorEmpty
     }
-    It "install database variable should have correct values" {
+    It "installdatabase variable should have correct values" {
         (Get-Variable installdatabase).Value | Should be 'dbareports'
     }
 } # End Context
@@ -69,3 +83,9 @@ Describe 'Get-Config Tests' {
     }
     Get-Config
 }# end describe
+
+### Get-Instances Tests
+
+Describe 'Get-Instances Tests' {
+    
+}#end describe
