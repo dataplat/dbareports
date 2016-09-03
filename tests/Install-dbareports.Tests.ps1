@@ -10,10 +10,10 @@ if($env:APPVEYOR_REPO_BRANCH -and $env:APPVEYOR_REPO_BRANCH -notlike "master")
     $Verbose.add("Verbose",$True)
 }
 
-Import-Module $PSScriptRoot\..\functions\Install-dbareports.ps1 -Force
+
 
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace('.Tests.', '.')
-
+Import-Module $PSScriptRoot\..\functions\$sut -Force
 Import-Module PSScriptAnalyzer
 $Rules = (Get-ScriptAnalyzerRule).Where{$_.RuleName -ne 'PSUseSingularNouns'}
 $Name = $sut.Split('.')[0]
@@ -23,7 +23,7 @@ $Name = $sut.Split('.')[0]
                 foreach ($rule in $rules) { 
                     $i = $rules.IndexOf($rule)
                     It "passes the PSScriptAnalyzer Rule number $i - $rule  " {
-                        (Invoke-ScriptAnalyzer -Path "$here\$sut" -IncludeRule $rule.RuleName ).Count | Should Be 0 
+                        (Invoke-ScriptAnalyzer -Path "$PSScriptRoot\..\functions\$sut" -IncludeRule $rule.RuleName ).Count | Should Be 0 
                     }
                 }
             }
