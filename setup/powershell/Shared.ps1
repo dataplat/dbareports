@@ -460,7 +460,7 @@ Internal function. Writes exception to disk (my docs\dbareports-exceptions.txt) 
 
 function Get-Instances
 {
-	$sql = "SELECT DISTINCT ServerName, InstanceName, InstanceId FROM [dbo].[InstanceList] Where Inactive = 0 AND NotContactable = 0"
+	$sql = "SELECT DISTINCT ServerName, InstanceName, InstanceId, ServerId FROM [dbo].[InstanceList] Where Inactive = 0 AND NotContactable = 0"
 	try
 	{
 		$server = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]

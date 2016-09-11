@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
@@ -11,7 +11,7 @@
       ,[Capacity]
       ,[FreeSpace]
       ,[Percentage]
-  FROM [DBADatabase].[Info].[DiskSpace]
+  FROM [Info].[DiskSpace]
 wHERE Date &gt; DATEADD(Day, - 1, GETDATE()) </CommandText>
     </Query>
     <Fields>

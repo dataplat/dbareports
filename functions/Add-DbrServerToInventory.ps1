@@ -107,12 +107,20 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		{
 			try
 			{
-				$smoserver = Connect-SqlServer -SqlServer $Server -SqlCredential $SqlInstanceCredential
+			    try
+                {
+                    $smoserver = Connect-SqlServer -SqlServer "TCP:$Server" -SqlCredential $SqlInstanceCredential 
+				}
+                catch
+                {
+                    Write-Output "TCP connection failed for $Server trying again without"
+                    $smoserver = Connect-SqlServer -SqlServer "$Server" -SqlCredential $SqlInstanceCredential
+                }
 				$ComputerName = $smoserver.ComputerNamePhysicalNetBIOS
 				$ServerName = $smoserver.NetName
 				$isclustered = $smoserver.IsClustered
 				$InstanceName = $smoserver.InstanceName
-				$name = $smoserver.Name
+				$name = $smoserver.Name.Replace("TCP:","")
 				$NotContactable = $False
 				
 				if ($InstanceName.length -eq 0)

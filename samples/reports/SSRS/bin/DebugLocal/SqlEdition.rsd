@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>DBA Database</DataSourceReference>
+      <CommandText>select Edition,count(Edition)as Quantity
+from [dbo].[InstanceList] IL
+LEFT JOIN [Info].[SQLInfo] SI
+ON  IL.InstanceID = SI.InstanceID
+JOIN [Info].[ServerInfo] OS
+ON  OS.ServerName = IL.ServerName 
+WHERE
+  OS.Domain in (@Domains)
+AND
+  IL.Environment in (@EnvironmentRole)
+AND
+ IL.Inactive = (@Decommissioned)
+ group by Edition
+order by Edition desc</CommandText>
+    </Query>
+  </DataSet>
+</SharedDataSet>
