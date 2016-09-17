@@ -7,12 +7,6 @@
 .DESCRIPTION
 
 
-.PARAMETER 
-
-
-.PARAMETER 
-	
-
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
 Copyright (C) 2016 Rob Sewell
@@ -24,19 +18,17 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Get-DbrConfig
 
 .EXAMPLE
-Verb-SqlNoun
-Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
-
+Get-DbrConfig
 
 .EXAMPLE   
-Verb-SqlNoun -WhatIf
+Get-DbrConfig -WhatIf
 Shows what would happen if the command were executed.
 	
 .EXAMPLE   
-Verb-SqlNoun -Policy 'xp_cmdshell must be disabled'
+Get-DbrConfig -Policy 'xp_cmdshell must be disabled'
 Does this 
 #>
 	Get-Config

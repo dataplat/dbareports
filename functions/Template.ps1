@@ -24,11 +24,15 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Verb-SqlNoun
 
 .EXAMPLE
 Verb-SqlNoun
-Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
+Does x, y
+
+.EXAMPLE
+Verb-SqlNoun -Parameter1 -Parameter2
+Does x, y
 
 .EXAMPLE   
 Verb-SqlNoun -WhatIf

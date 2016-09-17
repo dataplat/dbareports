@@ -5,13 +5,10 @@
 
 
 .DESCRIPTION
+Returns the JobName, Category, Description, Enabled or not, Status, LastRunTime and Outcome of agent jobs created in the last x hours 
 
-
-.PARAMETER 
-
-
-.PARAMETER 
-	
+.PARAMETER Hours
+Return jobs created within this number of hours
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -24,19 +21,17 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Get-DbrNewJob
+https://dbareports.io/functions/Get-DbrNewJob
 
 .EXAMPLE
 Get-DbrNewJob
-Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
 
-.EXAMPLE   
-Get-DbrNewJob -WhatIf
-Shows what would happen if the command were executed.
-	
-.EXAMPLE   
-Get-DbrNewJob -Policy 'xp_cmdshell must be disabled'
-Does this 
+Returns the JobName, Category, Description, Enabled or not, Status, LastRunTime and Outcome of agent jobs created in the last 24 hours 
+
+.EXAMPLE
+Get-DbrNewJob -hours 5
+
+Returns the JobName, Category, Description, Enabled or not, Status, LastRunTime and Outcome of agent jobs created in the last 5 hours 
 #>
 	[CmdletBinding()]
 	Param (
