@@ -78,7 +78,7 @@ The Prefix that gets added to the Agent Jobs defaults to dbareports
 The category for the Agent Jobs. Defaults to "dbareports collection jobs"
 	
 .PARAMETER TimeSpan
-By deafult, the jobs are scheduled to execute daily unless NoJobSchedule is specified. The default time is 04:15. To change the time, pass different timespan.
+By default, the jobs are scheduled to execute daily unless NoJobSchedule is specified. The default time is 04:15. To change the time, pass different timespan.
 
 $customtimespan = New-TimeSpan -hours 22 -minutes 15
 

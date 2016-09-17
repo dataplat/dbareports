@@ -2,7 +2,7 @@
 {
 <#
 .SYNOPSIS 
-
+Installs only the client component of DbaReports
 
 .DESCRIPTION
 Installs the following on the local client:
@@ -36,24 +36,6 @@ Installs the following on the local client:
 
 	Note that only the account that created the config file can decrypt the SecurePassword.
 	
-.PARAMETER 
-
-
-.PARAMETER 
-
-
-.PARAMETER 
-	
-
-.PARAMETER 
-
-	
-.PARAMETER 
-
-	
-.PARAMETER 
-	
-
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
 Copyright (C) 2016 Rob Sewell
@@ -65,10 +47,10 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Install-DbaReportsClient
 
 .EXAMPLE
-Verb-SqlNoun
+Install-DbaReportsClient
 Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
 
 
