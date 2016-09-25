@@ -3,22 +3,21 @@
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
-      <CommandText>SELECT 
+      <CommandText>	 SELECT 
 	  IL.Environment
 	  ,IL.ServerName
 	  ,COUNT(D.DatabaseID) as DatabaseCount
-	  ,LastReboot
-	  ,DateChecked    
-  FROM info.Databases d
-  JOIN dbo.InstanceList IL
+	,MAX(LastReboot) as LastReboot
+	,MAX(DateChecked) as DateChecked
+  FROM  dbo.InstanceList IL
+  JOIN info.Databases d
   ON 
   D.InstanceID = IL.InstanceID
   WHERE D.DateChecked &gt; DATEADD(Day,-6,GetDate())
   AND [lastwrite] = '1900-01-01 00:00:00.000'
   AND [lastRead] = '1900-01-01 00:00:00.000' 
- GROUP BY IL.ServerName,IL.Environment,D.LastReboot,DateChecked  
- ORDER BY Environment,DatabaseCount desc
-  </CommandText>
+ GROUP BY IL.ServerName ,IL.Environment 
+ ORDER BY  DatabaseCount desc</CommandText>
     </Query>
     <Fields>
       <Field Name="Environment">
