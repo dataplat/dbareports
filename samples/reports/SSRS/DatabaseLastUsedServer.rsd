@@ -7,7 +7,8 @@
 	  IL.Environment
 	  ,IL.ServerName
 	  ,COUNT(D.DatabaseID) as DatabaseCount
-	  ,LastReboot    
+	  ,LastReboot
+	  ,DateChecked    
   FROM info.Databases d
   JOIN dbo.InstanceList IL
   ON 
@@ -15,9 +16,8 @@
   WHERE D.DateChecked &gt; DATEADD(Day,-6,GetDate())
   AND [lastwrite] = '1900-01-01 00:00:00.000'
   AND [lastRead] = '1900-01-01 00:00:00.000' 
- GROUP BY IL.ServerName,IL.Environment,D.LastReboot
+ GROUP BY IL.ServerName,IL.Environment,D.LastReboot,DateChecked  
  ORDER BY Environment,DatabaseCount desc
-  
   </CommandText>
     </Query>
     <Fields>
@@ -35,6 +35,10 @@
       </Field>
       <Field Name="LastReboot">
         <DataField>LastReboot</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="DateChecked">
+        <DataField>DateChecked</DataField>
         <rd:TypeName>System.DateTime</rd:TypeName>
       </Field>
     </Fields>
