@@ -248,7 +248,7 @@
                         <Textbox Name="Textbox53">
                           <CanGrow>true</CanGrow>
                           <UserSort>
-                            <SortExpression>=Fields!RebootTime.Value</SortExpression>
+                            <SortExpression>=Fields!LastReboot.Value</SortExpression>
                           </UserSort>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -398,6 +398,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -539,7 +540,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
