@@ -2,28 +2,13 @@
 {
 <#
 .SYNOPSIS 
-
+Removes a server from the dbareports inventory of sql servers.
 
 .DESCRIPTION
+Removes instance/server from the instance list table within the dba reports database. Doing so will mean you are no longer able to report on that server. If you have decommissioned the server but still want to report/hold information on it then use the Set-DbrInstanceInactiveInInventory cmdlet instead.
 
-
-.PARAMETER 
-
-
-.PARAMETER 
-
-
-.PARAMETER 
-	
-
-.PARAMETER 
-
-	
-.PARAMETER 
-
-	
-.PARAMETER 
-	
+.PARAMETER
+Dynamic parameter returns a list of servers/instances
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -36,20 +21,13 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Remove-DbrServerFromInventory
 
 .EXAMPLE
-Verb-SqlNoun
-Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
+Remove-DbrServerFromInventory SQLServer01
+Removes the server "SQLServer01" from the instance list table within the dba reports database.
 
 
-.EXAMPLE   
-Verb-SqlNoun -WhatIf
-Shows what would happen if the command were executed.
-	
-.EXAMPLE   
-Verb-SqlNoun -Policy 'xp_cmdshell must be disabled'
-Does this 
 #>
 	[CmdletBinding()]
 	Param ()

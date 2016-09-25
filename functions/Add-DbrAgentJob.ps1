@@ -2,13 +2,13 @@
 {
 <#
 .SYNOPSIS 
-Creates a singel step SQL Agent job using the dba configuration
+Creates a single step SQL Agent job using the dba configuration
 
 .DESCRIPTION
-This will create a SQL Agent Job. It will use the configuration from the dbareports install and create the job on the the dbareports folder
+This will create a SQL Agent Job. It will use the configuration from the dbareports install, and create the job on the the dbareports folder
 
 .PARAMETER JobName
-The name of the JOb
+The name of the Job
 
 .PARAMETER LogFileFolder
 The folder to hold the log files for the job. The SQL Agent account needs to be able to access this path. Defaults to the dbareports install log file location
@@ -54,10 +54,10 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Add-DbrAgentJob
 
 .EXAMPLE
-Add-DbrAgentJob -JobName 'Agent Job to gather information' -LogFileFolder 'H:\LogFiles' -Description 'THis agent job will gather information and will log to this folder' -Category 'dba collection jobs' -OwnerLoginName 'THEBEARD\Rob' -Command $GatheringScript -Subsystem TransactSql 
+Add-DbrAgentJob -JobName 'Agent Job to gather information' -LogFileFolder 'H:\LogFiles' -Description 'This agent job will gather information and will log to folder H:\LogFiles' -Category 'dba collection jobs' -OwnerLoginName 'THEBEARD\Rob' -Command $GatheringScript -Subsystem TransactSql 
 
 This will add a Job called 'Agent Job to gather information' which will log to 'H:\LogFiles' and have a single TSQL Step which will run the TSQL stored in the $GatheringScript variable and the owner will be the THEBEARD\Rob account. It will be created on the dbareports server
 #>
@@ -116,7 +116,7 @@ This will add a Job called 'Agent Job to gather information' which will log to '
 		{
 			if ($Force -eq $false)
 			{
-				throw "Job already exists and Force was not speified"
+				throw "Job already exists and Force was not specified"
 			}
 			else
 			{

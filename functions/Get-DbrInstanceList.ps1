@@ -2,16 +2,10 @@
 {
 <#
 .SYNOPSIS 
-
+Returns datatable of contents of InstanceList table
 
 .DESCRIPTION
-
-
-.PARAMETER 
-
-
-.PARAMETER 
-	
+Returns datatable of contents of InstanceList table
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -28,15 +22,8 @@ https://dbareports.io/Get-DbrInstanceList
 
 .EXAMPLE
 Get-DbrInstanceList
-Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
+Returns datatable of contents of InstanceList table
 
-.EXAMPLE   
-Get-DbrInstanceList -WhatIf
-Shows what would happen if the command were executed.
-	
-.EXAMPLE   
-Get-DbrInstanceList -Policy 'xp_cmdshell must be disabled'
-Does this 
 #>
 	
 	BEGIN
