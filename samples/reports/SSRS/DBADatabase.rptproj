@@ -53,6 +53,10 @@
       <FullPath>NoOfDatabasesEnvDom.rsd</FullPath>
     </ProjectItem>
     <ProjectItem>
+      <Name>OperatingSystem.rsd</Name>
+      <FullPath>OperatingSystem.rsd</FullPath>
+    </ProjectItem>
+    <ProjectItem>
       <Name>ServerName.rsd</Name>
       <FullPath>ServerName.rsd</FullPath>
     </ProjectItem>
@@ -61,16 +65,12 @@
       <FullPath>ServersbyOperatingSystem.rsd</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>SuspectPages.rsd</Name>
-      <FullPath>SuspectPages.rsd</FullPath>
-    </ProjectItem>
-    <ProjectItem>
-      <Name>OperatingSystem.rsd</Name>
-      <FullPath>OperatingSystem.rsd</FullPath>
-    </ProjectItem>
-    <ProjectItem>
       <Name>SqlEdition.rsd</Name>
       <FullPath>SqlEdition.rsd</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>SuspectPages.rsd</Name>
+      <FullPath>SuspectPages.rsd</FullPath>
     </ProjectItem>
   </DataSets>
   <Reports>
@@ -133,11 +133,11 @@
       <Platform>Win32</Platform>
       <Options>
         <OutputPath>bin\Debug</OutputPath>
-        <TargetServerVersion>SSRS2008R2</TargetServerVersion>
-        <TargetServerURL>http://http/reportserver</TargetServerURL>
-        <TargetFolder>Technology/Enterprise Applications Team</TargetFolder>
-        <TargetDataSourceFolder>Technology/Data Sources</TargetDataSourceFolder>
-        <TargetDatasetFolder>Technology/Datasets</TargetDatasetFolder>
+        <TargetServerVersion>SSRS2016</TargetServerVersion>
+        <TargetServerURL>http://sql2016n1/reportserver/</TargetServerURL>
+        <TargetFolder>/DBA Reports</TargetFolder>
+        <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
+        <TargetDatasetFolder>Datasets</TargetDatasetFolder>
         <TargetReportPartFolder>Report Parts</TargetReportPartFolder>
       </Options>
     </Configuration>
@@ -146,8 +146,9 @@
       <Platform>Win32</Platform>
       <Options>
         <OutputPath>bin\DebugLocal</OutputPath>
-        <TargetServerVersion>SSRS2008R2</TargetServerVersion>
-        <TargetFolder>DBADatabase</TargetFolder>
+        <TargetServerVersion>SSRS2016</TargetServerVersion>
+        <TargetServerURL>http://sql2016n1/reportserver/</TargetServerURL>
+        <TargetFolder>/DBA Reports</TargetFolder>
         <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
         <TargetDatasetFolder>Datasets</TargetDatasetFolder>
         <TargetReportPartFolder>Report Parts</TargetReportPartFolder>
@@ -158,8 +159,9 @@
       <Platform>Win32</Platform>
       <Options>
         <OutputPath>bin\Release</OutputPath>
-        <TargetServerVersion>SSRS2008R2</TargetServerVersion>
-        <TargetFolder>Technology/Enterprise Applications Team</TargetFolder>
+        <TargetServerVersion>SSRS2016</TargetServerVersion>
+        <TargetServerURL>http://sql2016n1/reportserver/</TargetServerURL>
+        <TargetFolder>/DBA Reports</TargetFolder>
         <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
         <TargetDatasetFolder>Datasets</TargetDatasetFolder>
         <OverwriteDatasets>true</OverwriteDatasets>
