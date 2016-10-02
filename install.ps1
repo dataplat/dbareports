@@ -38,7 +38,7 @@ Write-Output "Installing module to $path"
 
 
 Remove-Module dbareports -ErrorAction SilentlyContinue
-$url = 'https://github.com/sqlcollaborative/dbareports/blob/master/archive/master.zip'
+$url = 'https://github.com/sqlcollaborative/dbareports/raw/master/archive/master.zip'
 
 $temp = ([System.IO.Path]::GetTempPath()).TrimEnd("\")
 $zipfile = "$temp\dbareports.zip"
@@ -90,12 +90,10 @@ Write-Output "Unzipping"
 # Keep it backwards compatible
 $shell = New-Object -COM Shell.Application
 $zipPackage = $shell.NameSpace($zipfile)
-$destinationFolder = $shell.NameSpace($temp)
+$destinationFolder = $shell.NameSpace($path)
 $destinationFolder.CopyHere($zipPackage.Items())
 
 Write-Output "Cleaning up"
-Move-Item -Path "$temp\dbareports-*\*" $path
-Remove-Item -Path "$temp\dbareports-*"
 Remove-Item -Path $zipfile
 
 Write-Output "Done! Please report any bugs to Rob. You can do this via GitHub or better still via the SQL Server Community Slack in the #dbareports channel. Auto invite link https://sqlpas.io/slack"
