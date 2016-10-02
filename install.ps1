@@ -38,7 +38,7 @@ Write-Output "Installing module to $path"
 
 
 Remove-Module dbareports -ErrorAction SilentlyContinue
-$url = 'https://github.com/sqldbawithabeard/dbareports/archive/master.zip'
+$url = 'https://github.com/sqlcollaborative/dbareports/blob/master/archive/master.zip'
 
 $temp = ([System.IO.Path]::GetTempPath()).TrimEnd("\")
 $zipfile = "$temp\dbareports.zip"
@@ -69,16 +69,17 @@ else
 }
 
 Write-Output "Downloading archive from github"
+Write-Output "Sorry there's no progress bar. This download is about 68 MB."
 try
 {
-	Invoke-WebRequest $url -OutFile $zipfile
+	(New-Object System.Net.WebClient).DownloadFile($url, $zipfile)
 }
 catch
 {
 	#try with default proxy and usersettings
 	Write-Output "Probably using a proxy for internet access, trying default proxy settings"
 	(New-Object System.Net.WebClient).Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
-	Invoke-WebRequest $url -OutFile $zipfile
+	(New-Object System.Net.WebClient).DownloadFile($url, $zipfile)
 }
 
 # Unblock if there's a block
