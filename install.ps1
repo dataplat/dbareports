@@ -94,8 +94,8 @@ $destinationFolder = $shell.NameSpace($temp)
 $destinationFolder.CopyHere($zipPackage.Items())
 
 Write-Output "Cleaning up"
-Move-Item -Path "$temp\dbareports-master\*" $path
-Remove-Item -Path "$temp\dbareports-master"
+Move-Item -Path "$temp\dbareports-*\*" $path
+Remove-Item -Path "$temp\dbareports-*"
 Remove-Item -Path $zipfile
 
 Write-Output "Done! Please report any bugs to Rob. You can do this via GitHub or better still via the SQL Server Community Slack in the #dbareports channel. Auto invite link https://sqlpas.io/slack"
