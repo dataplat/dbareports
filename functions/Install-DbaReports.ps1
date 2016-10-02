@@ -956,6 +956,8 @@ Installs the dbareports database on the server sql2016 and the powershell script
 				{
 					Add-DbrCredential
 					
+					$sourceserver.JobServer.ProxyAccounts.Refresh()
+					
 					$dbrproxy = $sourceserver.JobServer.ProxyAccounts | Where-Object { $_.Name -eq "PowerShell Proxy Account for dbareports" }
 					
 					if ($null -ne $dbrproxy)
