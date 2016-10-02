@@ -771,6 +771,8 @@ Installs the dbareports database on the server sql2016 and the powershell script
 		Function Add-Migration
 		{
 			
+			$upgradeexists = Test-Path "$parentPath\setup\database\UpgradeScripts\*.sql"
+			if ($upgradeexists -eq $false) { return }
 			$Migrations = Get-ChildItem -Path "$parentPath\setup\database\UpgradeScripts\*.sql"
 			$CurrentDBVersion = $sourceserver.Databases[$InstallDatabase].ExtendedProperties['dbareports version'].Value
 			Write-Output "Current database version of $InstallDatabase is $CurrentDBVersion"
