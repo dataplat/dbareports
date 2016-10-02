@@ -1,4 +1,4 @@
-﻿Function Verb-SqlNoun
+﻿Function Get-DbrSqlVersion
 {
 <#
 .SYNOPSIS 
@@ -14,16 +14,6 @@
 
 
 .PARAMETER 
-	
-
-.PARAMETER 
-
-	
-.PARAMETER 
-
-	
-.PARAMETER 
-	
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -36,7 +26,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Get-DbrSqlVersion
 
 .EXAMPLE
 Verb-SqlNoun

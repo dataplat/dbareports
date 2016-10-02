@@ -1,4 +1,4 @@
-﻿Function Get-DbrDetailedINfo
+﻿Function Get-DbrDetailedInfo
 {
 <#
 .SYNOPSIS 
@@ -28,20 +28,18 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Get-DbrDetailedInfo
 
 .EXAMPLE
-Verb-SqlNoun
+Get-DbrDetailedInfo
 Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
 
-
 .EXAMPLE   
-Verb-SqlNoun -WhatIf
+Get-DbrDetailedInfo -WhatIf
 Shows what would happen if the command were executed.
 	
 .EXAMPLE   
-Verb-SqlNoun -Policy 'xp_cmdshell must be disabled'
-Does this 
+Get-DbrDetailedInfo -Policy 'xp_cmdshell must be disabled'
 #>
 	[CmdletBinding()]
 	Param (

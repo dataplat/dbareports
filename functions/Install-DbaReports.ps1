@@ -78,7 +78,7 @@ The Prefix that gets added to the Agent Jobs defaults to dbareports
 The category for the Agent Jobs. Defaults to "dbareports collection jobs"
 	
 .PARAMETER TimeSpan
-By deafult, the jobs are scheduled to execute daily unless NoJobSchedule is specified. The default time is 04:15. To change the time, pass different timespan.
+By default, the jobs are scheduled to execute daily unless NoJobSchedule is specified. The default time is 04:15. To change the time, pass different timespan.
 
 $customtimespan = New-TimeSpan -hours 22 -minutes 15
 
@@ -130,7 +130,7 @@ Installs the dbareports database on the server sql2016 and the powershell script
 
 #>
 	[CmdletBinding()]
-    [OutputType([String])]  
+	[OutputType([String])]
 	Param (
 		[parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[Alias("ServerInstance", "SqlInstance")]
@@ -148,6 +148,8 @@ Installs the dbareports database on the server sql2016 and the powershell script
 		[switch]$NoPsFileCopy,
 		[switch]$NoJobSchedule,
 		[switch]$NoConfig,
+		[switch]$NoShortcut,
+		[switch]$NoAlias,
 		[string]$JobCategory = "dbareports collection jobs",
 		[timespan]$TimeSpan = $(New-TimeSpan -hours 4 -minutes 15),
 		[switch]$Force
@@ -667,7 +669,7 @@ Installs the dbareports database on the server sql2016 and the powershell script
 			}
 			
 			$db = $sourceserver.Databases[$InstallDatabase]
-			if ($null -ne $execaccount -and $null -eq $db.Users[$execaccount] )
+			if ($null -ne $execaccount -and $null -eq $db.Users[$execaccount])
 			{
 				Write-Output "Adding $execaccount to $InstallDatabase as db_owner"
 				try
@@ -771,6 +773,8 @@ Installs the dbareports database on the server sql2016 and the powershell script
 		Function Add-Migration
 		{
 			
+			$upgradeexists = Test-Path "$parentPath\setup\database\UpgradeScripts\*.sql"
+			if ($upgradeexists -eq $false) { return }
 			$Migrations = Get-ChildItem -Path "$parentPath\setup\database\UpgradeScripts\*.sql"
 			$CurrentDBVersion = $sourceserver.Databases[$InstallDatabase].ExtendedProperties['dbareports version'].Value
 			Write-Output "Current database version of $InstallDatabase is $CurrentDBVersion"
@@ -952,6 +956,8 @@ Installs the dbareports database on the server sql2016 and the powershell script
 				{
 					Add-DbrCredential
 					
+					$sourceserver.JobServer.ProxyAccounts.Refresh()
+					
 					$dbrproxy = $sourceserver.JobServer.ProxyAccounts | Where-Object { $_.Name -eq "PowerShell Proxy Account for dbareports" }
 					
 					if ($null -ne $dbrproxy)
@@ -1017,10 +1023,46 @@ Installs the dbareports database on the server sql2016 and the powershell script
 			Add-JobSchedule
 		}
 		
+		If ($NoShortcut -eq $false)
+		{
+			Write-Output "Copying shortcut to desktop"
+			$shortcut = "$parentPath\setup\shortcuts\dbareports.lnk"
+			Copy-Item $shortcut $([Environment]::GetFolderPath("Desktop"))
+		}
+		
+		If ($NoAlias -eq $false)
+		{
+			Write-Output "`n`nCreating a SQL Server alias called dbareports to $sqlserver in registry which requires admin access."
+			Write-Output "This will enable PowerBI to run without additional configuration."
+			New-DbrSqlAlias
+		}
+		
 		Write-Output "`nThanks for installing dbareports! Here are the results of Get-DbrConfig:"
 		Get-DbrConfig
 		Write-Output "You may now run Add-DbrServerToInventory to add a new server to your inventory."
 		
+		if ($Force -eq $false)
+		{
+			# Prompt to create and then create. 
+			$title = "Actually, we can automatically add $SqlServer to your inventory."
+			$message = "Would you like us to add $SqlServer to the inventory now? (Y/N)"
+			$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Will continue"
+			$no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "Will exit"
+			$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
+			$result = $host.ui.PromptForChoice($title, $message, $options, 0)
+			
+			if ($result -eq 1) { Write-Output "K!" }
+		}
+		else
+		{
+			$result = 0
+		}
+		
+		if ($result -eq 0)
+		{
+			Write-Output "Adding $SqlServer to inventory using Add-DbrServerToInventory"
+			Add-DbrServerToInventory -SqlInstance $sqlserver
+		}
 	}
 	
 	END

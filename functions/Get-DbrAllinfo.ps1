@@ -36,19 +36,19 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Get-DbrAllInfo
 
 .EXAMPLE
-Verb-SqlNoun
+Get-DbrAllInfo
 Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
 
 
 .EXAMPLE   
-Verb-SqlNoun -WhatIf
+Get-DbrAllInfo -WhatIf
 Shows what would happen if the command were executed.
 	
 .EXAMPLE   
-Verb-SqlNoun -Policy 'xp_cmdshell must be disabled'
+Get-DbrAllInfo -Policy 'xp_cmdshell must be disabled'
 Does this 
 #>
 	[CmdletBinding(SupportsShouldProcess = $true)]

@@ -3,17 +3,22 @@
 <#
 .SYNOPSIS 
 Adds an instance or an array of instances to the dbareports database using the config file
+
 .DESCRIPTION
 This command will add a SQL Instance or an array of instances to the dbareports database using the config file generated at install or via the dbrclient command
 
 .PARAMETER SqlInstance
 The instance or array of instances to add
+
 .PARAMETER SqlInstanceCredential
 The credential to connect to the dbareports database
+
 .PARAMETER Port
 The Port of the Instance to be added (if not specified then this is gathered)
+
 .PARAMETER Environment
 The terminology that you and your users use to define the environment the instance is in. Suggested examples are Prod or Production, Test, UAT, QA, PreProd, ProductionSupport,Development, etc
+
 .PARAMETER Location
 The terminology that you and your users use to define the location of the instance. It could be the town or city that the data centre is in or the name of the office etc
 
@@ -28,21 +33,22 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Add-DbrServerToInventory
+https://dbareports.io/functions/Add-DbrServerToInventory
 
 .EXAMPLE
 Add-DbrServerToInventory sql2016
 	
-Adds the SQL Server instance "sql2016" to the inventory then does XYZ
+Adds the SQL Server instance "sql2016" to the inventory then takes additional steps determined by the content of the config file.
 
 .EXAMPLE
 Add-DbrServerToInventory sql2016, sql2014
 	
-Adds the SQL Server instances sql2016 and sql2014 to the inventory then does XYZ
+Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes additional steps determined by the content of the config file.
 #>
 	[CmdletBinding()]
 	Param (
 		[parameter(ValueFromPipeline = $true, Mandatory = $true)]
+		[Alias("SqlServer", "ServerInstance")]
 		[string[]]$SqlInstance,
 		[object]$SqlInstanceCredential,
 		[int]$Port,
