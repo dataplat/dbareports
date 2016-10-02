@@ -48,8 +48,8 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 	[CmdletBinding()]
 	Param (
 		[parameter(ValueFromPipeline = $true, Mandatory = $true)]
-		[Alias("SqlServer", "SqlInstance")]
-		[object]$ServerInstance,
+		[Alias("SqlServer", "ServerInstance")]
+		[string[]]$SqlInstance,
 		[object]$SqlInstanceCredential,
 		[int]$Port,
 		[string]$Environment,

@@ -1033,14 +1033,18 @@ Installs the dbareports database on the server sql2016 and the powershell script
 		If ($NoAlias -eq $false)
 		{
 			Write-Output "`n`nCreating a SQL Server alias called dbareports to $sqlserver in registry which requires admin access."
-			Write-Output "This will enable PowerBI to run without additional configurations."
+			Write-Output "This will enable PowerBI to run without additional configuration."
 			New-DbrSqlAlias
 		}
+		
+		Write-Output "`nThanks for installing dbareports! Here are the results of Get-DbrConfig:"
+		Get-DbrConfig
+		Write-Output "You may now run Add-DbrServerToInventory to add a new server to your inventory."
 		
 		if ($Force -eq $false)
 		{
 			# Prompt to create and then create. 
-			$title = "We can automatically add $SqlServer to your inventory."
+			$title = "Actually, we can automatically add $SqlServer to your inventory."
 			$message = "Would you like us to add $SqlServer to the inventory now? (Y/N)"
 			$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Will continue"
 			$no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "Will exit"
@@ -1059,11 +1063,6 @@ Installs the dbareports database on the server sql2016 and the powershell script
 			Write-Output "Adding $SqlServer to inventory using Add-DbrServerToInventory"
 			Add-DbrServerToInventory -SqlInstance $sqlserver
 		}
-		
-		Write-Output "`nThanks for installing dbareports! Here are the results of Get-DbrConfig:"
-		Get-DbrConfig
-		Write-Output "You may now run Add-DbrServerToInventory to add a new server to your inventory."
-		
 	}
 	
 	END
