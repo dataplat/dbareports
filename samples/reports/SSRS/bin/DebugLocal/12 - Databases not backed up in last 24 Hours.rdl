@@ -2,30 +2,46 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSets>
-    <DataSet Name="ByServer">
+    <DataSet Name="DatabaseBackup">
       <SharedDataSet>
-        <SharedDataSetReference>DatabaseLastUsedServer</SharedDataSetReference>
+        <SharedDataSetReference>DatabaseBackup</SharedDataSetReference>
       </SharedDataSet>
       <Fields>
-        <Field Name="Environment">
-          <DataField>Environment</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="ServerName">
           <DataField>ServerName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="DatabaseCount">
-          <DataField>DatabaseCount</DataField>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LastBackupDate">
+          <DataField>LastBackupDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="LastDifferentialBackupDate">
+          <DataField>LastDifferentialBackupDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="LastLogBackupDate">
+          <DataField>LastLogBackupDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="MaxDate">
+          <DataField>MaxDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="DaysSinceBackup">
+          <DataField>DaysSinceBackup</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="LastReboot">
-          <DataField>LastReboot</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+        <Field Name="HoursinceBackup">
+          <DataField>HoursinceBackup</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="DateChecked">
-          <DataField>DateChecked</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+        <Field Name="Olderthan24">
+          <DataField>Olderthan24</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -34,55 +50,14 @@
     <ReportSection>
       <Body>
         <ReportItems>
-          <Textbox Name="Textbox17">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Click for the Databases Report</Value>
-                    <Style>
-                      <FontFamily>Segoe UI Light</FontFamily>
-                      <FontSize>14pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox17</rd:DefaultName>
-            <ActionInfo>
-              <Actions>
-                <Action>
-                  <Drillthrough>
-                    <ReportName>04 - Database Last Used</ReportName>
-                  </Drillthrough>
-                </Action>
-              </Actions>
-            </ActionInfo>
-            <Top>0.17639cm</Top>
-            <Left>10.60662cm</Left>
-            <Height>0.6cm</Height>
-            <Width>7.31541cm</Width>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Tablix Name="Tablix3">
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.52986cm</Width>
+                  <Width>3.0933cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.91204cm</Width>
+                  <Width>9.56871cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>3.00705cm</Width>
@@ -91,7 +66,7 @@
                   <Width>4.56808cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.24625cm</Width>
+                  <Width>4.16688cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -103,14 +78,14 @@
                         <Textbox Name="Textbox15">
                           <CanGrow>true</CanGrow>
                           <UserSort>
-                            <SortExpression>=Fields!Environment.Value</SortExpression>
+                            <SortExpression>=Fields!ServerName.Value</SortExpression>
                           </UserSort>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Environment</Value>
+                                  <Value>Server</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>14pt</FontSize>
@@ -141,14 +116,14 @@
                         <Textbox Name="Textbox19">
                           <CanGrow>true</CanGrow>
                           <UserSort>
-                            <SortExpression>=Fields!ServerName.Value</SortExpression>
+                            <SortExpression>=Fields!Name.Value</SortExpression>
                           </UserSort>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Server</Value>
+                                  <Value>Database</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>14pt</FontSize>
@@ -179,14 +154,14 @@
                         <Textbox Name="Textbox21">
                           <CanGrow>true</CanGrow>
                           <UserSort>
-                            <SortExpression>=Fields!DatabaseCount.Value</SortExpression>
+                            <SortExpression>=Fields!LastBackupDate.Value</SortExpression>
                           </UserSort>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Databases</Value>
+                                  <Value>Last Full</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>14pt</FontSize>
@@ -219,14 +194,14 @@
                         <Textbox Name="Textbox25">
                           <CanGrow>true</CanGrow>
                           <UserSort>
-                            <SortExpression>=Fields!LastReboot.Value</SortExpression>
+                            <SortExpression>=Fields!LastDifferentialBackupDate.Value</SortExpression>
                           </UserSort>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Rebooted</Value>
+                                  <Value>LastDiff</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>14pt</FontSize>
@@ -258,12 +233,15 @@
                       <CellContents>
                         <Textbox Name="Textbox4">
                           <CanGrow>true</CanGrow>
+                          <UserSort>
+                            <SortExpression>=Fields!DaysSinceBackup.Value</SortExpression>
+                          </UserSort>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Date Checked</Value>
+                                  <Value>Days Since Backup</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>14pt</FontSize>
@@ -298,40 +276,7 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Environment">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Environment.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI Light</FontFamily>
-                                    <FontSize>11pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Environment</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="ServerName">
+                        <Textbox Name="ServerName1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -348,7 +293,7 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>ServerName</rd:DefaultName>
+                          <rd:DefaultName>ServerName1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -364,26 +309,24 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="DatabaseCount">
+                        <Textbox Name="Name">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DatabaseCount.Value</Value>
+                                  <Value>=Fields!Name.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>11pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
+                              <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>DatabaseCount</rd:DefaultName>
+                          <rd:DefaultName>Name</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -399,14 +342,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="LastReboot">
+                        <Textbox Name="LastBackupDate">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!LastReboot.Value</Value>
+                                  <Value>=Fields!LastBackupDate.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>11pt</FontSize>
@@ -418,7 +361,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>LastReboot</rd:DefaultName>
+                          <rd:DefaultName>LastBackupDate</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -434,14 +377,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="DateChecked">
+                        <Textbox Name="LastDifferentialBackupDate">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DateChecked.Value</Value>
+                                  <Value>=Fields!LastDifferentialBackupDate.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>11pt</FontSize>
@@ -453,7 +396,42 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>DateChecked</rd:DefaultName>
+                          <rd:DefaultName>LastDifferentialBackupDate</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DaysSinceBackup">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DaysSinceBackup.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI Light</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DaysSinceBackup</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -490,11 +468,10 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>ByServer</DataSetName>
+            <DataSetName>DatabaseBackup</DataSetName>
             <Top>0.77639cm</Top>
             <Height>1.41986cm</Height>
-            <Width>20.26328cm</Width>
-            <ZIndex>1</ZIndex>
+            <Width>24.40401cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -521,10 +498,10 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Databases not used since last reboot- </Value>
+                      <Value>Databases not backed up in the last24 Hours  </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>20pt</FontSize>
+                        <FontSize>24pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>LightGrey</Color>
@@ -534,7 +511,7 @@
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>20pt</FontSize>
+                        <FontSize>24pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Format>d MMMM yyyy</Format>
                         <TextDecoration>None</TextDecoration>
@@ -628,9 +605,9 @@
                 </Actions>
               </ActionInfo>
               <Top>0cm</Top>
-              <Left>20.27682cm</Left>
+              <Left>19.48307cm</Left>
               <Height>0.65872cm</Height>
-              <Width>5.10965cm</Width>
+              <Width>5.9034cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>

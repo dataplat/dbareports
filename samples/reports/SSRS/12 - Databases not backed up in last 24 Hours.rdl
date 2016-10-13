@@ -60,10 +60,10 @@
                   <Width>9.56871cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>3.00705cm</Width>
+                  <Width>3.93309cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.56808cm</Width>
+                  <Width>4.62449cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>4.16688cm</Width>
@@ -471,7 +471,7 @@
             <DataSetName>DatabaseBackup</DataSetName>
             <Top>0.77639cm</Top>
             <Height>1.41986cm</Height>
-            <Width>24.40401cm</Width>
+            <Width>25.38647cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -501,7 +501,7 @@
                       <Value>Databases not backed up in the last24 Hours  </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>LightGrey</Color>
@@ -511,7 +511,7 @@
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Format>d MMMM yyyy</Format>
                         <TextDecoration>None</TextDecoration>
@@ -605,9 +605,9 @@
                 </Actions>
               </ActionInfo>
               <Top>0cm</Top>
-              <Left>19.48307cm</Left>
+              <Left>16.5951cm</Left>
               <Height>0.65872cm</Height>
-              <Width>5.9034cm</Width>
+              <Width>8.79137cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
