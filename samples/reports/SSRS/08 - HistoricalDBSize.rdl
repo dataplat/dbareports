@@ -529,7 +529,7 @@
             </ChartNoDataMessage>
             <DataSetName>LogsForServer</DataSetName>
             <Top>6.34998mm</Top>
-            <Left>6.35mm</Left>
+            <Left>4.45237mm</Left>
             <Height>158.74376mm</Height>
             <Width>369.21666mm</Width>
             <Style>
@@ -552,7 +552,7 @@
           <BackgroundColor>Gainsboro</BackgroundColor>
         </Style>
       </Body>
-      <Width>396.63728mm</Width>
+      <Width>378.1214mm</Width>
       <Page>
         <PageHeader>
           <Height>0.53084in</Height>
@@ -596,7 +596,7 @@
               <Top>0cm</Top>
               <Left>5.17477cm</Left>
               <Height>0.38153in</Height>
-              <Width>13.57833in</Width>
+              <Width>12.84936in</Width>
               <Style>
                 <BackgroundColor>#012456</BackgroundColor>
                 <PaddingLeft>2pt</PaddingLeft>
