@@ -498,7 +498,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Databases not backed up in the last24 Hours  </Value>
+                      <Value>Databases not backed up in the last 24 Hours </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
                         <FontSize>20pt</FontSize>
