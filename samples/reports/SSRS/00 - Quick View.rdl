@@ -244,7 +244,7 @@ Click for more information</Value>
             <Top>0.26113cm</Top>
             <Left>8.4635cm</Left>
             <Height>1.20854cm</Height>
-            <Width>7.39416cm</Width>
+            <Width>7.23195cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -531,7 +531,7 @@ Click for more information</Value>
               <Value />
             </TopImage>
             <DataSetName>LowDiskSpace</DataSetName>
-            <Top>1.61078cm</Top>
+            <Top>1.64606cm</Top>
             <Left>1.09044cm</Left>
             <Height>4.39146cm</Height>
             <Width>7.23194cm</Width>
@@ -575,7 +575,7 @@ Click for more information</Value>
                 </Action>
               </Actions>
             </ActionInfo>
-            <Top>0.22585cm</Top>
+            <Top>0.26113cm</Top>
             <Left>1.09043cm</Left>
             <Height>1.20854cm</Height>
             <Width>7.23195cm</Width>
@@ -866,10 +866,10 @@ Click for more information</Value>
               <Value />
             </TopImage>
             <DataSetName>AgentJobServer</DataSetName>
-            <Top>1.61078cm</Top>
+            <Top>1.64606cm</Top>
             <Left>8.46349cm</Left>
             <Height>4.39146cm</Height>
-            <Width>7.39417cm</Width>
+            <Width>7.23194cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1724,10 +1724,10 @@ Click for more information</Value>
                 </Action>
               </Actions>
             </ActionInfo>
-            <Top>0.29641cm</Top>
-            <Left>16.03406cm</Left>
+            <Top>0.26113cm</Top>
+            <Left>15.87184cm</Left>
             <Height>1.20854cm</Height>
-            <Width>7.39416cm</Width>
+            <Width>7.39417cm</Width>
             <ZIndex>9</ZIndex>
             <Style>
               <Border>
@@ -2016,7 +2016,7 @@ Click for more information</Value>
             </TopImage>
             <DataSetName>DatabaseBackup</DataSetName>
             <Top>1.64606cm</Top>
-            <Left>16.03405cm</Left>
+            <Left>15.87182cm</Left>
             <Height>4.39146cm</Height>
             <Width>7.39417cm</Width>
             <ZIndex>10</ZIndex>
@@ -2053,7 +2053,7 @@ Click for more information</Value>
                       <Value>SQL DBA Front Page - </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Color>LightGrey</Color>
                       </Style>
@@ -2062,7 +2062,7 @@ Click for more information</Value>
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Format>d MMMM yyyy</Format>
                         <Color>LightGrey</Color>
@@ -2154,7 +2154,7 @@ Click for more information</Value>
                   </Action>
                 </Actions>
               </ActionInfo>
-              <Top>0.00008cm</Top>
+              <Top>0.00007cm</Top>
               <Left>23.86185cm</Left>
               <Height>0.65872cm</Height>
               <Width>4.68938cm</Width>

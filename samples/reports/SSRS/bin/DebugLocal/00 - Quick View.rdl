@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource1">
+      <DataSourceReference>DBA Database</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>e23f5f82-f5c7-44ff-abb8-3aa83004870c</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
   <DataSets>
     <DataSet Name="AgentJobServer">
       <SharedDataSet>
@@ -161,6 +168,61 @@
         </Filter>
       </Filters>
     </DataSet>
+    <DataSet Name="DatabaseBackup">
+      <SharedDataSet>
+        <SharedDataSetReference>DatabaseBackup</SharedDataSetReference>
+      </SharedDataSet>
+      <Fields>
+        <Field Name="ServerName">
+          <DataField>ServerName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LastBackupDate">
+          <DataField>LastBackupDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="LastDifferentialBackupDate">
+          <DataField>LastDifferentialBackupDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="LastLogBackupDate">
+          <DataField>LastLogBackupDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="MaxDate">
+          <DataField>MaxDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="DaysSinceBackup">
+          <DataField>DaysSinceBackup</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="HoursinceBackup">
+          <DataField>HoursinceBackup</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Olderthan24">
+          <DataField>Olderthan24</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="EnvironmentalRoles">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <CommandText>Select distinct(Environment) from dbo.InstanceList</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Environment">
+          <DataField>Environment</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -201,7 +263,7 @@ Click for more information</Value>
             <Top>0.26113cm</Top>
             <Left>8.4635cm</Left>
             <Height>1.20854cm</Height>
-            <Width>7.39416cm</Width>
+            <Width>7.23195cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -488,7 +550,7 @@ Click for more information</Value>
               <Value />
             </TopImage>
             <DataSetName>LowDiskSpace</DataSetName>
-            <Top>1.61078cm</Top>
+            <Top>1.64606cm</Top>
             <Left>1.09044cm</Left>
             <Height>4.39146cm</Height>
             <Width>7.23194cm</Width>
@@ -532,7 +594,7 @@ Click for more information</Value>
                 </Action>
               </Actions>
             </ActionInfo>
-            <Top>0.22585cm</Top>
+            <Top>0.26113cm</Top>
             <Left>1.09043cm</Left>
             <Height>1.20854cm</Height>
             <Width>7.23195cm</Width>
@@ -823,10 +885,10 @@ Click for more information</Value>
               <Value />
             </TopImage>
             <DataSetName>AgentJobServer</DataSetName>
-            <Top>1.61078cm</Top>
+            <Top>1.64606cm</Top>
             <Left>8.46349cm</Left>
             <Height>4.39146cm</Height>
-            <Width>7.39417cm</Width>
+            <Width>7.23194cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1536,8 +1598,8 @@ Click for more information</Value>
                 </Action>
               </Actions>
             </ActionInfo>
-            <Top>0.26113cm</Top>
-            <Left>16.2687cm</Left>
+            <Top>8.40231cm</Top>
+            <Left>16.26871cm</Left>
             <Height>1.20854cm</Height>
             <Width>10.66208cm</Width>
             <ZIndex>6</ZIndex>
@@ -1585,8 +1647,8 @@ Click for more information</Value>
                 </Action>
               </Actions>
             </ActionInfo>
-            <Top>1.61078cm</Top>
-            <Left>16.2687cm</Left>
+            <Top>7.49363cm</Top>
+            <Left>16.26871cm</Left>
             <Height>0.76757cm</Height>
             <Width>12.28252cm</Width>
             <ZIndex>7</ZIndex>
@@ -1600,6 +1662,390 @@ Click for more information</Value>
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox60">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Databases Not Backed Up in 24 Hours --  </Value>
+                    <Style>
+                      <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>14pt</FontSize>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Sum(Fields!Olderthan24.Value, "DatabaseBackup")</Value>
+                    <Style>
+                      <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>14pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox59</rd:DefaultName>
+            <ActionInfo>
+              <Actions>
+                <Action>
+                  <Drillthrough>
+                    <ReportName>06 - Servers With Database not used since last reboot</ReportName>
+                  </Drillthrough>
+                </Action>
+              </Actions>
+            </ActionInfo>
+            <Top>6.69078cm</Top>
+            <Left>16.26871cm</Left>
+            <Height>0.76757cm</Height>
+            <Width>12.28252cm</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox3">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>No Backups in Last 24 Hours
+Click for more information</Value>
+                    <Style>
+                      <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>14pt</FontSize>
+                      <TextDecoration>None</TextDecoration>
+                      <Color>LightGrey</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <ActionInfo>
+              <Actions>
+                <Action>
+                  <Drillthrough>
+                    <ReportName>12 - Databases not backed up in last 24 Hours</ReportName>
+                  </Drillthrough>
+                </Action>
+              </Actions>
+            </ActionInfo>
+            <Top>0.26113cm</Top>
+            <Left>15.87184cm</Left>
+            <Height>1.20854cm</Height>
+            <Width>7.39417cm</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BackgroundColor>#2a4494</BackgroundColor>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <GaugePanel Name="GaugePanel6">
+            <RadialGauges>
+              <RadialGauge Name="RadialGauge1">
+                <PivotY>75</PivotY>
+                <GaugeScales>
+                  <RadialScale Name="RadialScale1">
+                    <Radius>54</Radius>
+                    <StartAngle>90</StartAngle>
+                    <SweepAngle>180</SweepAngle>
+                    <GaugePointers>
+                      <RadialPointer Name="RadialPointer1">
+                        <PointerCap>
+                          <Style>
+                            <BackgroundColor>White</BackgroundColor>
+                            <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                            <BackgroundGradientEndColor>DimGray</BackgroundGradientEndColor>
+                            <BackgroundHatchType>None</BackgroundHatchType>
+                          </Style>
+                          <CapImage>
+                            <OffsetX>0pt</OffsetX>
+                            <OffsetY>0pt</OffsetY>
+                            <Source>External</Source>
+                            <Value />
+                          </CapImage>
+                          <OnTop>true</OnTop>
+                          <CapStyle>RoundedWithWideIndentation</CapStyle>
+                          <Width>33</Width>
+                        </PointerCap>
+                        <NeedleStyle>Tapered</NeedleStyle>
+                        <Style>
+                          <Border>
+                            <Style>None</Style>
+                          </Border>
+                          <BackgroundColor>White</BackgroundColor>
+                          <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                          <BackgroundGradientEndColor>Orange</BackgroundGradientEndColor>
+                          <BackgroundHatchType>None</BackgroundHatchType>
+                          <ShadowOffset>1pt</ShadowOffset>
+                        </Style>
+                        <GaugeInputValue>
+                          <Value>=Sum(Fields!Olderthan24.Value)</Value>
+                          <Multiplier>1</Multiplier>
+                        </GaugeInputValue>
+                        <PointerImage>
+                          <OffsetX>0pt</OffsetX>
+                          <OffsetY>0pt</OffsetY>
+                          <Source>External</Source>
+                          <Value />
+                        </PointerImage>
+                        <MarkerLength>25</MarkerLength>
+                        <MarkerStyle>Wedge</MarkerStyle>
+                        <Placement>Inside</Placement>
+                        <Width>15</Width>
+                      </RadialPointer>
+                    </GaugePointers>
+                    <ScaleRanges>
+                      <ScaleRange Name="RadialRange1">
+                        <Style>
+                          <Border>
+                            <Color>Silver</Color>
+                            <Style>Solid</Style>
+                          </Border>
+                          <BackgroundColor>#00ffffff</BackgroundColor>
+                          <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                          <BackgroundGradientEndColor>Salmon</BackgroundGradientEndColor>
+                          <BackgroundHatchType>None</BackgroundHatchType>
+                          <ShadowOffset>0pt</ShadowOffset>
+                        </Style>
+                        <DistanceFromScale>30</DistanceFromScale>
+                        <StartValue>
+                          <Value>60</Value>
+                          <Multiplier>1</Multiplier>
+                        </StartValue>
+                        <EndValue>
+                          <Value />
+                          <Multiplier>1</Multiplier>
+                        </EndValue>
+                        <StartWidth>15</StartWidth>
+                        <EndWidth>30</EndWidth>
+                        <Placement>Inside</Placement>
+                      </ScaleRange>
+                    </ScaleRanges>
+                    <Style>
+                      <Border>
+                        <Style>None</Style>
+                      </Border>
+                      <BackgroundColor>CornflowerBlue</BackgroundColor>
+                      <BackgroundGradientType>None</BackgroundGradientType>
+                      <BackgroundGradientEndColor>White</BackgroundGradientEndColor>
+                      <BackgroundHatchType>None</BackgroundHatchType>
+                      <ShadowOffset>0pt</ShadowOffset>
+                    </Style>
+                    <Interval>NaN</Interval>
+                    <IntervalOffset>NaN</IntervalOffset>
+                    <MaximumValue>
+                      <Value>20</Value>
+                      <Multiplier>1</Multiplier>
+                    </MaximumValue>
+                    <MinimumValue>
+                      <Value>0</Value>
+                      <Multiplier>1</Multiplier>
+                    </MinimumValue>
+                    <GaugeMajorTickMarks>
+                      <Interval>NaN</Interval>
+                      <IntervalOffset>NaN</IntervalOffset>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>DimGray</BackgroundColor>
+                      </Style>
+                      <Placement>Cross</Placement>
+                      <TickMarkImage>
+                        <Source>External</Source>
+                        <Value />
+                      </TickMarkImage>
+                      <Length>18</Length>
+                      <Width>2</Width>
+                    </GaugeMajorTickMarks>
+                    <GaugeMinorTickMarks>
+                      <Interval>NaN</Interval>
+                      <IntervalOffset>NaN</IntervalOffset>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                          <Style>None</Style>
+                        </Border>
+                        <BackgroundColor>DimGray</BackgroundColor>
+                      </Style>
+                      <Placement>Cross</Placement>
+                      <TickMarkImage>
+                        <Source>External</Source>
+                        <Value />
+                      </TickMarkImage>
+                      <Length>8</Length>
+                      <Width>1</Width>
+                    </GaugeMinorTickMarks>
+                    <MaximumPin>
+                      <PinLabel>
+                        <Style>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                        <DistanceFromScale>0</DistanceFromScale>
+                      </PinLabel>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>WhiteSmoke</BackgroundColor>
+                      </Style>
+                      <Placement>Cross</Placement>
+                      <TickMarkImage>
+                        <Source>External</Source>
+                        <Value />
+                      </TickMarkImage>
+                      <Length>6</Length>
+                      <Width>6</Width>
+                      <Shape>Circle</Shape>
+                    </MaximumPin>
+                    <MinimumPin>
+                      <PinLabel>
+                        <Style>
+                          <FontSize>12pt</FontSize>
+                        </Style>
+                        <DistanceFromScale>0</DistanceFromScale>
+                      </PinLabel>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>WhiteSmoke</BackgroundColor>
+                      </Style>
+                      <Placement>Cross</Placement>
+                      <TickMarkImage>
+                        <Source>External</Source>
+                        <Value />
+                      </TickMarkImage>
+                      <Length>6</Length>
+                      <Width>6</Width>
+                      <Shape>Circle</Shape>
+                    </MinimumPin>
+                    <ScaleLabels>
+                      <Style>
+                        <FontSize>14pt</FontSize>
+                        <Color>#404040</Color>
+                      </Style>
+                      <Interval>NaN</Interval>
+                      <IntervalOffset>NaN</IntervalOffset>
+                      <DistanceFromScale>0</DistanceFromScale>
+                      <Placement>Outside</Placement>
+                      <RotateLabels>true</RotateLabels>
+                      <ShowEndLabels>true</ShowEndLabels>
+                      <UseFontPercent>true</UseFontPercent>
+                    </ScaleLabels>
+                    <Width>0</Width>
+                  </RadialScale>
+                </GaugeScales>
+                <BackFrame>
+                  <Style>
+                    <Border>
+                      <Style>None</Style>
+                    </Border>
+                    <BackgroundColor>WhiteSmoke</BackgroundColor>
+                    <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                    <BackgroundGradientEndColor>Gainsboro</BackgroundGradientEndColor>
+                    <BackgroundHatchType>None</BackgroundHatchType>
+                    <ShadowOffset>0pt</ShadowOffset>
+                  </Style>
+                  <FrameStyle>Edged</FrameStyle>
+                  <FrameShape>CustomSemiCircularN1</FrameShape>
+                  <FrameBackground>
+                    <Style>
+                      <BackgroundColor>WhiteSmoke</BackgroundColor>
+                      <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                      <BackgroundGradientEndColor>Gray</BackgroundGradientEndColor>
+                      <BackgroundHatchType>None</BackgroundHatchType>
+                    </Style>
+                  </FrameBackground>
+                  <FrameImage>
+                    <Source>External</Source>
+                    <Value />
+                  </FrameImage>
+                </BackFrame>
+                <ClipContent>true</ClipContent>
+                <TopImage>
+                  <Source>External</Source>
+                  <Value />
+                </TopImage>
+                <AspectRatio>1.48</AspectRatio>
+                <Height>100</Height>
+                <Width>100</Width>
+                <ActionInfo>
+                  <Actions>
+                    <Action>
+                      <Drillthrough>
+                        <ReportName>01 - Agent Job Summary</ReportName>
+                      </Drillthrough>
+                    </Action>
+                  </Actions>
+                </ActionInfo>
+              </RadialGauge>
+            </RadialGauges>
+            <AutoLayout>true</AutoLayout>
+            <BackFrame>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <BackgroundColor>Gainsboro</BackgroundColor>
+                <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                <BackgroundGradientEndColor>Gray</BackgroundGradientEndColor>
+                <BackgroundHatchType>None</BackgroundHatchType>
+                <ShadowOffset>0pt</ShadowOffset>
+              </Style>
+              <FrameBackground>
+                <Style>
+                  <BackgroundColor>Silver</BackgroundColor>
+                  <BackgroundGradientType>DiagonalLeft</BackgroundGradientType>
+                  <BackgroundGradientEndColor>Gray</BackgroundGradientEndColor>
+                  <BackgroundHatchType>None</BackgroundHatchType>
+                </Style>
+              </FrameBackground>
+              <FrameImage>
+                <Source>External</Source>
+                <Value />
+              </FrameImage>
+            </BackFrame>
+            <TopImage>
+              <Source>External</Source>
+              <Value />
+            </TopImage>
+            <DataSetName>DatabaseBackup</DataSetName>
+            <Top>1.64606cm</Top>
+            <Left>15.87182cm</Left>
+            <Height>4.39146cm</Height>
+            <Width>7.39417cm</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BackgroundColor>LightBlue</BackgroundColor>
+            </Style>
+          </GaugePanel>
         </ReportItems>
         <Height>4.20741in</Height>
         <Style>
@@ -1626,7 +2072,7 @@ Click for more information</Value>
                       <Value>SQL DBA Front Page - </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Color>LightGrey</Color>
                       </Style>
@@ -1635,7 +2081,7 @@ Click for more information</Value>
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Format>d MMMM yyyy</Format>
                         <Color>LightGrey</Color>
@@ -1727,7 +2173,7 @@ Click for more information</Value>
                   </Action>
                 </Actions>
               </ActionInfo>
-              <Top>0.00009cm</Top>
+              <Top>0.00007cm</Top>
               <Left>23.86185cm</Left>
               <Height>0.65872cm</Height>
               <Width>4.68938cm</Width>
@@ -1760,10 +2206,29 @@ Click for more information</Value>
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="EnvironmentRole">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>EnvironmentalRoles</DataSetName>
+          <ValueField>Environment</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>EnvironmentRole</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>EnvironmentRole</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <EmbeddedImages>

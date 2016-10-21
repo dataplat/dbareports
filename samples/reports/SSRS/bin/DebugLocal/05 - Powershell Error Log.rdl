@@ -430,7 +430,7 @@
                       <Value>PowerShell Log File Errors and Warnings - </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>LightGrey</Color>
@@ -440,7 +440,7 @@
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Format>d MMMM yyyy</Format>
                         <TextDecoration>None</TextDecoration>
