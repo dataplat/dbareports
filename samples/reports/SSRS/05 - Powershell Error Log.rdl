@@ -358,7 +358,6 @@
             </TablixRowHierarchy>
             <DataSetName>LogFileErrors</DataSetName>
             <Top>1.39375cm</Top>
-            <Left>0cm</Left>
             <Height>1.2cm</Height>
             <Width>26.74405cm</Width>
             <Style>
@@ -374,26 +373,10 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>This report will look at the log files for the Powershell scripts running the DBADatabase Automation Scripts running on HMDBS02 and search for Errors or Warnigns for Log Files created in the last 24 hours. The log files are located </Value>
+                    <Value>This report will look at the log files for the Powershell scripts running the DBAReports Automation Scripts running on The DBA Reports Server and search for Errors or Warnigns for Log Files created in the last 24 hours. The log files are located</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>11pt</FontSize>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>\\HMDBS02\K$\SQLBACKUP\LogFile</Value>
-                    <ActionInfo>
-                      <Actions>
-                        <Action>
-                          <Hyperlink>file://HMDBS02/LogFile</Hyperlink>
-                        </Action>
-                      </Actions>
-                    </ActionInfo>
-                    <Style>
-                      <FontFamily>Segoe UI Light</FontFamily>
-                      <FontSize>11pt</FontSize>
-                      <TextDecoration>Underline</TextDecoration>
-                      <Color>DarkBlue</Color>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -411,7 +394,6 @@
               </Actions>
             </ActionInfo>
             <Top>0.17639cm</Top>
-            <Left>0cm</Left>
             <Height>1.07625cm</Height>
             <Width>26.74403cm</Width>
             <ZIndex>1</ZIndex>
@@ -448,7 +430,7 @@
                       <Value>PowerShell Log File Errors and Warnings - </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>LightGrey</Color>
@@ -458,7 +440,7 @@
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Format>d MMMM yyyy</Format>
                         <TextDecoration>None</TextDecoration>
@@ -472,7 +454,6 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>textbox1</rd:DefaultName>
-              <Top>0cm</Top>
               <Left>5.13949cm</Left>
               <Height>0.38153in</Height>
               <Width>8.50572in</Width>
@@ -495,8 +476,6 @@
                   </Action>
                 </Actions>
               </ActionInfo>
-              <Top>0cm</Top>
-              <Left>0cm</Left>
               <Height>1.34833cm</Height>
               <Width>5.13949cm</Width>
               <ZIndex>1</ZIndex>
@@ -553,7 +532,6 @@
                   </Action>
                 </Actions>
               </ActionInfo>
-              <Top>0cm</Top>
               <Left>21.74403cm</Left>
               <Height>0.65872cm</Height>
               <Width>5cm</Width>

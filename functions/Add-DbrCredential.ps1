@@ -10,13 +10,11 @@ This will create a credential and a proxy on the dbareports server using the ins
 .PARAMETER JobCredential
 The Username and password for the credential in a PSCredential object. Will be prompted if it does not exist
 
-
 .PARAMETER CredentialName 
 The name of the credential Defaults to 'DBAreports',
 
 .PARAMETER ProxyName
 The name of the proxy. Defaults to 'PowerShell Proxy Account for dbareports'
-
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -29,7 +27,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/Verb-SqlNoun
+https://dbareports.io/functions/Add-DbrCredential
 
 .EXAMPLE
 Add-DbrCredential -CredentialName TheBeard -ProxyName Rob

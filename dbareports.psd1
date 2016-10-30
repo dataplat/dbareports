@@ -11,7 +11,7 @@
 	RootModule = 'dbareports.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '0.0.0.1'
+	ModuleVersion = '0.1.0.0'
 	
 	# ID used to uniquely identify this module
 	GUID = '654a8346-35f1-4592-a1b5-0ee472fab074'
@@ -80,7 +80,8 @@
 		'Get-DbrAgentJob',
 		'Get-DbrInstanceList',
 		'New-DbrSqlAlias',
-		'Get-DbrNewJob'
+		'Get-DbrNewJob',
+        'Write-Log'
 	)
 	
 	# Cmdlets to export from this module

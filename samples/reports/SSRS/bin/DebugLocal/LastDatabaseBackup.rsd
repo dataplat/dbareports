@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>DBA Database</DataSourceReference>
+      <CommandText>DECLARE @CurrDate DATETIME
+SET @CurrDate = GETDATE()
+Select
+il.[ServerName]
+,D.Name
+ ,D.LastBackupDate
+,D.LastDifferentialBackupDate
+,D.LastLogBackupDate
+,(SELECT MAX(BackupDate)
+	FROM (VALUES (D.LastBackupDate)
+	,(D.LastDifferentialBackupDate)
+	) AS VALUE (BackupDate)
+	) AS MaxDate
+,DATEDIFF(DAY,(SELECT MAX(BackupDate)
+	FROM (VALUES (D.LastBackupDate)
+	,(D.LastDifferentialBackupDate)
+	) AS VALUE (BackupDate)
+	),@CurrDate) as DaysSinceBackup
+,DATEDIFF(HOUR,(SELECT MAX(BackupDate)
+	FROM (VALUES (D.LastBackupDate)
+	,(D.LastDifferentialBackupDate)
+	) AS VALUE (BackupDate)
+	),@CurrDate) as HoursinceBackup
+,CASE 
+WHEN (DATEDIFF(HOUR, D.LastBackupDate, @CurrDate) &amp;gt; 24) AND (DATEDIFF(HOUR, D.LastDifferentialBackupDate, @CurrDate) &amp;gt;24)
+THEN 1
+ELSE 0
+END
+AS Olderthan24
+FROM [DBADatabase].[dbo].[InstanceList] il
+  JOIN [Info].[Databases] D
+  ON IL.InstanceID = D.InstanceID
+  JOIN [Info].[SQLInfo] SQL
+  ON IL.InstanceID = SQL.InstanceID
+  where il.Inactive = 0 and il.NotContactable = 0
+    AND DatabaseEngine = 'Microsoft SQL Server'
+	AND D.Inactive &amp;lt;&amp;gt; 1
+	AND D.Status = 'Normal'
+	AND SQL.SQLVersion &amp;lt;&amp;gt; 'SQL 2000'
+	AND IL.ServerName &amp;lt;&amp;gt; 'HDBS1016'
+	AND D.Name NOT IN ('WSS_Content_Template dev','WSS_Content_TemplateDev','WSS_Content_TemplateTest','Copyright2008R2','Tempdb')
+	AND D.IsUpdateable = 1
+	ORDER BY DaysSinceBackup desc,HoursinceBackup desc</CommandText>
+    </Query>
+  </DataSet>
+</SharedDataSet>

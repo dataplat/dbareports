@@ -1,24 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
-      <CommandText>SELECT 
+      <CommandText>	 SELECT 
 	  IL.Environment
 	  ,IL.ServerName
 	  ,COUNT(D.DatabaseID) as DatabaseCount
-	  ,LastReboot    
-  FROM info.Databases d
-  JOIN dbo.InstanceList IL
+	,MAX(LastReboot) as LastReboot
+	,MAX(DateChecked) as DateChecked
+  FROM  dbo.InstanceList IL
+  JOIN info.Databases d
   ON 
   D.InstanceID = IL.InstanceID
   WHERE D.DateChecked &gt; DATEADD(Day,-6,GetDate())
   AND [lastwrite] = '1900-01-01 00:00:00.000'
   AND [lastRead] = '1900-01-01 00:00:00.000' 
- GROUP BY IL.ServerName,IL.Environment,D.LastReboot
- ORDER BY Environment,DatabaseCount desc
-  
-  </CommandText>
+ GROUP BY IL.ServerName ,IL.Environment 
+ ORDER BY  DatabaseCount desc</CommandText>
     </Query>
+    <Fields>
+      <Field Name="Environment">
+        <DataField>Environment</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="ServerName">
+        <DataField>ServerName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="DatabaseCount">
+        <DataField>DatabaseCount</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="LastReboot">
+        <DataField>LastReboot</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="DateChecked">
+        <DataField>DateChecked</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+    </Fields>
   </DataSet>
 </SharedDataSet>
