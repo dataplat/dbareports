@@ -111,11 +111,11 @@ Internal function that creates SMO server object. Input can be text or SMO.Serve
 	{
 		if ($ParameterConnection)
 		{
-			$server.ConnectionContext.ConnectTimeout = 2
+			$server.ConnectionContext.ConnectTimeout = 10
 		}
 		else
 		{
-			$server.ConnectionContext.ConnectTimeout = 3
+			$server.ConnectionContext.ConnectTimeout = 11
 		}
 		
 		$server.ConnectionContext.Connect()
