@@ -91,7 +91,7 @@
                   <Width>4.56808cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.16688cm</Width>
+                  <Width>4.24625cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -493,7 +493,7 @@
             <DataSetName>ByServer</DataSetName>
             <Top>0.77639cm</Top>
             <Height>1.41986cm</Height>
-            <Width>20.1839cm</Width>
+            <Width>20.26328cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -524,7 +524,7 @@
                       <Value>Databases not used since last reboot- </Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>LightGrey</Color>
@@ -534,7 +534,7 @@
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontFamily>Segoe UI Light</FontFamily>
-                        <FontSize>24pt</FontSize>
+                        <FontSize>20pt</FontSize>
                         <FontWeight>Normal</FontWeight>
                         <Format>d MMMM yyyy</Format>
                         <TextDecoration>None</TextDecoration>
@@ -628,9 +628,9 @@
                 </Actions>
               </ActionInfo>
               <Top>0cm</Top>
-              <Left>19.48307cm</Left>
+              <Left>20.27682cm</Left>
               <Height>0.65872cm</Height>
-              <Width>5.9034cm</Width>
+              <Width>5.10965cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
