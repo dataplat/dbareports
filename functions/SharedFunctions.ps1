@@ -755,17 +755,17 @@ Function New-DbrAgentJobCategory
 	{
 		try
 		{
-			Write-Output "Creating Agent Job Category $CategoryName"
+			Write-Log -path $LogFilePath  -message "Creating Agent Job Category $CategoryName" -Level Info
 			$Category = New-Object Microsoft.SqlServer.Management.Smo.Agent.JobCategory
 			$Category.Parent = $JobServer
 			$Category.Name = $CategoryName
 			$Category.Create()
-			Write-Output "Created Agent Job Category $CategoryName"
+			Write-Log -path $LogFilePath  -message "Created Agent Job Category $CategoryName" -Level Info
 		}
 		catch
 		{
-			Write-Warning "FAILED : To Create Agent Job Category $CategoryName - Aborting"
-			Write-Exception $_
+
+            Write-Log -path $LogFilePath  -message "FAILED : To Create Agent Job Category $CategoryName - Aborting - $_" -Level Warn
 			continue
 		}
 	}
