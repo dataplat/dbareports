@@ -139,8 +139,7 @@ PROCESS
             if($DB.status -ne 'Normal')
             {
 			    $DBCCInfoSQL = "DBCC DBInfo('$DBName') With TableResults;"
-                $dbccresults = $server.ConnectionContext.ExecuteWithResults($DBCCInfoSQL).Tables
-                $LastDBCCDate = $dbccresults.rows.Where{$_.Field -eq 'dbi_dbccLastKnownGood'}[0].value 
+                $dbccresults = $server.ConnectionContext.ExecuteWithResults($DBCCInfoSQL).Tables[0]
             }
             else
             {
