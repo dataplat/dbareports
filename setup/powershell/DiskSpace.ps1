@@ -168,7 +168,7 @@ PROCESS
 					$free,
 					$percentfree,
 					$Update)
-					
+
 					Write-Log -path $LogFilePath -message "Adding $diskname for $ServerName" -level info
 				}
 				catch
@@ -183,6 +183,7 @@ PROCESS
 					$free,
 					$percentfree,
 					$Update" -level Warn
+					continue
 				}
 			}
 		}
