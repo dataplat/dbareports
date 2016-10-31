@@ -136,7 +136,7 @@ PROCESS
 			catch
 			{
 				Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
-				Write-Log -path $LogFilePath -message "$job.DateCreated,
+				Write-Log -path $LogFilePath -message "Data = $job.DateCreated,
 				$InstanceId,
 				$job.Category,
 				$job.Name,
