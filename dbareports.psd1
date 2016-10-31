@@ -11,7 +11,7 @@
 	RootModule = 'dbareports.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '0.1.0.0'
+	ModuleVersion = '0.1.1.0'
 	
 	# ID used to uniquely identify this module
 	GUID = '654a8346-35f1-4592-a1b5-0ee472fab074'
@@ -50,7 +50,7 @@
 	RequiredModules = @()
 	
 # Assemblies that must be loaded prior to importing this module
-RequiredAssemblies = @('Microsoft.SqlServer.Smo', 'Microsoft.SqlServer.SmoExtended')
+RequiredAssembliesï¿½=ï¿½@('Microsoft.SqlServer.Smo',ï¿½'Microsoft.SqlServer.SmoExtended')
 	
 	# Script files () that are run in the caller's environment prior to importing this module
 	ScriptsToProcess = @()
