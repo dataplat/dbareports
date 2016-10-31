@@ -65,7 +65,7 @@ PROCESS
 			$Connection = "$sqlservername\$InstanceName"
 		}
 		
-		# Connect to dbareports server
+		# Connect to server
 		$server = Connect-SqlServer -SqlServer $Connection
 		
 		Write-Output "Processing $Connection"
@@ -99,7 +99,20 @@ PROCESS
 		
 		foreach ($row in $suspectpages)
 		{
-			$null = $datatable.Rows.Add($row)
+        $DBName = $row.DBName
+		$SQL = " SELECT DatabaseID From info.Databases WHERE Name = '$DBName' and InstanceID = '$InstanceId'" 
+        $Results = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]	
+        $DatabaseID= $Results.DatabaseID
+        # remove the null for troubleshooting to see the data
+        $null = $datatable.Rows.Add(
+					$DatabaseID,
+					$suspectpages.FileName ,
+					$suspectpages.page_id,
+					$suspectpages.EventType,
+					$suspectpages.error_count,
+					$suspectpages.last_update_date,
+					$suspectpages.InstanceID
+                    )
 		}
 		
 		$server.ConnectionContext.Disconnect()

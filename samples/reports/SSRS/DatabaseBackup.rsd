@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>DBA Database</DataSourceReference>
+      <CommandText>DECLARE @CurrDate DATETIME
+SET @CurrDate = GETDATE()
+Select
+il.[ServerName]
+,D.Name
+ ,D.LastBackupDate
+,D.LastDifferentialBackupDate
+,D.LastLogBackupDate
+,(SELECT MAX(BackupDate)
+	FROM (VALUES (D.LastBackupDate)
+	,(D.LastDifferentialBackupDate)
+	) AS VALUE (BackupDate)
+	) AS MaxDate
+,DATEDIFF(DAY,(SELECT MAX(BackupDate)
+	FROM (VALUES (D.LastBackupDate)
+	,(D.LastDifferentialBackupDate)
+	) AS VALUE (BackupDate)
+	),@CurrDate) as DaysSinceBackup
+,DATEDIFF(HOUR,(SELECT MAX(BackupDate)
+	FROM (VALUES (D.LastBackupDate)
+	,(D.LastDifferentialBackupDate)
+	) AS VALUE (BackupDate)
+	),@CurrDate) as HoursinceBackup
+,CASE 
+WHEN (DATEDIFF(HOUR, D.LastBackupDate, @CurrDate) &gt; 24) AND (DATEDIFF(HOUR, D.LastDifferentialBackupDate, @CurrDate) &gt;24)
+THEN 1
+ELSE 0
+END
+AS Olderthan24
+FROM [dbo].[InstanceList] il
+  JOIN [Info].[Databases] D
+  ON IL.InstanceID = D.InstanceID
+  JOIN [Info].[SQLInfo] SQL
+  ON IL.InstanceID = SQL.InstanceID
+  where il.Inactive = 0 and il.NotContactable = 0
+	AND D.Inactive &lt;&gt; 1
+	AND D.Status = 'Normal'
+	AND SQL.SQLVersion &lt;&gt; 'SQL 2000'
+	AND D.IsUpdateable = 1
+	ORDER BY DaysSinceBackup desc,HoursinceBackup desc</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="ServerName">
+        <DataField>ServerName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Name">
+        <DataField>Name</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="LastBackupDate">
+        <DataField>LastBackupDate</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="LastDifferentialBackupDate">
+        <DataField>LastDifferentialBackupDate</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="LastLogBackupDate">
+        <DataField>LastLogBackupDate</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="MaxDate">
+        <DataField>MaxDate</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="DaysSinceBackup">
+        <DataField>DaysSinceBackup</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="HoursinceBackup">
+        <DataField>HoursinceBackup</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="Olderthan24">
+        <DataField>Olderthan24</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

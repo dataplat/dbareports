@@ -2,16 +2,10 @@
 {
 <#
 .SYNOPSIS 
-
+Creates/updates a sql alias for the specified server
 
 .DESCRIPTION
-
-
-.PARAMETER 
-
-
-.PARAMETER 
-	
+Creates/updates a sql alias for dbareports by altering HKLM:\SOFTWARE\Microsoft\MSSQLServer\Client
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -24,19 +18,10 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .LINK
-https://dbareports.io/New-DbrSqlAlias
+https://dbareports.io/functions/New-DbrSqlAlias
 
 .EXAMPLE
 New-DbrSqlAlias
-Copies all policies and conditions from sqlserver2014a to sqlcluster, using Windows credentials. 
-
-.EXAMPLE   
-New-DbrSqlAlias -WhatIf
-Shows what would happen if the command were executed.
-	
-.EXAMPLE   
-New-DbrSqlAlias -Policy 'xp_cmdshell must be disabled'
-Does this 
 #>
 	[CmdletBinding()]
 	Param (
@@ -135,11 +120,11 @@ Does this
 			
 			if ($basekey -like "*WOW64*")
 			{
-				$architecture = "for 32-bit"
+				$architecture = "32-bit"
 			}
 			else
 			{
-				$architecture = "for 64-bit"
+				$architecture = "64-bit"
 			}
 			
 			Write-Output "Creating/updating alias for $SqlServer for $architecture"

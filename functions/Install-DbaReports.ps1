@@ -20,7 +20,7 @@ Installs the following on the specified SQL server:
 - If no InstallDirectory is specified, the SQL Server's backup directory will be used by default
 - If no LogFileDirectory is specified, InstallDirectory\logs will be used 
 
-Installs the following on the local client:
+Installs the following on the local client
 	
 	Config file at Documents\WindowsPowerShell\Modules\dbareports\dbareports-config.json
 	
@@ -78,7 +78,7 @@ The Prefix that gets added to the Agent Jobs defaults to dbareports
 The category for the Agent Jobs. Defaults to "dbareports collection jobs"
 	
 .PARAMETER TimeSpan
-By deafult, the jobs are scheduled to execute daily unless NoJobSchedule is specified. The default time is 04:15. To change the time, pass different timespan.
+By default, the jobs are scheduled to execute daily unless NoJobSchedule is specified. The default time is 04:15. To change the time, pass different timespan.
 
 $customtimespan = New-TimeSpan -hours 22 -minutes 15
 
@@ -121,22 +121,25 @@ https://dbareports.io/Install-DbaReports
 .EXAMPLE
 Install-DBAreports -SqlServer sql2016
 
+Installs the dbareports database on SQL2016 and uses all defaults. Will not output to screen but will log to a log file in C:\Users\$ENV:USERNAME\Documents\WindowsPowerShell\Modules\dbareports\dbareports_install_DATE.txt
 
 .EXAMPLE
 Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 
+Installs the dbareports database on the server sql2016 and the powershell script files at \\fileshare\share\sql Will not output to screen but will log to a log file in C:\Users\$ENV:USERNAME\Documents\WindowsPowerShell\Modules\dbareports\dbareports_install_DATE.txt
 
 .EXAMPLE
-Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
+Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql -Verbose
 
-
+Installs the dbareports database on the server sql2016 and the powershell script files at \\fileshare\share\sql Will output to screen and will log to a log file in C:\Users\$ENV:USERNAME\Documents\WindowsPowerShell\Modules\dbareports\dbareports_install_DATE.txt
 #>
 	[CmdletBinding()]
+	[OutputType([String])]
 	Param (
 		[parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[Alias("ServerInstance", "SqlInstance")]
 		[object]$SqlServer,
-		[object]$SqlCredential,
+		[PSCredential]$SqlCredential,
 		[Alias("Database")]
 		[string]$InstallDatabase = "dbareports",
 		[string]$InstallPath,
@@ -149,6 +152,8 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		[switch]$NoPsFileCopy,
 		[switch]$NoJobSchedule,
 		[switch]$NoConfig,
+		[switch]$NoShortcut,
+		[switch]$NoAlias,
 		[string]$JobCategory = "dbareports collection jobs",
 		[timespan]$TimeSpan = $(New-TimeSpan -hours 4 -minutes 15),
 		[switch]$Force
@@ -158,10 +163,28 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 	
 	BEGIN
 	{
+		try	
+		{
+			$docs = [Environment]::GetFolderPath("MyDocuments")
+			$Date = Get-Date -format yyyyMMddhhmmss
+            if((Test-Path "$docs\WindowsPowerShell\Modules\dbareports\") -eq $false)
+            {
+                New-Item "$docs\WindowsPowerShell\Modules\dbareports" -ItemType Directory -ErrorAction Stop
+            }
+			$LogFile = New-Item "$docs\WindowsPowerShell\Modules\dbareports\dbareports_install_$Date.txt" -ItemType File -ErrorAction Stop
+		}
+		catch
+		{
+			Write-Warning "Failed to create log file please see error below"
+			Write-Error $_
+			break
+		}
+		$LogFilePath = $LogFile.FullName
+        Write-Output "Log filepath for install is $LogFilePath"
 		Function Add-DatabaseObjects
 		{
 			# Schema Setup
-			Write-Output "Creating schemas"
+			Write-Log -path $LogFilePath  -message "Creating schemas" 
 			try
 			{
 				$schemanames = $sourceserver.Databases[$InstallDatabase].Schemas.Name
@@ -173,11 +196,11 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 					
 					if ($schemanames -contains $schemaname)
 					{
-						Write-Warning "Schema $schemaname already exists. Skipping."
+						Write-Log -path $LogFilePath  -message "Schema $schemaname already exists. Skipping." -Level Warn
 						Continue
 					}
 					
-					Write-Output "Creating schema $schemaname"
+					Write-Log -path $LogFilePath  -message "Creating schema $schemaname" -Level Info 
 					$file = Get-ChildItem -Path "$parentPath\setup\database\Security\Schemas\$filename"
 					$sql = Get-Content -Path $file -Raw
 					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
@@ -185,11 +208,11 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			}
 			catch
 			{
-				Write-Warning "Schema could not be created."
+				Write-Log -path $LogFilePath  -message "Schema could not be created. - $_" -Level Error 
 			}
 			
 			# Extended Properties Setup
-			Write-Output "Creating extended properties"
+			Write-Log -path $LogFilePath  -message "Creating extended properties" -Level info
 			try
 			{
 				$propertynames = $sourceserver.Databases[$InstallDatabase].ExtendedProperties.Name
@@ -201,11 +224,11 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 					
 					if ($propertynames -contains $name)
 					{
-						Write-Warning "Extended Property $name already exists. Skipping."
+						Write-Log -path $LogFilePath  -message "Extended Property $name already exists. Skipping." -Level Warn
 						Continue
 					}
 					
-					Write-Output "Creating Extended Property $name"
+					Write-Log -path $LogFilePath  -message "Creating Extended Property $name" -Level Info
 					$file = Get-ChildItem -Path "$parentPath\setup\database\Extended Properties\$filename"
 					$sql = Get-Content -Path $file -Raw
 					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
@@ -213,75 +236,73 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			}
 			catch
 			{
-				Write-Warning "Extended Properties could not be created."
+				Write-Log -path $LogFilePath  -message "Extended Properties could not be created. - $_" -Level Error
 			}
 			
 			
-			# Table setup with PKs first
-			Write-Output "Creating tables"
+			# Table setup 
+			## SHOULD THIS HAVE A NESTED TRY CATCH?
+			Write-Log -path $LogFilePath  -message "Creating tables" -Level Info
 			$tablenames = $sourceserver.Databases[$InstallDatabase].Tables.Name
+			# FUnction to create the tables using the SQL Files 
+			function Create-Table
+			{
+				Param([object]$tables) 
+			try
+				{	
+				foreach ($filename in $tables)
+				{
+					$table = $filename.Replace(".sql", "") # .TrimEnd didn't work :()
+					$schema = $table.Split(".")[0]
+					$tablename = $table.Split(".")[1]
+					
+					if ($tablenames -contains $tablename)
+					{
+						Write-Log -path $LogFilePath  -message "$table already exists. Skipping." -Level Warn
+						continue
+					}
+					
+					Write-Log -path $LogFilePath  -message "Creating table $tablename" -Level info
+					$file = Get-ChildItem -Path "$parentPath\setup\database\Tables\$filename"
+					$sql = Get-Content -Path $file -Raw
+					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+				}
+			}
+			catch
+			{
+				Write-Log -path $LogFilePath  -message "Failed to create table $table - $_" -Level Error
+				throw
+			}
+
+			}
 			try
 			{
+				## Create tabels with PKs first
 				$first = 'info.serverinfo.sql', 'dbo.InstanceList.sql', 'info.Databases.sql', 'dbo.Clients.sql'
-				
-				foreach ($filename in $first)
+				Write-Log -path $LogFilePath  -message "Creating the first tables $first"
+				Create-Table -tables $first -ErrorAction Stop
+            } 
+   			catch
+			{
+				Write-Log -path $LogFilePath  -message "Couldn't create the First tables - $_" -Level Error
+				throw
+			}
+				try
 				{
-					$table = $filename.Replace(".sql", "") # .TrimEnd didn't work :()
-					$schema = $table.Split(".")[0]
-					$tablename = $table.Split(".")[1]
-					
-					if ($tablenames -contains $tablename)
-					{
-						Write-Warning "$table already exists. Skipping."
-						continue
-					}
-					
-					Write-Output "Creating table $tablename"
-					$file = Get-ChildItem -Path "$parentPath\setup\database\Tables\$filename"
-					$sql = Get-Content -Path $file -Raw
-					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					## Create the rest of the tables 
+					$therest = (Get-ChildItem -Path "$parentPath\setup\database\Tables\*.sql" | Where-Object { $_.Name -notin $first }).Name
+					Write-Log -path $LogFilePath  -message "Creating the rest of the tables $therest"
+					Create-Table -tables $therest -ErrorAction Stop
 				}
-			}
-			catch
-			{
-				Write-Exception $_
-				throw "Couldn't create tables $table"
-			}
-			
-			# The rest of the Tables
-			try
-			{
-				$therest = Get-ChildItem -Path "$parentPath\setup\database\Tables\*.sql" | Where-Object { $_.Name -notin $first }
-				
-				foreach ($filename in $therest.name)
+				catch
 				{
-					$table = $filename.Replace(".sql", "") # .TrimEnd didn't work :()
-					$schema = $table.Split(".")[0]
-					$tablename = $table.Split(".")[1]
-					
-					if ($tablenames -contains $tablename)
-					{
-						Write-Warning "$table already exists. Skipping."
-						continue
-					}
-					
-					Write-Output "Creating table $tablename"
-					
-					$file = Get-ChildItem -Path "$parentPath\setup\database\Tables\$filename"
-					$sql = Get-Content -Path $file -Raw
-					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					Write-Log -path $LogFilePath  -message "Couldn't create the rest of the tables - $_" -Level Error
+					throw
 				}
-				
-			}
-			catch
-			{
-				Write-Exception $_
-				throw "Couldn't create the rest of the tables"
-			}
-			
+            
 			# Stored procedure Setup
-			Write-Output "Creating initial stored procedures"
-			
+			Write-Log -path $LogFilePath  -message  "Creating initial stored procedures" -Level Info	
+
 			try
 			{
 				$procnames = $sourceserver.Databases[$InstallDatabase].StoredProcedures.Name
@@ -293,11 +314,11 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 					
 					if ($procnames -contains $procname)
 					{
-						Write-Warning "Procedure $procname already exists. Skipping."
+						Write-Log -path $LogFilePath  -message "Procedure $procname already exists. Skipping." -Level Warn
 						Continue
 					}
 					
-					Write-Output "Creating procedure $procname"
+					Write-Log -path $LogFilePath  -message "Creating procedure $procname" -Level info
 					$file = Get-ChildItem -Path "$parentPath\setup\database\StoredProcedures\$filename"
 					$sql = Get-Content -Path $file -Raw
 					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
@@ -305,8 +326,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			}
 			catch
 			{
-				Write-Exception $_
-				Write-Warning "Stored procedures could not be created."
+				Write-Log -path $LogFilePath  -message "Stored procedures could not be created. - $_" -Level Error
 			}
 		}
 		
@@ -328,9 +348,9 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				
 				$tvptable = $alltables | Where-Object { $_.Schema -eq $schema -and $_.Name -eq $tablename }
 				
-				if ($tvptable -eq $null)
+				if ($null -eq $tvptable)
 				{
-					Write-Warning "Can't find $schema.$tablename. Moving on."
+					Write-Log -path $LogFilePath  -message "Can't find $schema.$tablename. Moving on." -Level Warn
 					Continue
 				}
 				
@@ -338,7 +358,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				
 				if ($tvpnames -contains $tvpname)
 				{
-					Write-Warning "TVP $schema.tvp_$tablename already exists. Skipping TVP and Stored Procedure."
+					Write-Log -path $LogFilePath  -message "TVP $schema.tvp_$tablename already exists. Skipping TVP and Stored Procedure" -Level Warn
 					Continue
 				}
 				
@@ -354,15 +374,14 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$sql = "CREATE TYPE $schema.tvp_$tablename AS TABLE ($script, [U] bit)"
 				
 				try
-				{
-					Write-Verbose $sql
-					Write-Output "Creating user defined table type $schema.tvp_$tablename"
+				{					
+					Write-Log -path $LogFilePath   -message "Creating user defined table type $schema.tvp_$tablename" -Level Info
 					$results = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql)
 				}
 				catch
 				{
-					Write-Exception $_
-					Write-Warning "Can't create TVP type for $table in the $InstallDatabase database on $($sourceserver.name)."
+					Write-Log -path $LogFilePath  -message "Can't create TVP type for $table in the $InstallDatabase database on $($sourceserver.name).  - $_" -Level Error
+					Write-Log -path $LogFilePath  -message "$sql " -Level Error
 					Continue
 				}
 				
@@ -374,14 +393,14 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				}
 				catch
 				{
-					Write-Exception $_
-					throw "Can't get column list from $table in the $InstallDatabase database on $($sourceserver.name)."
+					 Write-Log -path $LogFilePath  -message "Can't get column list from $table in the $InstallDatabase database on $($sourceserver.name). - $_" -Level Error
+					 throw
 				}
 				
 				$pkcolumn = Get-IdentityColumn $table
-				if ($pkcolumn -eq $null)
+				if ($null -eq $pkcolumn)
 				{
-					Write-Warning "No IDENTITY column found on $tablename. Skipping."
+					Write-Log -path $LogFilePath  -message "No IDENTITY column found on $tablename. Skipping." -Level Warn
 					Continue
 				}
 				
@@ -414,13 +433,13 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 								END"
 				try
 				{
-					Write-Output "Creating procedure $procname"
+					Write-Log -path $LogFilePath  -message "Creating procedure $procname" -Level Info
 					$results = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
 				}
 				catch
 				{
-					Write-Exception $_
-					throw "Can't create stored procedure for $table in the $InstallDatabase database on $($sourceserver.name)."
+					 Write-Log -path $LogFilePath  -message "Can't create stored procedure for $table in the $InstallDatabase database on $($sourceserver.name). - $_" -Level Error
+					 throw
 				}
 			}
 		}
@@ -432,7 +451,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$jobprefix = "$jobprefix - dbareports"
 			}
 			
-			if ($ProxyAccount -eq $null) { $ProxyAccount = "None" }
+			if ($null -eq $ProxyAccount) { $ProxyAccount = "None" }
 			
 			if ($InstallPath.StartsWith("\\"))
 			{
@@ -562,11 +581,11 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				
 				if ($jobnames -contains $jobname)
 				{
-					Write-Warning "$jobname already exists. Skipping."
+					Write-Log -path $LogFilePath  -Level "$jobname already exists. Skipping." -Level Warn
 					Continue
 				}
 				
-				Write-Output "Creating job $jobname"
+				Write-Log -path $LogFilePath  -message "Creating job $jobname" -Level Info
 				
 				$temphash = @{
 					LogFileFolder = $LogFileFolder
@@ -594,13 +613,15 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			if ($InstallPath.StartsWith("\\") -eq $true)
 			{
 				# Make the directories
+				Write-Log -path $LogFilePath  -message "Creating the directory for the PowerShell Files at $InstallPath" -Level Info
 				$null = New-Item -ItemType Directory $InstallPath -Force
 				$null = New-Item -ItemType Directory "$InstallPath\logs" -Force
 				
 				# Copy the files
 				$sourcedir = "$parentPath\setup\powershell"
-				Write-Output "Copying everything from $sourcedir to $InstallPath"
-				Copy-Item "$sourcedir\*.ps1" $InstallPath -Force
+				Write-Log -path $LogFilePath  -message "Copying everything from $sourcedir to $InstallPath" -Level info
+				Copy-Item "$sourcedir\*.ps1" $InstallPath -Force -ErrorAction Stop
+				Write-Log -path $LogFilePath  -message "All files copied" -Level Info
 			}
 			else
 			{
@@ -616,6 +637,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				try
 				{
 					# Make the directories
+					Write-Log -path $LogFilePath  -message "Creating the directory for the PowerShell Files at $InstallPath" -Level Info
 					$null = New-Item -ItemType Directory $InstallPath -Force -ErrorAction Ignore
 					$null = New-Item -ItemType Directory "$InstallPath\logs" -Force -ErrorAction Ignore
 					
@@ -625,16 +647,16 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 					
 					# copy the files to the admin UNC share
 					Copy-Item "$parentPath\setup\powershell\*.ps1" $InstallPath -Force
+					Write-Log -path $LogFilePath  -message "All files copied" -Level Info
 				}
 				catch
 				{
-					Write-Exception $_
-					throw "Can't create files on $InstallPath. Check to ensure you have permissions to do so or run the installer locally."
+					Write-Log -path $LogFilePath  -message "Can't create files on $InstallPath. Check to ensure you have permissions to do so or run the installer locally. - $_" -Level error
 				}
 			}
 			
 			# Do the replaces
-			Write-Output "Customizing files for this installation"
+			Write-Log -path $LogFilePath  -message  "Customizing files for this installation" -Level Info
 			$files = Get-ChildItem "$InstallPath\*.ps1"
 			
 			if ($LogFileFolder.StartsWith("\\"))
@@ -648,7 +670,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			
 			foreach ($file in $files)
 			{
-				Write-Output "Updating $file"
+				Write-Log -path $LogFilePath  -message "Updating $file" -Level Info
 				$customized = (Get-Content -Raw $file).Replace("--installserver--", $source)
 				$customized = $customized.Replace("--installdb--", $InstallDatabase)
 				$customized = $customized.Replace("--logdir--", $JobLogPath)
@@ -661,16 +683,16 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		{
 			$execaccount = $sourceserver.JobServer.ServiceAccount
 			
-			if ($ProxyAccount -ne $null -and $ProxyAccount -ne "None")
+			if ($null -ne $ProxyAccount -and $ProxyAccount -ne "None")
 			{
 				$proxydetails = $sourceserver.JobServer.ProxyAccounts[$ProxyAccount]
 				$execaccount = $proxydetails.CredentialIdentity
 			}
 			
 			$db = $sourceserver.Databases[$InstallDatabase]
-			if ($execaccount -ne $null -and $db.Users[$execaccount] -eq $null)
+			if ($null -ne $execaccount -and $null -eq $db.Users[$execaccount])
 			{
-				Write-Output "Adding $execaccount to $InstallDatabase as db_owner"
+				Write-Log -path $LogFilePath  -message "Adding $execaccount to $InstallDatabase as db_owner" -Level Info
 				try
 				{
 					$dbuser = New-Object Microsoft.SqlServer.Management.Smo.User -ArgumentList $db, $execaccount
@@ -680,12 +702,13 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 					$dbo = $db.Roles['db_owner']
 					$dbo.AddMember($execaccount)
 					$dbo.Alter()
+					Write-Log -path $LogFilePath  -message "Successfully Added $execaccount to $InstallDatabase as db_owner" -Level Info
 				}
 				catch
 				{
-					Write-Exception $_
-					Write-Warning "Cannot add $execaccount to $InstallDatabase as db_owner."
-				}
+					Write-Log -path $LogFilePath  "Cannot add $execaccount to $InstallDatabase as db_owner." -Level Warn
+					throw
+			}
 			}
 		}
 		
@@ -700,7 +723,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			foreach ($job in $dbrjobs)
 			{
 				$jobname = $job.name.Replace("dbareports - ", "")
-				Write-Output "Scheduling $jobname for $timespan"
+				Write-Log -path $LogFilePath  -message "Scheduling $jobname for $timespan" -Level Info
 				
 				$schedulename = "Daily dbareports update - $jobname"
 				$schedule = New-Object Microsoft.SqlServer.Management.SMO.Agent.JobSchedule($job, $schedulename)
@@ -713,6 +736,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$job.Alter()
 				$timespan = $timespan.Add($fiveminutes)
 			}
+			##missing try catch here
 		}
 		
 		Function Get-IdentityColumn
@@ -724,12 +748,13 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			
 			try
 			{
+				Write-Log -path $LogFilePath  -message "Getting column list from $table in the $InstallDatabase on $($sourceserver.name)"
 				$identity = $sourceserver.ConnectionContext.ExecuteScalar($sql)
 			}
 			catch
 			{
-				Write-Exception $_
-				throw "Can't get column list from $table in the $InstallDatabase database on $($sourceserver.name)."
+				Write-Log -path $LogFilePath  -message "Can't get column list from $table in the $InstallDatabase database on $($sourceserver.name). - $_" -level Error
+				throw					
 			}
 			
 			return $identity
@@ -747,7 +772,8 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				{
 					if ($folderperms -eq $false)
 					{
-						throw "SQL Server Agent Account ($agentaccount) cannot access $path"
+						Write-Log -path $LogFilePath  -message "SQL Server Agent Account ($agentaccount) cannot access $path - $_" -level Error
+						throw 
 					}
 				}
 			}
@@ -761,21 +787,23 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$sql = "EXEC sp_updateextendedproperty N'dbareports installpath', N'$InstallPath', NULL, NULL, NULL, NULL, NULL, NULL;
 			    			EXEC sp_updateextendedproperty N'dbareports logfilefolder', N'$LogFileFolder', NULL, NULL, NULL, NULL, NULL, NULL"
 				$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+                Write-Log -path $LogFilePath  -message "Updated extended properties in the $InstallDatabase database." -level Info
 			}
 			catch
 			{
-				Write-Exception $_
-				Write-Warning "Could not update extended properties in the $InstallDatabase database."
+				Write-Log -path $LogFilePath  -message "Could not update extended properties in the $InstallDatabase database. - $_" -level Error
 			}
 		}
 		
 		Function Add-Migration
 		{
 			
+			$upgradeexists = Test-Path "$parentPath\setup\database\UpgradeScripts\*.sql"
+			if ($upgradeexists -eq $false) { return }
 			$Migrations = Get-ChildItem -Path "$parentPath\setup\database\UpgradeScripts\*.sql"
 			$CurrentDBVersion = $sourceserver.Databases[$InstallDatabase].ExtendedProperties['dbareports version'].Value
-			Write-Output "Current database version of $InstallDatabase is $CurrentDBVersion"
-			Write-Output "Upgrading database to $DBVersion"
+			Write-Log -path $LogFilePath  -message "Current database version of $InstallDatabase is $CurrentDBVersion" -level Info
+			Write-Log -path $LogFilePath  -message "Upgrading database to $DBVersion" -level Info
 			foreach ($Migration in $Migrations)
 			{
 				$Scriptversion = $Migration.Name.Split(' ')[1]
@@ -786,17 +814,17 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 						$file = $Migration.FullName
 						$sql = Get-Content -Path $file -Raw
 						$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
-						Write-Output "Upgrade file $File executed"
+						Write-Log -path $LogFilePath  -message "Upgrade file $File executed" -level Info
 					}
 					catch
 					{
-						Write-Warning "$File failed to execute"
+						Write-Log -path $LogFilePath  -message "$File failed to execute - $_" -level Error
 						break
 					}
 				}
 			}
-			Write-Output "Upgraded database to $DBVersion"
-			Write-Output "Setting Extended Property"
+			Write-Log -path $LogFilePath  -message "Upgraded database to $DBVersion" -level Info
+			Write-Log -path $LogFilePath  -message "Setting Extended Property" -level Info
 			try
 			{
 				$sql = "EXEC sp_updateextendedproperty N'dbareports version', N'$DBVersion', NULL, NULL, NULL, NULL, NULL, NULL"
@@ -804,7 +832,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			}
 			catch
 			{
-				Write-Warning "Failed to update extended property"
+				Write-Log -path $LogFilePath  -message "Failed to update extended property - $_" -level Error
 			}
 			
 		}
@@ -819,7 +847,8 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		
 		if ($sourceserver.VersionMajor -lt 10)
 		{
-			throw "The dbareports database must be installed on SQL Server 2008 and above."
+			Write-Log -path $LogFilePath  -message "The dbareports database must be installed on SQL Server 2008 and above." -level Warn
+			throw
 		}
 	}
 	
@@ -828,6 +857,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		if ($TimeSpan.Hours -gt 24)
 		{
 			throw "This is a daily schedule so the hours cannot exceed 24"
+            Write-Log -path $LogFilePath  -message "This is a daily schedule so the hours cannot exceed 24" -level Error
 		}
 		
 		# ensure agent is running
@@ -837,6 +867,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		if ($agent.count -eq 0)
 		{
 			throw "SQL Server Agent does not appear to be running."
+            Write-Log -path $LogFilePath  -message "SQL Server Agent does not appear to be running." -level Error
 		}
 		
 		# boom!
@@ -845,6 +876,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			if ($sourceserver.Databases[$InstallDatabase].Count -ne 0)
 			{
 				Write-Output "Force specified. Removing everything."
+                Write-Log -path $LogFilePath  -message "Force specified. Removing everything." -level Warn
 				Uninstall-DbaReports -Force -ErrorAction SilentlyContinue
 			}
 		}
@@ -853,8 +885,9 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		if ($InstallPath.Length -eq 0)
 		{
 			$InstallPath = $sourceserver.BackupDirectory
-			Write-Output "No install path specified, using SQL instance's backup directory $installpath"
+            Write-Log -path $LogFilePath  -message "No install path specified, using SQL instance's backup directory $installpath" -level Warn
 			# WE CAN EITHER AUTO SET IT TO BACKUPS OR PROMPT THEM WITH SHOW-SQLSERVERFILESYSTEM?
+			# Agree - PROMPT THEM
 		}
 		
 		if ($InstallPath -notlike '*dbareports*')
@@ -867,7 +900,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		if ($LogFileFolder.Length -eq 0)
 		{
 			$LogFileFolder = "$InstallPath\logs"
-			Write-Output "No log file path specified, using $LogFileFolder"
+            Write-Log -path $LogFilePath  -message "No log file path specified, using $LogFileFolder" -level Info
 		}
 		
 		# check if database exists
@@ -886,31 +919,32 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
 				$result = $host.ui.PromptForChoice($title, $message, $options, 0)
 				
-				if ($result -eq 1) { return "FINE!" }
+				if ($result -eq 1) { return "FINE!"; Write-Log -path $LogFilePath  -message "User Chose not to Install Database" -level Error}
 			}
 			try
 			{
 				$sql = "create database [$InstallDatabase]"
 				$dbexists = $sourceserver.ConnectionContext.ExecuteNonQuery($sql)
 				$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-				$jobserver = $sourceserver.jobserver
+				##$jobserver = $sourceserver.jobserver
 			}
 			catch
 			{
-				Write-Exception $_
+				Write-Log -path $LogFilePath  -message "Couldn't create database, sorry. BYE. $_" -level Error
 				throw "Couldn't create database, sorry. BYE."
 			}
 		}
 		else ## If I am right, if the db exists and db version less than version in here run the migration scripts from the current db version to version in this script
 		{
 			Write-Output "Checking for Migration Scripts"
+            Write-Log -path $LogFilePath  -message "Checking for Migration Scripts" -level Info
 			Add-Migration
 		}
 		If ($NoConfig -eq $false)
 		{
 			$securepassword = $SqlCredential.Password
 			
-			if ($securepassword -ne $null)
+			if ($null -ne $securepassword)
 			{
 				$securepassword = $securepassword | ConvertFrom-SecureString
 			}
@@ -923,7 +957,7 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 			}
 			
 			$config = Get-ConfigFileName
-			Write-Output "Writing config to $config"
+            Write-Log -path $LogFilePath  -message "Writing config to $config" -level Info
 			$json | ConvertTo-Json | Set-Content -Path $config -Force
 		}
 		
@@ -931,13 +965,13 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		{
 			$dbrproxy = $sourceserver.JobServer.ProxyAccounts | Where-Object { $_.Name -like "*dbareports*" }
 			
-			if ($dbrproxy -eq $null -and $Force -eq $false)
+			if ($null -eq $dbrproxy -and $Force -eq $false)
 			{
 				$netbiosname = $sourceserver.ComputerNamePhysicalNetBIOS
 				
 				if ($agentaccount -like 'NT *' -or $agentaccount -like "$netbiosname\*")
 				{
-					Write-Warning "The Agent account, $agentaccount, is a local account. It is *highly unlikely* that it will have permissions to log into other SQL Servers."
+	            Write-Log -path $LogFilePath  -message "The Agent account, $agentaccount, is a local account. It is *highly unlikely* that it will have permissions to log into other SQL Servers." -level Warn			
 				}
 				
 				# Prompt to create and then create. 
@@ -948,24 +982,27 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
 				$result = $host.ui.PromptForChoice($title, $message, $options, 0)
 				
-				if ($result -eq 1) { Write-Output "K!" }
+				if ($result -eq 1) {Write-Log -path $LogFilePath  -message "User Chose not to create Proxy Account" -level Info }
 				if ($result -eq 0)
 				{
 					Add-DbrCredential
 					
+					$sourceserver.JobServer.ProxyAccounts.Refresh()
+					
 					$dbrproxy = $sourceserver.JobServer.ProxyAccounts | Where-Object { $_.Name -eq "PowerShell Proxy Account for dbareports" }
 					
-					if ($dbrproxy -ne $null)
+					if ($null -ne $dbrproxy)
 					{
 						$ProxyAccount = $dbrproxy.Name
 					}
 					else
 					{
-						throw "Proxy account not found. Can't continue."
+						Write-Log -path $LogFilePath  -message "Proxy Account not found Cannto continue" -level Error
+                        throw "Proxy account not found. Can't continue."
 					}
 				}
 			}
-			elseif ($dbrproxy -ne $null)
+			elseif ($null -ne $dbrproxy)
 			{
 				$proxyname = $dbrproxy.Name
 				
@@ -977,14 +1014,14 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 				$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
 				$result = $host.ui.PromptForChoice($title, $message, $options, 0)
 				
-				if ($result -eq 1) { Write-Output "FINE!" }
+				if ($result -eq 1) { Write-Output "FINE!";Write-Log -path $LogFilePath  -message "User Chose to use Proxy Account $proxyname" -level Info }
 				if ($result -eq 0) { $ProxyAccount = $proxyname }
 			}
 		}
 		
 		If ($NoPsFileCopy -eq $false)
 		{
-			Write-Output "Copying PS files"
+            Write-Log -path $LogFilePath  -message "Copying PS Files" -level Info
 			Copy-PsFiles
 			
 			# Get SQL Server to test the access to each path
@@ -993,11 +1030,11 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		
 		If ($NoDatabaseObjects -eq $false)
 		{
-			Write-Output "Creating SQL Objects"
+            Write-Log -path $LogFilePath  -message "Creating SQL Objects" -level Info
 			Add-DatabaseObjects
-			Write-Output "Creating Stored Procedures and User Defined Table Types"
+            Write-Log -path $LogFilePath  -message "Creating Stored Procedures and User Defined Table Types" -level Info
 			Add-BulkInsertSprocs
-			Write-Output "Adding dbareports installation extended info"
+            Write-Log -path $LogFilePath  -message "Adding dbareports installation extended info" -level Info
 			Add-InstallInfo
 		}
 		
@@ -1008,25 +1045,71 @@ Install-DBAreports -SqlServer sql2016 -InstallPath \\fileshare\share\sql
 		
 		If ($NoJobs -eq $false)
 		{
-			Write-Output "Creating Jobs"
+            Write-Log -path $LogFilePath  -message "Creating Jobs" -level Info
 			Add-Jobs
 		}
 		
 		If ($NoJobSchedule -eq $false)
 		{
-			Write-Output "Adding Schedules starting at $TimeSpan"
+            Write-Log -path $LogFilePath  -message "Adding Schedules starting at $TimeSpan" -level Info
 			Add-JobSchedule
 		}
 		
-		Write-Output "`nThanks for installing dbareports! Here are the results of Get-DbrConfig:"
-		Get-DbrConfig
-		Write-Output "You may now run Add-DbrServerToInventory to add a new server to your inventory."
+		If ($NoShortcut -eq $false)
+		{
+            Write-Log -path $LogFilePath  -message "Copying shortcut to desktop" -level Info
+			$shortcut = "$parentPath\setup\shortcuts\dbareports.lnk"
+			Copy-Item $shortcut $([Environment]::GetFolderPath("Desktop"))
+		}
 		
+		If ($NoAlias -eq $false)
+		{
+			Write-Log -path $LogFilePath  -message "Creating a SQL Server alias called dbareports to $sqlserver in registry which requires admin access." -level Info
+            Write-Log -path $LogFilePath  -message "This will enable PowerBI to run without additional configuration." -level Info
+			New-DbrSqlAlias
+		}
+        
+        Write-Log -path $LogFilePath  -message "Thanks for installing dbareports! Here are the results of Get-DbrConfig:" -level Info		
+		$GetConfig = Get-DbrConfig
+        Write-Log -path $LogFilePath  -message $GetConfig -Level Info
+        Write-Log -path $LogFilePath  -message "You may now run Add-DbrServerToInventory to add a new server to your inventory." -level Info
+		
+		if ($Force -eq $false)
+		{
+			# Prompt to create and then create. 
+			$title = "Actually, we can automatically add $SqlServer to your inventory."
+			$message = "Would you like us to add $SqlServer to the inventory now? (Y/N)"
+			$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Will continue"
+			$no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "Will exit"
+			$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
+			$result = $host.ui.PromptForChoice($title, $message, $options, 0)
+			
+			if ($result -eq 1) { Write-Output "K!" ;Write-Log -path $LogFilePath  -message "User Chose not to add $SQLServer to inventory" -Level Info}
+		}
+		else
+		{
+			$result = 0
+		}
+		
+		if ($result -eq 0)
+		{
+			Write-Log -path $LogFilePath  -message "Adding $SqlServer to inventory using Add-DbrServerToInventory" -Level Info
+			Add-DbrServerToInventory -SqlInstance $sqlserver
+		}
 	}
 	
 	END
 	{
-		$sourceserver.ConnectionContext.Disconnect()
+		    $sourceserver.ConnectionContext.Disconnect()
+            $title = "Want to review the install log?"
+			$message = "Would you like to review the install log now? (Y/N)"
+			$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", "Will continue"
+			$no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", "Will exit"
+			$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
+			$result = $host.ui.PromptForChoice($title, $message, $options, 0)
+			
+			if ($result -eq 1) { Write-Output "K!" }
+            else{notepad $LogFilePath}
 		
 	}
 }

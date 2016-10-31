@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition">
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
       <CommandText>SELECT 
       IL.ServerName
 	  ,D.Name
-	  ,d.DateAdded
+	  ,d.DateChecked
 	  ,DATEDIFF(Day,LastReboot,GetDate())  as DaysSinceReboot
 	  ,LastReboot
 	  ,CAST(LastReboot as date) as LastRebootDate
@@ -26,8 +26,50 @@
   JOIN dbo.InstanceList IL
   ON 
   D.InstanceID = IL.InstanceID
-  WHERE d.DateAdded &gt; DATEADD(Day,-6,GetDate())
+  -- WHERE d.DateAdded &gt; DATEADD(Day,-6,GetDate())
   ORDER BY DaysSinceLastWrite desc, DaysSinceLastRead desc</CommandText>
     </Query>
+    <Fields>
+      <Field Name="ServerName">
+        <DataField>ServerName</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Name">
+        <DataField>Name</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="DateChecked">
+        <DataField>DateChecked</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="DaysSinceReboot">
+        <DataField>DaysSinceReboot</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="LastReboot">
+        <DataField>LastReboot</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="LastRebootDate">
+        <DataField>LastRebootDate</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="DaysSinceLastRead">
+        <DataField>DaysSinceLastRead</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="LastRead">
+        <DataField>LastRead</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+      <Field Name="DaysSinceLastWrite">
+        <DataField>DaysSinceLastWrite</DataField>
+        <rd:TypeName>System.Int32</rd:TypeName>
+      </Field>
+      <Field Name="LastWrite">
+        <DataField>LastWrite</DataField>
+        <rd:TypeName>System.DateTime</rd:TypeName>
+      </Field>
+    </Fields>
   </DataSet>
 </SharedDataSet>

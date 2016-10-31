@@ -16,6 +16,9 @@
 
 This repo contains the PowerShell module SSRS and PowerBi samples for you to gather, store and report on information about your SQL Server estate. You can find more details on the website https://dbareports.io 
 
+[![Build status](https://ci.appveyor.com/api/projects/status/4ogcjt7glm5ojd73/branch/development?svg=true)](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports/branch/development)  - Development Branch 
+
+[![Build status](https://ci.appveyor.com/api/projects/status/4ogcjt7glm5ojd73/branch/master?svg=true)](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports/branch/master)  - Master Branch 
 ## Installer
 We’ve tried to make the installation experience as simple as possible. Executing Install-DBAreports does the following:
 
@@ -53,3 +56,12 @@ The types of information available about the estate includes
 * SQL Agent detail: Name, Category, Status, Last Run Time, Outcome
 * Suspect Pages: Number of suspect pages in msdb
 * Database last used: Uses the sys.dm_db_index_usage_stats
+
+## How To Install
+
+* Click on Clone or Download and download the repo.
+* Unzip and Copy the folder to your modules folder Use $env:PSModulePath to pick a folder
+* Run Import-Module dbareports
+* Get-Help Install-Dbareports -showwindow
+* Then install using the details and examples there
+* To add servers use Add-DbrServerToInventory Run Get-Help Add-DbrServerToInventory -detailed or -showwindow first
