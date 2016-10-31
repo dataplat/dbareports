@@ -103,7 +103,7 @@ PROCESS
 		Write-Log -path $LogFilePath -message "Can't get server list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
 	}
 	
-	foreach ($server in $servers)
+	foreach ($server in $sqlservers)
 	{
 		$ServerName = $server.ServerName
 		$ServerId = $server.ServerId
