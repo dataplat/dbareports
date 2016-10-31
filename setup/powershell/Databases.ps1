@@ -125,7 +125,7 @@ PROCESS
 	try
 	{
 		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
-		$sql = "SELECT AgentJobServerID, InstanceID FROM $table"
+		$sql = "SELECT Name, DatabaseID, InstanceID, DateAdded, Inactive FROM $table"
 		$table = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
 		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
 	}
