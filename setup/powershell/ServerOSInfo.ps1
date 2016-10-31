@@ -40,6 +40,19 @@ Param (
 
 BEGIN
 {
+	# Create Log File 
+	$Date = Get-Date -Format yyyyMMdd_HHmmss
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_DiskSpace_' + $Date + '.txt'
+	try
+	{
+		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "DiskSpace Job started" -level info
+	}
+	catch
+	{
+		Write-error "Failed to create Log File at $LogFilePath"
+	}
+	
 	# Specify table name that we'll be inserting into
 	$table = "info.ServerInfo"
 	$schema = $table.Split(".")[0]
@@ -49,34 +62,55 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	
-	# Start Transcript
-	$Date = Get-Date -Format ddMMyyyy_HHmmss
-	$transcript = "$LogFileFolder\$table" + " _" + "$Date.txt"
-	Start-Transcript -Path $transcript -Append
-	
 	# Connect to dbareports server
-	$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-	
+	try
+	{
+		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
+		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
+	}
+
 	# Get columns automatically from the table on the SQL Server
 	# and creates the necessary $script:datatable with it
-	Initialize-DataTable
+	try
+	{
+		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
+		Initialize-DataTable -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+	}
 }
 
 PROCESS
 {
 	$DateChecked = Get-Date
-	$servers = Get-Instances
+		try
+	{
+		Write-Log -path $LogFilePath -message "Getting Instances from $sqlserver" -level info
+		$sqlservers = Get-Instances
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
+		break
+	}
 	
 	# Get list of all servers already in the database
 	try
 	{
+		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
 		$sql = "SELECT ServerName, ServerID FROM $table"
 		$table = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
 	}
 	catch
 	{
-		Write-Exception $_
-		throw "Can't get server list from $InstallDatabase on $($sourceserver.name)."
+		Write-Log -path $LogFilePath -message "Can't get server list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
 	}
 	
 	foreach ($server in $servers)
@@ -92,11 +126,17 @@ PROCESS
 			$Connection = "$sqlservername\$InstanceName"
 		}
 		
-		# Connect to dbareports server
-		$server = Connect-SqlServer -SqlServer $Connection
-		
-		Write-Output "Processing $Connection"
-		
+		# Connect to Instance
+		try
+		{
+			$server = Connect-SqlServer -SqlServer $Connection
+			Write-Log -path $LogFilePath -message "Connecting to $Connection" -level info
+		}
+		catch
+		{
+			Write-Log -path $LogFilePath -message "Failed to connect to $Connection - $_" -level Warn
+			continue
+		}
 		$update = $true
 		
 		$row = $table | Where-Object { $_.Servername -eq $SqlserverName }
@@ -123,26 +163,30 @@ PROCESS
 		
 		if ($ipaddr -eq $null)
 		{
-			Write-Output "Could not resovle IP address for $sqlServerName. Moving on."
+			Write-Log -path $LogFilePath -message "Could not resolve IP address for $ServerName. Moving on." -level info
+			Write-Log -path $LogFilePath -message "Tried Resolve-SqlIpAddress $ServerName and Resolve-IpAddress $servername"
 			continue
 		}
 		
 		try
 		{
-			$system = Get-WmiObject Win32_ComputerSystem -ComputerName $ipaddr
-			$os = Get-WmiObject Win32_OperatingSystem -ComputerName $ipaddr
+			Write-Log -path $LogFilePath -message "Getting System WMI from $ipaddr" -level info
+			$system = Get-WmiObject Win32_ComputerSystem -ComputerName $ipaddr -ErrorAction Stop 
+			Write-Log -path $LogFilePath -message "Getting OS WMI from $ipaddr" -level info
+			$os = Get-WmiObject Win32_OperatingSystem -ComputerName $ipaddr -ErrorAction Stop
 		}
 		catch
 		{
-			Write-Exception $_
-			Write-Output "Could not connect to WMI on $SqlserverName. Recording exception and moving on."
+			Write-Log -path $LogFilePath -message "Failed to get WMI from  $ipaddr - $_" -level Warn
 			continue
 		}
 		
 		$ram = '{0:n0}' -f ($system.TotalPhysicalMemory/1gb)
 		
 		# to see results as they come in, skip $null=
-		$Null = $datatable.Rows.Add(
+		try
+		{
+			$Null = $datatable.Rows.Add(
 			$key,
 			$DateChecked,
 			$SQLServerName,
@@ -152,35 +196,48 @@ PROCESS
 			$system.NumberOfLogicalProcessors,
 			$ipaddr,
 			$ram,
-			$Update
-		)
-		Write-Output "Added row for $sqlServerName"
+			$Update)
+		}
+		catch
+		{
+			Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
+			Write-Log -path $LogFilePath -message "Data = $key,
+			$DateChecked,
+			$SQLServerName,
+			$system.DNSHostName,
+			$system.Domain,
+			$os.Caption,
+			$system.NumberOfLogicalProcessors,
+			$ipaddr,
+			$ram,
+			$Update" -level Warn
+			continue
+		
+		}
 	}
 	
 	$rowcount = $datatable.Rows.Count
 	
 	if ($rowcount -eq 0)
 	{
-		Write-Output "No rows returned. No update required."
+		Write-Log -path $LogFilePath -message "No rows returned. No update required." -level info
 		continue
 	}
 	
-	Write-Output "Attempting Import of $rowcount row(s)"
 	try
 	{
-		Write-Tvp
+		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
+		Write-Tvp -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Server OS Info into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
 	{
-		Write-Exception $_
-		Write-Output "Bulk insert failed. Recording exception and quitting."
+		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
 	}
 }
 
 END
 {
-	Write-Output "Finished"
+	Write-Log -path $LogFilePath -message "ServerOS Finished"
 	$sourceserver.ConnectionContext.Disconnect()
-	Stop-Transcript
 }
-
