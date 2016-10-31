@@ -77,7 +77,7 @@ BEGIN
 
 PROCESS
 {
-		try
+	try
 	{
 		Write-Log -path $LogFilePath -message "Getting Instances from $sqlserver" -level info
 		$sqlservers = Get-Instances
@@ -184,14 +184,14 @@ PROCESS
 	
 	try
 	{
-		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)"
+		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
 		Write-Tvp -ErrorAction Stop 
-		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Agent JOb Detail into the $InstallDatabase on $sqlserver
-		"
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Agent Job Server into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
 	{
-		
+		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
+	}
 }
 
 END
