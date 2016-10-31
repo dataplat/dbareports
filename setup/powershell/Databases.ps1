@@ -302,6 +302,7 @@ PROCESS
 				$reboot,
                 $LastDBCCDate,
 				$Update" -level Error
+				continue
 			}
 		}
 	}
