@@ -29,11 +29,11 @@ BEGIN
 {	
 	# Create Log File 
 	$Date = Get-Date -Format yyyyMMdd_HHmmss
-	$LogFilePath = $LogFileFolder + '\' + 'dbareports_DiskSpace_' + $Date + '.txt'
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_SuspectPages_' + $Date + '.txt'
 	try
 	{
 		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
-		Write-Log -path $LogFilePath -message "DiskSpace Job started" -level info
+		Write-Log -path $LogFilePath -message "SuspectPages Job started" -level info
 	}
 	catch
 	{
@@ -184,7 +184,7 @@ PROCESS
 	{
 		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
 		Write-Tvp -ErrorAction Stop 
-		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Server OS Info into the $InstallDatabase on $($sourceserver.name)" -level info
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of SuspectPages Info into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
 	{
@@ -194,6 +194,6 @@ PROCESS
 
 END
 {
-	Write-Log -path $LogFilePath -message "ServerOS Finished"
+	Write-Log -path $LogFilePath -message "SuspectPages Finished"
 	$sourceserver.ConnectionContext.Disconnect()
 }

@@ -42,11 +42,11 @@ BEGIN
 {
 	# Create Log File 
 	$Date = Get-Date -Format yyyyMMdd_HHmmss
-	$LogFilePath = $LogFileFolder + '\' + 'dbareports_DiskSpace_' + $Date + '.txt'
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_ServerOSInfo_' + $Date + '.txt'
 	try
 	{
 		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
-		Write-Log -path $LogFilePath -message "DiskSpace Job started" -level info
+		Write-Log -path $LogFilePath -message "ServerOSInfo Job started" -level info
 	}
 	catch
 	{
