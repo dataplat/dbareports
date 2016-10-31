@@ -81,8 +81,11 @@ PROCESS
 
 	try
 	{
-		Write-Log -path $LogFilePath -message "Getting Instances from $sqlserver" -level info
-		$sqlservers = Get-Instances
+		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
+		$sql = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
+		$sqlservers = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
+	
 	}
 	catch
 	{
