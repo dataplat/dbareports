@@ -76,20 +76,20 @@ PROCESS
 {
 	try
 	{
-		Write-Log -message "Getting Instances from $sqlserver" -level info
+		Write-Log -path $LogFilePath -message "Getting Instances from $sqlserver" -level info
 		$sqlservers = Get-Instances
 	}
 	catch
 	{
-		Write-Log -message " Failed to get instances - $_" -level Error
+		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
 		break
 	}
 	
-	foreach ($sqlserver in $sqlservers)
+	foreach ($sqlsrv in $sqlservers)
 	{
-		$sqlservername = $sqlserver.ServerName
-		$InstanceName = $sqlserver.InstanceName
-		$InstanceId = $sqlserver.InstanceId
+		$sqlservername = $sqlsrv.ServerName
+		$InstanceName = $sqlsrv.InstanceName
+		$InstanceId = $sqlsrv.InstanceId
 		if ($InstanceName -eq 'MSSQLServer')
 		{
 			$Connection = $sqlservername
@@ -103,11 +103,11 @@ PROCESS
 		try
 		{
 			$server = Connect-SqlServer -SqlServer $Connection
-			Write-Log -message "Connecting to $Connection" -level info
+			Write-Log -path $LogFilePath -message "Connecting to $Connection" -level info
 		}
 		catch
 		{
-			Write-Log -message "Failed to connect to $Connection - $_" -level Warn
+			Write-Log -path $LogFilePath -message "Failed to connect to $Connection - $_" -level Warn
 			continue
 		}
 		
