@@ -73,7 +73,7 @@
 		'Add-DbrServerToInventory',
 		'Get-DbrAllInfo',
 		'Remove-DbrServerFromInventory',
-		'Test-SqlPath',
+		'Test-dbrSqlPath',
 		'Install-DbaReportsClient',
 		'Set-DbrInstanceInactiveInInventory',
 		'Get-DbrConfig',
