@@ -766,7 +766,7 @@ Installs the dbareports database on the server sql2016 and the powershell script
 			
 			foreach ($path in $paths)
 			{
-				$folderperms = Test-SqlPath -SqlServer $sqlserver -Path $path
+				$folderperms = Test-dbrSqlPath -SqlServer $sqlserver -Path $path
 				
 				if ($sqlaccount -eq $agentaccount)
 				{

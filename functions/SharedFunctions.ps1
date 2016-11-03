@@ -166,7 +166,7 @@ Internal function that creates SMO server object. Input can be text or SMO.Serve
 	return $server
 }
 
-Function Test-SqlPath
+Function Test-dbrSqlPath
 {
 	[CmdletBinding()]
 	param (
