@@ -11,16 +11,16 @@
 	RootModule = 'dbareports.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '0.1.1.0'
+	ModuleVersion = '0.1.2.0'
 	
 	# ID used to uniquely identify this module
 	GUID = '654a8346-35f1-4592-a1b5-0ee472fab074'
 	
 	# Author of this module
-	Author = 'Rob Sewell'
+	Author = 'SQL Collaborative - Initial Author Rob Sewell'
 	
 	# Company or vendor of this module
-	CompanyName = 'sqldbawithabeard.com'
+	CompanyName = 'SQL Collaborative'
 	
 	# Copyright statement for this module
 	Copyright = '2016 Rob Sewell'
@@ -50,7 +50,7 @@
 	RequiredModules = @()
 	
 	# Assemblies that must be loaded prior to importing this module
-	RequiredAssemblies=@('Microsoft.SqlServer.Smo','Microsoft.SqlServer.SmoExtended')
+	RequiredAssemblies= @('Microsoft.SqlServer.Smo','Microsoft.SqlServer.SmoExtended')
 	
 	# Script files () that are run in the caller's environment prior to importing this module
 	ScriptsToProcess = @()
