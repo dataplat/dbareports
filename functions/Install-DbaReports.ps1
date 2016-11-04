@@ -102,6 +102,12 @@ A switch which will not schedule the Agent Jobs
 .PARAMETER NoConfig
 A switch which will not create the json config file on the local machine. 
 
+.PARAMETER NoAlias
+A switch which means the script will not create an alias for the dbareports server
+
+.PARAMETER NoShortcut
+A switch which means the script will not create a shortcut on the desktop
+
 .PARAMETER Force
 A switch to force the installation of dbareports. This will drop and recreate everything and all of your data will be lost. "Use the force wisely DBA"
 
@@ -203,7 +209,10 @@ Installs the dbareports database on the server sql2016 and the powershell script
 					Write-Log -path $LogFilePath  -message "Creating schema $schemaname" -Level Info 
 					$file = Get-ChildItem -Path "$parentPath\setup\database\Security\Schemas\$filename"
 					$sql = Get-Content -Path $file -Raw
-					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					If ($PSCmdlet.ShouldProcess(“Executing $filename against $installdatabase on $($sourceserver.name)“)) 
+					{ 
+						$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					}
 				}
 			}
 			catch
@@ -231,7 +240,10 @@ Installs the dbareports database on the server sql2016 and the powershell script
 					Write-Log -path $LogFilePath  -message "Creating Extended Property $name" -Level Info
 					$file = Get-ChildItem -Path "$parentPath\setup\database\Extended Properties\$filename"
 					$sql = Get-Content -Path $file -Raw
-					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					If ($PSCmdlet.ShouldProcess(“Executing $filename against $installdatabase on $($sourceserver.name)“)) 
+					{ 
+						$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					}
 				}
 			}
 			catch
@@ -245,9 +257,10 @@ Installs the dbareports database on the server sql2016 and the powershell script
 			Write-Log -path $LogFilePath  -message "Creating tables" -Level Info
 			$tablenames = $sourceserver.Databases[$InstallDatabase].Tables.Name
 			# FUnction to create the tables using the SQL Files 
-			function Create-Table
+			function New-Table
 			{
-				Param([object]$tables) 
+					[CmdletBinding(SupportsShouldProcess = $true)] 
+					Param([object]$tables) 
 			try
 				{	
 				foreach ($filename in $tables)
@@ -265,7 +278,10 @@ Installs the dbareports database on the server sql2016 and the powershell script
 					Write-Log -path $LogFilePath  -message "Creating table $tablename" -Level info
 					$file = Get-ChildItem -Path "$parentPath\setup\database\Tables\$filename"
 					$sql = Get-Content -Path $file -Raw
-					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					If ($PSCmdlet.ShouldProcess(“Executing $filename against $installdatabase on $($sourceserver.name)“)) 
+					{ 
+						$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					}
 				}
 			}
 			catch
@@ -280,7 +296,7 @@ Installs the dbareports database on the server sql2016 and the powershell script
 				## Create tabels with PKs first
 				$first = 'info.serverinfo.sql', 'dbo.InstanceList.sql', 'info.Databases.sql', 'dbo.Clients.sql'
 				Write-Log -path $LogFilePath  -message "Creating the first tables $first"
-				Create-Table -tables $first -ErrorAction Stop
+				New-Table -tables $first -ErrorAction Stop
             } 
    			catch
 			{
@@ -292,7 +308,7 @@ Installs the dbareports database on the server sql2016 and the powershell script
 					## Create the rest of the tables 
 					$therest = (Get-ChildItem -Path "$parentPath\setup\database\Tables\*.sql" | Where-Object { $_.Name -notin $first }).Name
 					Write-Log -path $LogFilePath  -message "Creating the rest of the tables $therest"
-					Create-Table -tables $therest -ErrorAction Stop
+					New-Table -tables $therest -ErrorAction Stop
 				}
 				catch
 				{
@@ -321,7 +337,10 @@ Installs the dbareports database on the server sql2016 and the powershell script
 					Write-Log -path $LogFilePath  -message "Creating procedure $procname" -Level info
 					$file = Get-ChildItem -Path "$parentPath\setup\database\StoredProcedures\$filename"
 					$sql = Get-Content -Path $file -Raw
-					$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					If ($PSCmdlet.ShouldProcess(“Executing $filename against $installdatabase on $($sourceserver.name)“)) 
+					{ 
+						$null = $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+					}
 				}
 			}
 			catch
@@ -332,6 +351,7 @@ Installs the dbareports database on the server sql2016 and the powershell script
 		
 		Function Add-BulkInsertSprocs
 		{
+			[CmdletBinding(SupportsShouldProcess = $true)] 
 			$notriggers = 'info.LogFileErrorMessages.sql', 'dbo.NotEntered.sql'
 			$tables = Get-ChildItem -Path "$parentPath\setup\database\Tables\*.sql" | Where-Object { $notriggers -notcontains $_.Name }
 			
@@ -376,7 +396,10 @@ Installs the dbareports database on the server sql2016 and the powershell script
 				try
 				{					
 					Write-Log -path $LogFilePath   -message "Creating user defined table type $schema.tvp_$tablename" -Level Info
-					$results = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql)
+				If ($PSCmdlet.ShouldProcess(“Executing TVP SQL against $installdatabase on $($sourceserver.name)“)) 
+					{
+						$results = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql)
+					}
 				}
 				catch
 				{
