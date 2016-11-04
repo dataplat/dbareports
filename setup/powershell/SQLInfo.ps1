@@ -29,6 +29,19 @@ BEGIN
 {
 	# Add date created?
 	
+	# Create Log File 
+	$Date = Get-Date -Format yyyyMMdd_HHmmss
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_SQLInfo_' + $Date + '.txt'
+	try
+	{
+		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "SQLInfo Job started" -level info
+	}
+	catch
+	{
+		Write-error "Failed to create Log File at $LogFilePath"
+	}
+
 	# Specify table name that we'll be inserting into
 	$table = "info.SQLInfo"
 	$schema = $table.Split(".")[0]
@@ -38,34 +51,55 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	
-	# Start Transcript
-	$Date = Get-Date -Format ddMMyyyy_HHmmss
-	$transcript = "$LogFileFolder\$table" + " _" + "$Date.txt"
-	Start-Transcript -Path $transcript -Append
-	
 	# Connect to dbareports server
-	$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-	
+	try
+	{
+		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
+		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
+	}
+
 	# Get columns automatically from the table on the SQL Server
 	# and creates the necessary $script:datatable with it
-	Initialize-DataTable
+	try
+	{
+		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
+		Initialize-DataTable -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+	}
 }
 
 PROCESS
 {
 	$DateChecked = Get-Date
-	$sqlservers = Get-Instances
+	try
+	{
+		Write-Log -path $LogFilePath -message "Getting Instances from $sqlserver" -level info
+		$sqlservers = Get-Instances
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
+		break
+	}
 	
 	# Get list of all servers already in the database
 	try
 	{
+		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
 		$sql = "SELECT ServerName, SQLInfoID, InstanceID, DateAdded FROM $table"
 		$table = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
 	}
 	catch
 	{
-		Write-Exception $_
-		throw "Can't get server list from $InstallDatabase on $($sourceserver.name)."
+		Write-Log -path $LogFilePath -message "Can't get server list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
 	}
 	
 	foreach ($sqlserver in $sqlservers)
@@ -82,11 +116,18 @@ PROCESS
 			$Connection = "$sqlservername\$InstanceName"
 		}
 		
-		# Connect to dbareports server
-		$server = Connect-SqlServer -SqlServer $Connection
-		
-		Write-Output "Processing $Connection"
-		
+		# Connect to Instance
+		try
+		{
+			$server = Connect-SqlServer -SqlServer $Connection
+			Write-Log -path $LogFilePath -message "Connecting to $Connection" -level info
+		}
+		catch
+		{
+			Write-Log -path $LogFilePath -message "Failed to connect to $Connection - $_" -level Warn
+			continue
+		}
+
 		$row = $table | Where-Object { $_.Servername -eq $sqlservername -and $_.InstanceId -eq $InstanceID }
 		$key = $row.SQLInfoID
 		
@@ -146,7 +187,9 @@ PROCESS
 			$HADREndpointPort = '0'
 		}
 		
-		$null = $datatable.rows.Add(
+		try
+		{
+			$null = $datatable.rows.Add(
 			$key,
 			$(Get-Date),
 			$DateAdded,
@@ -201,33 +244,93 @@ PROCESS
 			$AGListenerIPs,
             $Server.JobServer.ServiceAccount,
             $Server.JobServer.ServiceStartMode,
-			$Update
-		)
+			$Update)
+		}
+		catch
+		{
+			Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
+			Write-Log -path $LogFilePath -message "Data = $Key,
+			$(Get-Date),
+			$DateAdded,
+			$sqlServerName,
+			$InstanceName,
+			$server.VersionString,
+			$Version,
+			$server.ProductLevel,
+			$server.Edition,
+			$server.ServerType,
+			$server.Collation,
+			$IsHADREnabled,
+			$server.ServiceAccount,
+			$server.ServiceName,
+			$server.ServiceStartMode,
+			$server.BackupDirectory,
+			$server.BrowserServiceAccount,
+			$server.BrowserStartMode,
+			$server.IsClustered,
+			$server.ClusterName,
+			$server.ClusterQuorumState,
+			$server.ClusterQuorumType,
+			$server.Configuration.C2AuditMode.RunValue,
+			$server.Configuration.CostThresholdForParallelism.RunValue,
+			$server.Configuration.MaxDegreeOfParallelism.RunValue,
+			$server.Configuration.DatabaseMailEnabled.RunValue,
+			$server.Configuration.DefaultBackupCompression.RunValue,
+			$server.Configuration.FillFactor.RunValue,
+			$server.Configuration.MaxServerMemory.RunValue,
+			$server.Configuration.MinServerMemory.RunValue,
+			$server.Configuration.RemoteDacConnectionsEnabled.RunValue,
+			$server.Configuration.XPCmdShellEnabled.RunValue,
+			$server.Configuration.CommonCriteriaComplianceEnabled.RunValue,
+			$server.DefaultFile,
+			$server.DefaultLog,
+			$server.HADREndpointPort,
+			$server.ErrorLogPath,
+			$server.InstallDataDirectory,
+			$server.InstallSharedDirectory,
+			$server.IsCaseSensitive,
+			$server.IsFullTextInstalled,
+			$server.LinkedServers,
+			$server.LoginMode,
+			$server.MasterDBLogPath,
+			$server.MasterDBPath,
+			$server.NamedPipesEnabled,
+			$server.Configuration.OptimizeAdhocWorkloads.RunValue,
+			$InstanceID,
+			$AGListener,
+			$AGs,
+			$AGListenerPort,
+			$AGListenerIPs,
+            $Server.JobServer.ServiceAccount,
+            $Server.JobServer.ServiceStartMode,
+			$Update" -level Warn
+			continue
+		}
 	}
+	
 	
 	$rowcount = $datatable.Rows.Count
 	
 	if ($rowcount -eq 0)
 	{
-		Write-Output "No rows returned. No update required."
+		Write-Log -path $LogFilePath -message "No rows returned. No update required." -level info
 		continue
 	}
 	
-	Write-Output "Attempting Import of $rowcount row(s)"
 	try
 	{
-		Write-Tvp
+		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
+		Write-Tvp -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of SQL Info into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
 	{
-		Write-Exception $_
-		Write-Output "Bulk insert failed. Recording exception and quitting."
+		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
 	}
 }
 
 END
 {
-	Write-Output "Finished"
+	Write-Log -path $LogFilePath -message "SQLInfo Finished"
 	$sourceserver.ConnectionContext.Disconnect()
-	Stop-Transcript
 }

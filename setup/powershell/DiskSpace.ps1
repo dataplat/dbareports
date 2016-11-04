@@ -1,9 +1,4 @@
 <#
-Hopefully fixed please check      # This currently doesn't work so well with clusters. Will have to slightly reorg database?
-      # I dont know if the above is still true. Plz evaluate. I think it is.
-
-#>
-<#
 .SYNOPSIS  
 This Script will check all of the instances in the InstanceList and gather the Windows Info and save to the Info.ServerInfo table
 
@@ -33,6 +28,19 @@ Param (
 
 BEGIN
 {
+	# Create Log File 
+	$Date = Get-Date -Format yyyyMMdd_HHmmss
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_DiskSpace_' + $Date + '.txt'
+	try
+	{
+		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "DiskSpace Job started" -level info
+	}
+	catch
+	{
+		Write-error "Failed to create Log File at $LogFilePath"
+	}
+
 	# Specify table name that we'll be inserting into
 	$table = "info.DiskSpace"
 	$schema = $table.Split(".")[0]
@@ -42,43 +50,69 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	
-	# Start Transcript
-	$Date = Get-Date -Format ddMMyyyy_HHmmss
-	$transcript = "$LogFileFolder\$table" + "_" + "$Date.txt"
-	Start-Transcript -Path $transcript -Append
-	
 	# Connect to dbareports server
-	$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-	
+	try
+	{
+		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
+		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
+	}
+
 	# Get columns automatically from the table on the SQL Server
 	# and creates the necessary $script:datatable with it
-	Initialize-DataTable
+	try
+	{
+		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
+		Initialize-DataTable -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+	}
+	
 }
 
 PROCESS
 {
 	$DateChecked = Get-Date
-	$servers = Get-Instances
-	
-	# Get list of all servers already in the database
+
 	try
 	{
-		$sql = "SELECT a.DiskSpaceID, a.DiskName, b.ServerID, b.ServerName FROM $table a JOIN info.Serverinfo b on a.ServerId = b.ServerId"
-		$table = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
+		$sql = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
+		$sqlservers = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
+	
 	}
 	catch
 	{
-		Write-Exception $_
-		throw "Can't get server list from $InstallDatabase on $($sourceserver.name)."
+		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
+		break
+	}
+
+	# Get list of all servers already in the database
+	try
+	{
+		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
+		$sql = "SELECT a.DiskSpaceID, a.DiskName, b.ServerID, b.ServerName FROM $table a JOIN info.Serverinfo b on a.ServerId = b.ServerId"
+		$table = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Can't get server list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
 	}
 	
-	foreach ($server in $servers)
+	foreach ($server in $sqlservers)
 	{
 		$ServerName = $server.ServerName
 		$ServerId = $server.ServerId
 		$date = Get-Date
 		
-		Write-Output "Processing $ServerName"
+		Write-Log -path $LogFilePath -message "Processing $ServerName" -level info
 		try
 		{
 			$ipaddr = Resolve-SqlIpAddress $ServerName
@@ -90,7 +124,8 @@ PROCESS
 		
 		if ($ipaddr -eq $null)
 		{
-			Write-Output "Could not resovle IP address for $ServerName. Moving on."
+			Write-Log -path $LogFilePath -message "Could not resolve IP address for $ServerName. Moving on." -level info
+			Write-Log -path $LogFilePath -message "Tried Resolve-SqlIpAddress $ServerName and Resolve-IpAddress $servername"
 			continue
 		}
 		
@@ -101,8 +136,7 @@ PROCESS
 		}
 		catch
 		{
-			Write-Exception $_
-			Write-Output "Could not connect to WMI on $ServerName. Recording exception and moving on."
+			Write-Log -path $LogFilePath -message "Could not connect to WMI on $ServerName. " -level Warn
 			continue
 		}
 		
@@ -125,7 +159,9 @@ PROCESS
 				$percentfree = "{0:n0}" -f (($disk.Freespace / $disk.Capacity) * 100)
 				
 				# to see results as they come in, skip $null=
-				$datatable.Rows.Add(
+				try
+				{
+					$Null = $datatable.Rows.Add(
 					$key,
 					$Date,
 					$ServerId ,
@@ -135,35 +171,49 @@ PROCESS
 					$free,
 					$percentfree,
 					$Update)
+
+					Write-Log -path $LogFilePath -message "Adding $diskname for $ServerName" -level info
+				}
+				catch
+				{
+					Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
+					Write-Log -path $LogFilePath -message "Data = $key,
+					$Date,
+					$ServerId ,
+					$diskname,
+					$disk.Label,
+					$total,
+					$free,
+					$percentfree,
+					$Update" -level Warn
+					continue
+				}
 			}
 		}
-		Write-Output "Adding $diskname for $ServerName"
+
 	}
 	
 	$rowcount = $datatable.Rows.Count
 	
 	if ($rowcount -eq 0)
 	{
-		Write-Output "No rows returned. No update required."
+		Write-Log -path $LogFilePath -message "No rows returned. No update required." -level info
 		continue
 	}
 	
-	Write-Output "Attempting Import of $rowcount row(s)"
 	try
 	{
-		Write-Tvp
+		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
+		Write-Tvp -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of DiskSpace into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
 	{
-		Write-Exception $_
-		Write-Output "Bulk insert failed. Recording exception and quitting."
+		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
 	}
 }
 
 END
 {
-	Write-Output "Finished"
-	$sourceserver.ConnectionContext.Disconnect()
-	Stop-Transcript
+	Write-Log -path $LogFilePath -message "DiskSpace Finished"
 }
-

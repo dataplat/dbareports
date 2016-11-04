@@ -27,6 +27,19 @@ Param (
 
 BEGIN
 {
+	# Create Log File 
+	$Date = Get-Date -Format yyyyMMdd_HHmmss
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_AgentJobDetail_' + $Date + '.txt'
+	try
+	{
+		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Agent Job Detail Job started" -level info
+	}
+	catch
+	{
+		Write-error "Failed to create Log File at $LogFilePath"
+	}
+	
 	# Specify table name that we'll be inserting into
 	$table = "info.AgentJobDetail"
 	$schema = $table.Split(".")[0]
@@ -36,28 +49,47 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	
-	# Start Transcript
-	$Date = Get-Date -Format ddMMyyyy_HHmmss
-	$transcript = "$LogFileFolder\$table" + " _" + "$Date.txt"
-	Start-Transcript -Path $transcript -Append
-	
 	# Connect to dbareports server
-	$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-	
+	try
+	{
+		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
+		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
+	}
 	# Get columns automatically from the table on the SQL Server
 	# and creates the necessary $script:datatable with it
-	Initialize-DataTable
+	try
+	{
+		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
+		Initialize-DataTable -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+	}
 }
 
 PROCESS
 {
-	$sqlservers = Get-Instances
-	
-	foreach ($sqlserver in $sqlservers)
+	try
 	{
-		$sqlservername = $sqlserver.ServerName
-		$InstanceName = $sqlserver.InstanceName
-		$InstanceId = $sqlserver.InstanceId
+		Write-Log -path $LogFilePath -message "Getting Instances from $sqlserver" -level info
+		$sqlservers = Get-Instances
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
+		break
+	}
+	
+	foreach ($sqlsrv in $sqlservers)
+	{
+		$sqlservername = $sqlsrv.ServerName
+		$InstanceName = $sqlsrv.InstanceName
+		$InstanceId = $sqlsrv.InstanceId
 		if ($InstanceName -eq 'MSSQLServer')
 		{
 			$Connection = $sqlservername
@@ -67,10 +99,17 @@ PROCESS
 			$Connection = "$sqlservername\$InstanceName"
 		}
 		
-		# Connect to dbareports server
-		$server = Connect-SqlServer -SqlServer $Connection
-		
-		Write-Output "Processing $Connection"
+		# Connect to Instance
+		try
+		{
+			$server = Connect-SqlServer -SqlServer $Connection
+			Write-Log -path $LogFilePath -message "Connecting to $Connection" -level info
+		}
+		catch
+		{
+			Write-Log -path $LogFilePath -message "Failed to connect to $Connection - $_" -level Warn
+			continue
+		}
 		
 		$jobs = $server.JobServer.jobs
 		$Date = Get-Date
@@ -78,8 +117,9 @@ PROCESS
 		{
 			$lastrundate = $job.LastRunDate
 			if ($lastrundate -eq '01/01/0001 00:00:00') { $lastrundate = $null }
-			
-			$null = $datatable.rows.Add(
+			try
+			{
+				$null = $datatable.rows.Add(
 				$null,
 				$job.DateCreated,
 				$InstanceId,
@@ -91,8 +131,24 @@ PROCESS
 				$lastrundate,
 				$job.LastRunOutcome,
 				$Date,
-				$false
-			)
+				$false)
+			}
+			catch
+			{
+				Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
+				Write-Log -path $LogFilePath -message "Data = $job.DateCreated,
+				$InstanceId,
+				$job.Category,
+				$job.Name,
+				$job.Description,
+				$job.IsEnabled,
+				$job.CurrentRunStatus,
+				$lastrundate,
+				$job.LastRunOutcome,
+				$Date,
+				$false" -level Error
+				continue
+			}
 		}
 	}
 	
@@ -100,25 +156,25 @@ PROCESS
 	
 	if ($rowcount -eq 0)
 	{
-		Write-Output "No rows returned. No update required."
+		Write-Log -path $LogFilePath -message "No rows returned. No update required." -level info
 		continue
 	}
 	
-	Write-Output "Attempting Import of $rowcount row(s)"
 	try
 	{
-		Write-Tvp
+		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)"
+		Write-Tvp -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Agent JOb Detail into the $InstallDatabase on $sqlserver
+		"
 	}
 	catch
 	{
-		Write-Exception $_
-		Write-Output "Bulk insert failed. Recording exception and quitting."
+		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
 	}
 }
 
 END
 {
-	Write-Output "Finished"
+	Write-Log -path $LogFilePath -message "Agent Job Detail Finished"
 	$sourceserver.ConnectionContext.Disconnect()
-	Stop-Transcript
 }

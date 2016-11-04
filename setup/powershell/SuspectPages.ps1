@@ -26,7 +26,20 @@ Param (
 )
 
 BEGIN
-{
+{	
+	# Create Log File 
+	$Date = Get-Date -Format yyyyMMdd_HHmmss
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_SuspectPages_' + $Date + '.txt'
+	try
+	{
+		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "SuspectPages Job started" -level info
+	}
+	catch
+	{
+		Write-error "Failed to create Log File at $LogFilePath"
+	}
+
 	# Specify table name that we'll be inserting into
 	$table = "info.SuspectPages"
 	
@@ -34,22 +47,42 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	
-	# Start Transcript
-	$Date = Get-Date -Format ddMMyyyy_HHmmss
-	$transcript = "$LogFileFolder\$table" + " _" + "$Date.txt"
-	Start-Transcript -Path $transcript -Append
-	
-	# Connect to dbareports server
-	$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-	
+# Connect to dbareports server
+	try
+	{
+		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
+		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
+	}
+
 	# Get columns automatically from the table on the SQL Server
 	# and creates the necessary $script:datatable with it
-	Initialize-DataTable
+	try
+	{
+		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
+		Initialize-DataTable -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+	}
 }
 
 PROCESS
 {
-	$servers = Get-Instances
+		try
+	{
+		Write-Log -path $LogFilePath -message "Getting Instances from $sqlserver" -level info
+		$sqlservers = Get-Instances
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
+		break
+	}
 	
 	foreach ($server in $servers)
 	{
@@ -65,10 +98,17 @@ PROCESS
 			$Connection = "$sqlservername\$InstanceName"
 		}
 		
-		# Connect to server
-		$server = Connect-SqlServer -SqlServer $Connection
-		
-		Write-Output "Processing $Connection"
+		# Connect to Instance
+		try
+		{
+			$server = Connect-SqlServer -SqlServer $Connection
+			Write-Log -path $LogFilePath -message "Connecting to $Connection" -level info
+		}
+		catch
+		{
+			Write-Log -path $LogFilePath -message "Failed to connect to $Connection - $_" -level Warn
+			continue
+		}
 		
 		$sql = "Select
 				DB_NAME(database_id) as DBName, 
@@ -93,8 +133,7 @@ PROCESS
 		}
 		catch
 		{
-			Write-Exception $_
-			throw "Can't get suspect pages from msdb on $servername."
+			Write-Log -path $LogFilePath "Can't get suspect pages from msdb on $servername." -level Warn
 		}
 		
 		foreach ($row in $suspectpages)
@@ -104,7 +143,9 @@ PROCESS
         $Results = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]	
         $DatabaseID= $Results.DatabaseID
         # remove the null for troubleshooting to see the data
-        $null = $datatable.Rows.Add(
+        		try
+				{
+					$null = $datatable.Rows.Add(
 					$DatabaseID,
 					$suspectpages.FileName ,
 					$suspectpages.page_id,
@@ -113,34 +154,46 @@ PROCESS
 					$suspectpages.last_update_date,
 					$suspectpages.InstanceID
                     )
+				}
+				catch
+				{
+					Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
+					Write-Log -path $LogFilePath -message "Data = $DatabaseID,
+					$suspectpages.FileName ,
+					$suspectpages.page_id,
+					$suspectpages.EventType,
+					$suspectpages.error_count,
+					$suspectpages.last_update_date,
+					$suspectpages.InstanceID " -level Warn
+					continue
+				}
 		}
 		
 		$server.ConnectionContext.Disconnect()
 	}
-	
+		
 	$rowcount = $datatable.Rows.Count
 	
 	if ($rowcount -eq 0)
 	{
-		Write-Output "Looking good on all servers."
+		Write-Log -path $LogFilePath -message "No rows returned. No update required." -level info
 		continue
 	}
 	
-	Write-Output "Attempting Import of $rowcount row(s)"
 	try
 	{
-		Write-Tvp
+		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
+		Write-Tvp -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of SuspectPages Info into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
 	{
-		Write-Exception $_
-		Write-Output "Bulk insert failed. Recording exception and quitting."
+		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
 	}
 }
 
 END
 {
-	Write-Output "Finished"
+	Write-Log -path $LogFilePath -message "SuspectPages Finished"
 	$sourceserver.ConnectionContext.Disconnect()
-	Stop-Transcript
 }

@@ -29,6 +29,19 @@ Param (
 
 BEGIN
 {
+		# Create Log File 
+	$Date = Get-Date -Format yyyyMMdd_HHmmss
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_AgentJobServer_' + $Date + '.txt'
+	try
+	{
+		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Agent Job Server Job started" -level info
+	}
+	catch
+	{
+		Write-error "Failed to create Log File at $LogFilePath"
+	}
+	
 	# Specify table name that we'll be inserting into
 	$table = "info.AgentJobServer"
 	$schema = $table.Split(".")[0]
@@ -38,33 +51,54 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	
-	# Start Transcript
-	$Date = Get-Date -Format ddMMyyyy_HHmmss
-	$transcript = "$LogFileFolder\$table" + " _" + "$Date.txt"
-	Start-Transcript -Path $transcript -Append
-	
-	# Connect to dbareports server
-	$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-	
+		# Connect to dbareports server
+	try
+	{
+		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
+		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
+	}
+
 	# Get columns automatically from the table on the SQL Server
 	# and creates the necessary $script:datatable with it
-	Initialize-DataTable
+	try
+	{
+		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
+		Initialize-DataTable -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+	}
 }
 
 PROCESS
 {
-	$sqlservers = Get-Instances
+	try
+	{
+		Write-Log -path $LogFilePath -message "Getting Instances from $sqlserver" -level info
+		$sqlservers = Get-Instances
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
+		break
+	}
 	
 	# Get list of all servers already in the database
 	try
 	{
+		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
 		$sql = "SELECT AgentJobServerID, InstanceID FROM $table"
 		$table = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
 	}
 	catch
 	{
-		Write-Exception $_
-		throw "Can't get server list from $InstallDatabase on $($sourceserver.name)."
+		Write-Log -path $LogFilePath -message "Can't get server list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
 	}
 	
 	foreach ($sqlserver in $sqlservers)
@@ -74,6 +108,7 @@ PROCESS
 		$InstanceId = $sqlserver.InstanceId
 		$update = $true
 		
+		# Checking for existing record and setting flag
 		$record = $table | Where-Object { $_.InstanceId -eq $InstanceID }
 		$key = $record.AgentJobServerID
 		
@@ -81,9 +116,7 @@ PROCESS
 		{
 			$update = $false
 		}
-		$sqlservername = $sqlserver.ServerName
-		$InstanceName = $sqlserver.InstanceName
-		$InstanceId = $sqlserver.InstanceId
+
 		if ($InstanceName -eq 'MSSQLServer')
 		{
 			$Connection = $sqlservername
@@ -93,10 +126,17 @@ PROCESS
 			$Connection = "$sqlservername\$InstanceName"
 		}
 		
-		# Connect to dbareports server
-		$server = Connect-SqlServer -SqlServer $Connection
-		
-		Write-Output "Processing $InstanceName"
+		# Connect to Instance
+		try
+		{
+			$server = Connect-SqlServer -SqlServer $Connection
+			Write-Log -path $LogFilePath -message "Connecting to $Connection" -level info
+		}
+		catch
+		{
+			Write-Log -path $LogFilePath -message "Failed to connect to $Connection - $_" -level Warn
+			continue
+		}
 		
 		$jobs = $server.JobServer.jobs
 		$JobCount = $jobs.Count
@@ -105,7 +145,9 @@ PROCESS
 		$UnknownCount = ($jobs | Where-Object { $_.LastRunOutcome -eq 'Unknown' -and $_.IsEnabled -eq $true }).Count
 		$JobsDisabled = ($jobs | Where-Object { $_.IsEnabled -eq $false }).Count
 		
-		$null = $datatable.rows.Add(
+		try
+		{
+			$null = $datatable.rows.Add(
 			$key,
 			$(Get-Date),
 			$InstanceId,
@@ -114,33 +156,46 @@ PROCESS
 			$failedCount,
 			$JobsDisabled,
 			$UnknownCount,
-			$Update
-		)
+			$Update)
+		}
+		catch
+		{
+			Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
+			Write-Log -path $LogFilePath -message "Data = $key,
+			$(Get-Date),
+			$InstanceId,
+			$JobCount,
+			$successCount,
+			$failedCount,
+			$JobsDisabled,
+			$UnknownCount,
+			$Update" -level Error
+			continue
+		}
 	}
 	
 	$rowcount = $datatable.Rows.Count
 	
 	if ($rowcount -eq 0)
 	{
-		Write-Output "No rows returned. No update required."
+		Write-Log -path $LogFilePath -message "No rows returned. No update required." -level info
 		continue
 	}
 	
-	Write-Output "Attempting Import of $rowcount row(s)"
 	try
 	{
-		Write-Tvp
+		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
+		Write-Tvp -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Agent Job Server into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
 	{
-		Write-Exception $_
-		Write-Output "Bulk insert failed. Recording exception and quitting."
+		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
 	}
 }
 
 END
 {
-	Write-Output "Finished"
+	Write-Log -path $LogFilePath -message "Agent Job Server Finished"
 	$sourceserver.ConnectionContext.Disconnect()
-	Stop-Transcript
 }
