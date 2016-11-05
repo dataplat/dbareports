@@ -22,6 +22,12 @@ The terminology that you and your users use to define the environment the instan
 .PARAMETER Location
 The terminology that you and your users use to define the location of the instance. It could be the town or city that the data centre is in or the name of the office etc
 
+.PARAMETER Confirm
+Prompts you for confirmation before executing the command.
+
+.PARAMETER WhatIf
+This doesnt work as install is too dynamic. Show what would happen if the cmdlet was run.
+
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
 Copyright (C) 2016 Rob Sewell
@@ -45,7 +51,8 @@ Add-DbrServerToInventory sql2016, sql2014
 	
 Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes additional steps determined by the content of the config file.
 #>
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true)] 
+	[OutputType([string])]
 	Param (
 		[parameter(ValueFromPipeline = $true, Mandatory = $true)]
 		[Alias("SqlServer", "ServerInstance")]
@@ -117,6 +124,13 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
                     Write-Output "TCP connection failed for $Server trying again without"
                     $smoserver = Connect-SqlServer -SqlServer "$Server" -SqlCredential $SqlInstanceCredential
                 }
+				 # If localhost or . entered and server being added tehn $port is not retrieved unless connection made with server name
+				 if ($smoserver.ConnectionContext.ServerInstance -ne $smoserver.ComputerNamePhysicalNetBIOS)
+ 				{
+    				$smoserver.ConnectionContext.Disconnect()
+    				$Connection = "TCP:$($smoserver.ComputerNamePhysicalNetBIOS)"
+    				$smoserver  = New-Object Microsoft.SqlServer.Management.Smo.Server $Connection
+ 				}
 				$ComputerName = $smoserver.ComputerNamePhysicalNetBIOS
 				$ServerName = $smoserver.NetName
 				$isclustered = $smoserver.IsClustered
@@ -139,7 +153,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 			$row = $allservers.Rows | Where-Object { $_.InstanceName -eq $InstanceName -and $_.ComputerName -eq $ComputerName }
 			$key = $row.InstanceId
 									
-			if ($key -eq $null)
+			if ($null -eq $key)
 			{
 				$update = $false
 			}
@@ -161,7 +175,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
             $exists = $false
             }	
             Write-output "Exists = $Exists for $Server"		## trouble shooting			
-			if ($Serverkey -eq $null)
+			if ($null -eq $Serverkey)
 			{
 				if($exists -eq $false)
                 {
@@ -169,7 +183,10 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
                 try
 			    	{
                         $sql = "INSERT INTO [info].[ServerInfo] ([ServerName]) VALUES ('$ComputerName')"
-                        $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+                    	If ($PSCmdlet.ShouldProcess("Adding $ComputerName to  $InstallDatabase")) 
+        				{
+						 $sourceserver.Databases[$InstallDatabase].ExecuteNonQuery($sql)
+						}
                         Write-Output "Added $ComputerName to ServerInfo Table"
                     }
                 catch
@@ -229,7 +246,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 						$row = $allservers.Rows | Where-Object { $_.ComputerName -eq $node }
 						$nodekey = $row.InstanceId
 												
-						if ($nodekey -eq $null)
+						if ($null -eq $nodekey)
 						{
 							$nodeupdate = $false
 						}
@@ -325,7 +342,10 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 			$agentserverjob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - Test Access to Servers and Log Directory" }
 			if ($agentserverjob.CurrentRunStatus -eq "Idle")
 			{
-				$agentserverjob.Start()
+				If ($PSCmdlet.ShouldProcess("Starting Agent Job $($agentserverjob.name)")) 
+        				{
+							$agentserverjob.Start()
+						}
 			}
 			do
 			{
