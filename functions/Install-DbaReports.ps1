@@ -115,7 +115,7 @@
       Prompts you for confirmation before executing the command.
 
       .PARAMETER WhatIf
-      Show what would happen if the cmdlet was run.
+      This doesnt work as install is too dynamic. Show what would happen if the cmdlet was run.
       .NOTES 
       dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
       Copyright (C) 2016 Rob Sewell
@@ -1278,7 +1278,7 @@
       }
       catch
       {
-        Write-Log "Failed to add shortcut to desktop - $_" -level Error
+        Write-Log -Path $LogFilePath "Failed to add shortcut to desktop - $_" -level Error
       }
     }
 		
