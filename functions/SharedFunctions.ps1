@@ -857,7 +857,8 @@ foreach ($result in $results.Tables.rows)
             Write-Output "Added $ColumnName of string"
        } 
        $null = $datatable.Columns.Add($column) 
-    }  
+    }  #end foreach
+}# end Initialize-DataTable
 
 Function Write-Tvp
 {
