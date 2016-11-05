@@ -96,6 +96,7 @@ Context "Test parameter help for $Name" {
 		} 
 	} 
 } 
+   ## needs some proper tests for the function here
     Describe "$Name Tests"{
         Context "Some Tests" {
               It "Should have some Pester Tests added" {
