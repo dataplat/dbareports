@@ -191,14 +191,16 @@
       }
       If ($PSCmdlet.ShouldProcess("Creating LogFile")) 
       { 
-        $LogFile = New-Item "$docs\WindowsPowerShell\Modules\dbareports\dbareports_install_$Date.txt" -ItemType File -ErrorAction Stop
+        $LogFile = New-Item "$docs\dbareports_install_$Date.txt" -ItemType File -ErrorAction Stop
       }
     }
     catch
     {
       Write-Warning "Failed to create log file please see error below"
       Write-Error $_
+      Write-Output "You can find the install log here $($Logfile.FullName)"
       break
+
     }
     $LogFilePath = $LogFile.FullName
     Write-Output "Log filepath for install is $LogFilePath"
@@ -236,6 +238,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Schema could not be created. - $_" -Level Error 
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
 			
       # Extended Properties Setup
@@ -267,6 +270,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Extended Properties could not be created. - $_" -Level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }			
       # Table setup 
       ## SHOULD THIS HAVE A NESTED TRY CATCH?
@@ -303,6 +307,7 @@
         catch
         {
           Write-Log -path $LogFilePath  -message "Failed to create table $table - $_" -Level Error
+          Write-Output "You can find the install log here $($Logfile.FullName)"
           throw
         }
 
@@ -317,6 +322,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Couldn't create the First tables - $_" -Level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
         throw
       }
       try
@@ -331,6 +337,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Couldn't create the rest of the tables - $_" -Level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
         throw
       }
             
@@ -364,6 +371,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Stored procedures could not be created. - $_" -Level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
     }
 		
@@ -428,6 +436,7 @@
         {
           Write-Log -path $LogFilePath  -message "Can't create TVP type for $table in the $InstallDatabase database on $($sourceserver.name).  - $_" -Level Error
           Write-Log -path $LogFilePath  -message "$sql " -Level Error
+          Write-Output "You can find the install log here $($Logfile.FullName)"
           Continue
         }
 				
@@ -440,6 +449,7 @@
         catch
         {
           Write-Log -path $LogFilePath  -message "Can't get column list from $table in the $InstallDatabase database on $($sourceserver.name). - $_" -Level Error
+          Write-Output "You can find the install log here $($Logfile.FullName)"
           throw
         }
 				
@@ -487,6 +497,7 @@
         catch
         {
           Write-Log -path $LogFilePath  -message "Can't create stored procedure for $table in the $InstallDatabase database on $($sourceserver.name). - $_" -Level Error
+          Write-Output "You can find the install log here $($Logfile.FullName)"
           throw
         }
       }
@@ -721,6 +732,7 @@
         catch
         {
           Write-Log -path $LogFilePath  -message "Can't create files on $InstallPath. Check to ensure you have permissions to do so or run the installer locally. - $_" -Level error
+          Write-Output "You can find the install log here $($Logfile.FullName)"
         }
       }
 			
@@ -733,6 +745,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message  "GCI failed for $installpath - $_" -Level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
         break
       }
 			
@@ -762,6 +775,7 @@
         catch
         {
           Write-Log -path $LogFilePath  -message "Failed Updating $file -$_" -Level Error
+          Write-Output "You can find the install log here $($Logfile.FullName)"
         }
       }
     }
@@ -801,6 +815,7 @@
         catch
         {
           Write-Log -path $LogFilePath  "Cannot add $execaccount to $InstallDatabase as db_owner." -Level Warn
+          Write-Output "You can find the install log here $($Logfile.FullName)"
           throw
         }
       }
@@ -838,6 +853,7 @@
           catch
           {
             Write-Log -path $LogFilePath -message "Failed to create schedule $schedulename - $_" -level Error
+            Write-Output "You can find the install log here $($Logfile.FullName)"
           }
         }
         If ($PSCmdlet.ShouldProcess("Adding Schedule $schedulename to Job $($Job.Name)")) 
@@ -850,6 +866,7 @@
           catch
           {
             Write-Log -path $LogFilePath -message "Faield to add Schedule $schedulename to Job $($Job.name)"
+            Write-Output "You can find the install log here $($Logfile.FullName)"
           }
 
         }
@@ -872,6 +889,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Can't get column list from $table in the $InstallDatabase database on $($sourceserver.name). - $_" -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
         throw					
       }
 			
@@ -915,6 +933,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Could not update extended properties in the $InstallDatabase database. - $_" -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
     }
 		
@@ -929,6 +948,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Failed to test for upgrade scritps - $_ " -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
       if ($upgradeexists -eq $false) 
       {
@@ -941,6 +961,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Failed to get upgrade scritps - $_ " -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
       try
       {
@@ -949,6 +970,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Failed to get Current Database version from $InstallDatabase - $_ " -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
       Write-Log -path $LogFilePath  -message "Current database version of $InstallDatabase is $CurrentDBVersion" -level Info
       Write-Log -path $LogFilePath  -message "Upgrading database to $DBVersion" -level Info
@@ -970,6 +992,7 @@
           catch
           {
             Write-Log -path $LogFilePath  -message "$File failed to execute - $_" -level Error
+            Write-Output "You can find the install log here $($Logfile.FullName)"
             break
           }
         }
@@ -987,6 +1010,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Failed to update extended property - $_" -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
 			
     }
@@ -1024,6 +1048,7 @@
     catch
     {
       Write-Log -path $LogFilePath  -message "Failed to gather Agent Process on $($sourceserver.name)"
+      Write-Output "You can find the install log here $($Logfile.FullName)"
     }
     $agentaccount = $sourceserver.JobServer.ServiceAccount
 		
@@ -1078,6 +1103,7 @@
     catch
     {
       Write-Log -path $LogFilePath  -message "Failed to check if $installdatabase exists on $($sourceserver.name)"
+      Write-Output "You can find the install log here $($Logfile.FullName)"
     }
 		
     if ($dbexists -eq $false)
@@ -1111,6 +1137,7 @@
       catch
       {
         Write-Log -path $LogFilePath  -message "Couldn't create database, sorry. BYE. $_" -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
         throw "Couldn't create database, sorry. BYE."
       }
     }
@@ -1142,6 +1169,7 @@
       catch
       {	
         Write-Log -path $LogFilePath -message "Failed to get config name - $_ " -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
       Write-Log -path $LogFilePath  -message "Writing config to $config" -level Info
       try
@@ -1154,6 +1182,7 @@
       catch
       {	
         Write-Log -path $LogFilePath -message "Failed to write config to $config - $_ " -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
     }
 		
@@ -1279,6 +1308,7 @@
       catch
       {
         Write-Log -Path $LogFilePath "Failed to add shortcut to desktop - $_" -level Error
+        Write-Output "You can find the install log here $($Logfile.FullName)"
       }
     }
 		
