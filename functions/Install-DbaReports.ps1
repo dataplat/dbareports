@@ -793,30 +793,33 @@
       }
 			
       $db = $sourceserver.Databases[$InstallDatabase]
-      if ($null -ne $execaccount -and $null -eq $db.Users[$execaccount])
+      if ($null -ne $execaccount)
       {
+        if($null -eq $db.Users[$execaccount])
+        {
         Write-Log -path $LogFilePath  -message "Adding $execaccount to $InstallDatabase as db_owner" -Level Info
         try
         {
-          $dbuser = New-Object Microsoft.SqlServer.Management.Smo.User -ArgumentList $db, $execaccount
-          $dbuser.Login = $execaccount
-          If ($PSCmdlet.ShouldProcess("Creating Database User $execaccount")) 
-          { 
-            $dbuser.Create()
+            $dbuser = New-Object Microsoft.SqlServer.Management.Smo.User -ArgumentList $db, $execaccount
+            $dbuser.Login = $execaccount
+            If ($PSCmdlet.ShouldProcess("Creating Database User $execaccount")) 
+            { 
+              $dbuser.Create()
+            }
+            $dbo = $db.Roles['db_owner']
+            If ($PSCmdlet.ShouldProcess("Adding $execaccount as db owner for $InstallDatabase")) 
+            { 
+              $dbo.AddMember($execaccount)
+              $dbo.Alter()
+            }
+            Write-Log -path $LogFilePath  -message "Successfully Added $execaccount to $InstallDatabase as db_owner" -Level Info
           }
-          $dbo = $db.Roles['db_owner']
-          If ($PSCmdlet.ShouldProcess("Addign $execaccount as db owner for $InstallDatabase")) 
-          { 
-            $dbo.AddMember($execaccount)
-            $dbo.Alter()
+          catch
+          {
+            Write-Log -path $LogFilePath  "Cannot add $execaccount to $InstallDatabase as db_owner. - $_" -Level Warn
+            Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
+            throw
           }
-          Write-Log -path $LogFilePath  -message "Successfully Added $execaccount to $InstallDatabase as db_owner" -Level Info
-        }
-        catch
-        {
-          Write-Log -path $LogFilePath  "Cannot add $execaccount to $InstallDatabase as db_owner." -Level Warn
-          Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
-          throw
         }
       }
     }

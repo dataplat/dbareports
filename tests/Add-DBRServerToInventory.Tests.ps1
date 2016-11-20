@@ -102,6 +102,7 @@ Context "Test parameter help for $Name" {
               It "Should have some Pester Tests added" {
                   $true | Should Be $true
               }
+		}
     }
-    }
+    
     
