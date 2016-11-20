@@ -95,7 +95,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		}
 		catch 
 		{
-			Write-Log -message "Get-Config Failed to run - $_" -Level Error
+			Write-Log -path $LogFilePath -message "Get-Config Failed to run - $_" -Level Error
 			Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 		}
 		
@@ -105,7 +105,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		
 		if ($SqlServer.length -eq 0)
 		{
-			Write-Log -message "No config file found. Have you installed dbareports? Please run Install-DbaReports or Install-DbaReportsClient" -Level Warn
+			Write-Log -path $LogFilePath -message "No config file found. Have you installed dbareports? Please run Install-DbaReports or Install-DbaReportsClient" -Level Warn
 			Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 		}
 		
@@ -118,7 +118,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		}
 		catch
 		{
-			Write-Log -message "Failed to connect to $sqlserver - $_ " -Level Error
+			Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_ " -Level Error
 			Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 			break
 		}
@@ -138,7 +138,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		}
 		catch  
 		{
-			Write-Log -message "Failed to Intialise the datatable for $table - $_ " -Level Error
+			Write-Log -path $LogFilePath -message "Failed to Intialise the datatable for $table - $_ " -Level Error
 			Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 			break			
 		}
@@ -152,7 +152,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		}
 		catch
 		{
-			Write-Log -message "Can't get InstanceList in the $InstallDatabase database on $($sourceserver.name). - $_" -Level Error
+			Write-Log -path $LogFilePath -message "Can't get InstanceList in the $InstallDatabase database on $($sourceserver.name). - $_" -Level Error
 			Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 			break	
 		}
@@ -165,7 +165,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		}
 		catch
 		{
-			Write-Log -message "Can't get ServerName in the $InstallDatabase database on $($sourceserver.name). - $_" -Level Error
+			Write-Log -path $LogFilePath -message "Can't get ServerName in the $InstallDatabase database on $($sourceserver.name). - $_" -Level Error
 			Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 			break	
 		}
@@ -183,7 +183,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 				}
                 catch
                 {
-                    Write-Log -message "TCP connection failed for $Server trying again without" -Level Warn
+                    Write-Log -path $LogFilePath -message "TCP connection failed for $Server trying again without" -Level Warn
                     $smoserver = Connect-SqlServer -SqlServer "$Server" -SqlCredential $SqlInstanceCredential
                 }
 				 # If localhost or . entered and server being added then $port is not retrieved unless connection made with server name
@@ -197,7 +197,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 					}
 					catch
 					{
-						Write-Log -message "TCP connection failed for TCP:$($smoserver.ComputerNamePhysicalNetBIOS)" -Level Error
+						Write-Log -path $LogFilePath -message "TCP connection failed for TCP:$($smoserver.ComputerNamePhysicalNetBIOS)" -Level Error
 						Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 						break	
 					}
@@ -216,7 +216,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 			}
 			catch
 			{
-				Write-Log -message "Couldn't contact $Server. Marked as NotContactable." -Level Warn
+				Write-Log -path $LogFilePath -message "Couldn't contact $Server. Marked as NotContactable." -Level Warn
 				$NotContactable = $true
                 $Name = $server
 			}
@@ -230,7 +230,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 			}
 			else
 			{
-				Write-Log -message "$Server already exists in database. Updating information." -Level Warn
+				Write-Log -path $LogFilePath -message "$Server already exists in database. Updating information." -Level Warn
 				$update = $true
 			}
             
@@ -262,20 +262,20 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
                     }
                 catch
                     {
-                    	Write-Log -message "Server insert FOR $Servername failed - $_" -Level Error
+                    	Write-Log -path $LogFilePath -message "Server insert FOR $Servername failed - $_" -Level Error
 						Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 						break	
                     }
 			    }
                 else
 			    {
-			    	Write-Log -message "$ComputerName already exists in datatable. Moving On." -Level Info
+			    	Write-Log -path $LogFilePath -message "$ComputerName already exists in datatable. Moving On." -Level Info
                     break
 			    }
             }
 			else
 			{
-				Write-log -message "$ComputerName already exists in database. Updating information." -Level info
+				Write-Log -path $LogFilePath -message "$ComputerName already exists in database. Updating information." -Level info
 			}
 
 
@@ -286,7 +286,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
                 }
             catch
                 {
-                	Write-Log -message "Failed to Get ServerId from Serverinfo Table - $_" -Level Warn
+                	Write-Log -path $LogFilePath -message "Failed to Get ServerId from Serverinfo Table - $_" -Level Warn
                 }
 			
 			
@@ -300,14 +300,14 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 				}
 				catch
 				{
-					Write-Log -message "Port could not be determined for $ServerName. Skipping." -Level Warn
+					Write-Log -path $LogFilePath -message "Port could not be determined for $ServerName. Skipping." -Level Warn
 					Continue
 				}
 			}
 			
 			if ($isclustered -eq $true)
 			{
-				Write-Log -message "$server is clustered - Grabbing Nodes" -Level Info
+				Write-Log -path $LogFilePath -message "$server is clustered - Grabbing Nodes" -Level Info
 				$sql = "Select NodeName  FROM sys.dm_os_cluster_nodes"
 				$nodes = $smoserver.ConnectionContext.ExecuteWithResults($sql).Tables.NodeName
 				
@@ -327,7 +327,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 							$nodeupdate = $true
 						}
 						
-						Write-Log -message "Added clustered node $node to server collection." -Level Info
+						Write-Log -path $LogFilePath -message "Added clustered node $node to server collection." -Level Info
 						
 						# Populate the datatable
 						try
@@ -353,7 +353,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 						}
 						catch
 						{
-							Write-Log -message "Failed to add $servername\$InstanceName to teh datatable - $_" -Level Error
+							Write-Log -path $LogFilePath -message "Failed to add $servername\$InstanceName to teh datatable - $_" -Level Error
 							Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 							continue	
 						}
@@ -385,7 +385,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 			}
 			catch 
 			{
-				Write-Log -message "Failed to add $servername\$InstanceName to teh datatable - $_" -Level Error
+				Write-Log -path $LogFilePath -message "Failed to add $servername\$InstanceName to teh datatable - $_" -Level Error
 				Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 				continue
 			}
@@ -395,18 +395,18 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		
 		if ($rowcount -eq 0)
 		{
-			Write-Log -message "No rows returned. No update required." -Level Info
+			Write-Log -path $LogFilePath -message "No rows returned. No update required." -Level Info
 			continue
 		}
 		
 		
 		if ($Update -eq $true)
 		{
-			Write-Log -message "Updating $rowcount row(s)" -Level Info
+			Write-Log -path $LogFilePath -message "Updating $rowcount row(s)" -Level Info
 		}
 		else
 		{
-			Write-Log -message "Adding $rowcount row(s)" -Level Info
+			Write-Log -path $LogFilePath -message "Adding $rowcount row(s)" -Level Info
 		}
 		try
 		{
@@ -417,7 +417,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		}
 		catch
 		{
-				Write-Log -message "Bulk insert failed. Recording exception and quitting.- $_" -Level Error
+				Write-Log -path $LogFilePath -message "Bulk insert failed. Recording exception and quitting.- $_" -Level Error
 				Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 				break
 		}
@@ -434,7 +434,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 		}
 		
 		$successful = $SqlInstance -join ", "
-		Write-Log -message "Checking to see if $execaccount has access to $successful." -Level Info
+		Write-Log -path $LogFilePath -message "Checking to see if $execaccount has access to $successful." -Level Info
 		
 		try
 		{
@@ -455,43 +455,43 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 			
 			if ($agentserverjob.LastRunOutcome -eq "Failed")
 			{
-				Write-Log -message "$execaccount cannot access one of the instances in InstanceList. Check dat." -Level Warn
+				Write-Log -path $LogFilePath -message "$execaccount cannot access one of the instances in InstanceList. Check dat." -Level Warn
 			}
 			else
 			{
-				Write-log -message "Lookin' good! $execaccount successfully logged in to $successful." -Level Info
+				Write-Log -path $LogFilePath -message "Lookin' good! $execaccount successfully logged in to $successful." -Level Info
 			}
 			
 			if ($update -ne $true)
 			{
-				Write-Log -message "Populating a few other tables with the info for $successful while we're at it." -Level Info
+				Write-Log -path $LogFilePath -message "Populating a few other tables with the info for $successful while we're at it." -Level Info
 				
 				try
 				{
-					Write-Log -message "Starting Agent Job Server job" -Level Info
+					Write-Log -path $LogFilePath -message "Starting Agent Job Server job" -Level Info
 					$agentserverjob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - Agent Job Server*" }
 					$agentserverjob.Start()
 					
-					Write-Log -message "Starting Windows Server Information job" -Level Info
+					Write-Log -path $LogFilePath -message "Starting Windows Server Information job" -Level Info
 					$winserverInfoJob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - Windows Server Information*" }
 					$winserverInfoJob.Start()
 					
-					Write-Log -message "Starting SQL Server Information job" -Level Info
+					Write-Log -path $LogFilePath -message "Starting SQL Server Information job" -Level Info
 					$sqlserverinfojob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - SQL Server Information*" }
 					$sqlserverinfojob.Start()
 					
-					Write-Log -message "Done!" -Level Info
+					Write-Log -path $LogFilePath -message "Done!" -Level Info
 				}
 				catch
 				{
-					Write-Log -message "Well that didn't go as planned. Please ensure that SQL Server Agent is running on $sqlserver - $_" -Level Warn
+					Write-Log -path $LogFilePath -message "Well that didn't go as planned. Please ensure that SQL Server Agent is running on $sqlserver - $_" -Level Warn
 					Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 				}
 			}
 		}
 		catch
 		{
-			Write-Log -message "The Agent Job on $sqlserver cannot contact all servers in the InventoryList. Check job history for details. - $_"
+			Write-Log -path $LogFilePath -message "The Agent Job on $sqlserver cannot contact all servers in the InventoryList. Check job history for details. - $_"
 			Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 		}
 	}
