@@ -692,6 +692,7 @@
         If ($PSCmdlet.ShouldProcess("Copying PS Files from $sourcedir to $InstallPath")) 
         { 
           Copy-Item "$sourcedir\*.ps1" $InstallPath -Force -ErrorAction Stop
+          Copy-Item "$parentPath\functions\Write-Log.ps1" $InstallPath -Force
         }
         Write-Log -path $LogFilePath  -message "All files copied" -Level Info
       }
@@ -726,6 +727,7 @@
           If ($PSCmdlet.ShouldProcess("Copying PS Files from $parentPath\setup\powershell\ to $InstallPath")) 
           { 
             Copy-Item "$parentPath\setup\powershell\*.ps1" $InstallPath -Force
+            Copy-Item "$parentPath\functions\Write-Log.ps1" $InstallPath -Force
           }
           Write-Log -path $LogFilePath  -message "All files copied" -Level Info
         }
