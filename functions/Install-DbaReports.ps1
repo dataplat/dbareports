@@ -643,7 +643,7 @@
 				
         if ($jobnames -contains $jobname)
         {
-          Write-Log -path $LogFilePath  -Level "$jobname already exists. Skipping." -Level Warn
+          Write-Log -path $LogFilePath  -message "$jobname already exists. Skipping." -Level Warn
           Continue
         }
 				
