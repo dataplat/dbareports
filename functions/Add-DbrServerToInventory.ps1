@@ -88,10 +88,9 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 
 		try 
 		{
-			If ($PSCmdlet.ShouldProcess("Reading Config File")) 
-      		{ 
+
 				  Get-Config
-			}
+			
 		}
 		catch 
 		{
@@ -134,6 +133,10 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 			If ($PSCmdlet.ShouldProcess("Initialise the Datatable")) 
       		{ 
 				Initialize-DataTable
+                Write-Log -path $LogFilePath -message "Intialised the datatable for $table" -Level Info
+                $Column = New-Object system.Data.DataColumn update, ([boolean]) 
+                $null = $datatable.Columns.Add($column) 
+                Write-Log -path $LogFilePath -message  "Added $ColumnName of bit" -Level Info
 			}
 		}
 		catch  
@@ -347,13 +350,14 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 									$Environment,
 									$Location,
 									$NotContactable,
-									$nodeupdate
+									$nodeupdate,
+$update
 									)
 								  }
 						}
 						catch
 						{
-							Write-Log -path $LogFilePath -message "Failed to add $servername\$InstanceName to teh datatable - $_" -Level Error
+							Write-Log -path $LogFilePath -message "Failed to add $servername\$InstanceName to the datatable - $_" -Level Error
 							Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 							continue	
 						}
