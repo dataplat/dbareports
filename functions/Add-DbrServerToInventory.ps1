@@ -136,7 +136,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
                 Write-Log -path $LogFilePath -message "Intialised the datatable for $table" -Level Info
                 $Column = New-Object system.Data.DataColumn update, ([boolean]) 
                 $null = $datatable.Columns.Add($column) 
-                Write-Log -path $LogFilePath -message  "Added $ColumnName of bit" -Level Info
+                Write-Log -path $LogFilePath -message  "Added update of bit" -Level Info
 			}
 		}
 		catch  
@@ -190,7 +190,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
                     $smoserver = Connect-SqlServer -SqlServer "$Server" -SqlCredential $SqlInstanceCredential
                 }
 				 # If localhost or . entered and server being added then $port is not retrieved unless connection made with server name
-				 if ($smoserver.ConnectionContext.ServerInstance -ne $smoserver.ComputerNamePhysicalNetBIOS)
+				 if ($smoserver.ConnectionContext.ServerInstance -eq 'localhost' -or $smoserver.ConnectionContext.ServerInstance -eq '.' )
  				{
     				try
 					{
@@ -206,11 +206,21 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 					}
  				}
 				$ComputerName = $smoserver.ComputerNamePhysicalNetBIOS
+                if ($null -eq $ComputerName)
+                {
+                    $ComputerName = $smoserver.DomainInstanceName 
+                }
 				$ServerName = $smoserver.NetName
+                if ($null -eq $ServerName)
+                {
+                    $ServerName = $smoserver.DomainInstanceName 
+                }
 				$isclustered = $smoserver.IsClustered
 				$InstanceName = $smoserver.InstanceName
 				$name = $smoserver.Name.Replace("TCP:","")
 				$NotContactable = $False
+
+               # Write-Output "ComputerName = $ComputerName" ## For troubleshooting
 				
 				if ($InstanceName.length -eq 0)
 				{
@@ -285,6 +295,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
             try
 				{
                     $sql = "SELECT [ServerId] FROM [info].[ServerInfo] WHERE Servername = '$ComputerName'"
+                   # Write-Output $SQL ## For Troubleshooting
                     $serverid = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables.ServerId
                 }
             catch
@@ -389,7 +400,8 @@ $update
 			}
 			catch 
 			{
-				Write-Log -path $LogFilePath -message "Failed to add $servername\$InstanceName to teh datatable - $_" -Level Error
+				Write-Log -path $LogFilePath -message "Failed to add $servername\$InstanceName to the datatable - $_" -Level Error
+                ## $datatable ## For Troubleshooting
 				Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
 				continue
 			}
