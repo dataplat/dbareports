@@ -629,10 +629,10 @@
         Subsystem = 'PowerShell'
       }
 
-      $Alerts= @{
+      $Alerts = @{
         JobName = "$jobprefix - Alerts"
         Description = "This job will scrape all the log files and add the Errors and Warnings to the LogFileErrorMessages table in the $InstallDatabase database.It will log to $LogFileFolder."
-        Command = "$JobCommand '$JobFilePath\LogFileErrorMessages.ps1'"
+        Command = "$JobCommand '$JobFilePath\Alerts.ps1'"
         Subsystem = 'PowerShell'
       }
 
