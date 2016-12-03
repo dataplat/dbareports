@@ -585,8 +585,8 @@
 			
       $testaccess = @{
         JobName = "$jobprefix - Test Access to Servers and Log Directory"
-        Description = "This job will run a PowerShell script to test accses to servers listed in the dbo.InstanceList table in the $InstallDatabase database. It will also test write access to $LogFileFolder."
-        Command = "$JobCommand '$JobFilePath\TestAccess.ps1'"
+        Description = "This job will run a PowerShell script to gather the Alerts from the servers listed in the dbo.InstanceList table in the $InstallDatabase database. It will log to $LogFileFolder"
+        Command = "$JobCommand '$JobFilePath\Alerts.ps1'"
         Subsystem = 'PowerShell'
       }
 			
@@ -629,6 +629,13 @@
         Subsystem = 'PowerShell'
       }
 
+      $Alerts= @{
+        JobName = "$jobprefix - Alerts"
+        Description = "This job will scrape all the log files and add the Errors and Warnings to the LogFileErrorMessages table in the $InstallDatabase database.It will log to $LogFileFolder."
+        Command = "$JobCommand '$JobFilePath\LogFileErrorMessages.ps1'"
+        Subsystem = 'PowerShell'
+      }
+
       $jobnames = $sourceserver.JobServer.Jobs.Name
 			
       $hasharray = @()
@@ -644,6 +651,7 @@
       $hasharray += $setdbinactive
       $hasharray += $testaccess
 			$hasharray += $LogFileErrors 
+      $hasharray += $testaccess
       
       foreach ($hash in $hasharray)
       {
