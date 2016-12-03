@@ -186,7 +186,7 @@ PROCESS
 				$Inactive = 0
 			}
             $DBName = $db.Name
-            if($DB.status -ne 'Normal')
+            if($DB.status -eq 'Normal')
             {
 			    try
 				{
