@@ -213,6 +213,8 @@ PROCESS
 				$Update"
 				continue
 			}
+	    } #End foreach ALerts
+    }#End foreach Servers
 			$rowcount = $datatable.Rows.Count
 	
 	if ($rowcount -eq 0)
