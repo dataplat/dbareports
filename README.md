@@ -1,4 +1,19 @@
 # DBA Reports
+[![licence badge]][licence]
+[![stars badge]][stars]
+[![forks badge]][forks]
+[![issues badge]][issues]
+
+[licence badge]:https://img.shields.io/badge/license-MIT-blue.svg
+[stars badge]:https://img.shields.io/github/stars/SQLDBAWithABeard/dbareports.svg
+[forks badge]:https://img.shields.io/github/forks/SQLDBAWithABeard/dbareports.svg
+[issues badge]:https://img.shields.io/github/issues/SQLDBAWithABeard/dbareports.svg
+
+[licence]:https://github.com/SQLDBAWithABeard/dbareports/blob/master/LICENSE.md
+[stars]:https://github.com/SQLDBAWithABeard/dbareports/stargazers
+[forks]:https://github.com/SQLDBAWithABeard/dbareports/network
+[issues]:https://github.com/SQLDBAWithABeard/dbareports/issues
+
 This repo contains the PowerShell module SSRS and PowerBi samples for you to gather, store and report on information about your SQL Server estate. You can find more details on the website https://dbareports.io 
 
 [![Build status](https://ci.appveyor.com/api/projects/status/j5webpirpjxid52d/branch/Development?svg=true)][- Development branch appveyor build latest](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports-duvtp/branch/Development)   
@@ -9,6 +24,7 @@ This repo contains the PowerShell module SSRS and PowerBi samples for you to gat
 We’ve tried to make the installation experience as simple as possible. Executing Install-DBAreports does the following:
 )  - Development Branch 
 
+[![Build status](https://ci.appveyor.com/api/projects/status/4ogcjt7glm5ojd73/branch/master?svg=true)](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports/branch/master)  - Master Branch 
 ## Installer
 We’ve tried to make the installation experience as simple as possible. Executing Install-DBAreports does the following:
 
@@ -46,3 +62,12 @@ The types of information available about the estate includes
 * SQL Agent detail: Name, Category, Status, Last Run Time, Outcome
 * Suspect Pages: Number of suspect pages in msdb
 * Database last used: Uses the sys.dm_db_index_usage_stats
+
+## How To Install
+
+* Click on Clone or Download and download the repo.
+* Unzip and Copy the folder to your modules folder Use $env:PSModulePath to pick a folder
+* Run Import-Module dbareports
+* Get-Help Install-Dbareports -showwindow
+* Then install using the details and examples there
+* To add servers use Add-DbrServerToInventory Run Get-Help Add-DbrServerToInventory -detailed or -showwindow first
