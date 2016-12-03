@@ -651,7 +651,7 @@
       $hasharray += $setdbinactive
       $hasharray += $testaccess
 			$hasharray += $LogFileErrors 
-      $hasharray += $testaccess
+      $hasharray += $Alerts
       
       foreach ($hash in $hasharray)
       {
