@@ -42,8 +42,7 @@ CREATE TABLE [info].[Databases]
 [LastRead] [datetime2] NULL,
 [LastWrite] [datetime2] NULL,
 [LastReboot] [datetime2] NULL,
-[LastDBCCDate] [datetime] NULL,
-[Update] [bit] NULL
+[LastDBCCDate] [datetime] NULL
 ) ON [PRIMARY]
 GO
 ALTER TABLE [info].[Databases] ADD CONSTRAINT [PK_Databases] PRIMARY KEY CLUSTERED  ([DatabaseID]) ON [PRIMARY]
