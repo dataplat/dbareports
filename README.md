@@ -4,7 +4,7 @@
 [![forks badge]][forks]
 [![issues badge]][issues]
 
-[licence badge]:https://img.shields.io/badge/license-MIT-blue.svg
+[licence badge]:https://img.shields.io/badge/License-GPL%20v3-blue.svg
 [stars badge]:https://img.shields.io/github/stars/SQLDBAWithABeard/dbareports.svg
 [forks badge]:https://img.shields.io/github/forks/SQLDBAWithABeard/dbareports.svg
 [issues badge]:https://img.shields.io/github/issues/SQLDBAWithABeard/dbareports.svg
