@@ -1,9 +1,9 @@
-﻿<#
-.SYNOPSIS 
- Script to scrape the PowerShell log files and enter into DBA Database for Reporting
+<#
+.SYNOPSIS  
+This Script will check the Log Files in the Log File Folder for errors adn warnings and insert them into the LogFileErrorMessages table
 
-.DESCRIPTION
-This script will scrape the log files int eh log folder and add errors and warnings to the dbareports database for easy reporting
+.DESCRIPTION 
+This Script will check the Log Files in the Log File Folder for errors adn warnings and insert them into the LogFileErrorMessages table
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
@@ -27,35 +27,116 @@ Param (
 
 BEGIN
 {
+	# Load up shared functions
+	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+	. "$currentdir\shared.ps1"
+	. "$currentdir\Write-Log.ps1"
+	# Create Log File 
+	$Date = Get-Date -Format yyyyMMdd_HHmmss
+	$LogFilePath = $LogFileFolder + '\' + 'dbareports_LogFileErrorMessages_' + $Date + '.txt'
+	try
+	{
+		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Databases Job started" -level info
+	}
+	catch
+	{
+		Write-error "Failed to create Log File at $LogFilePath"
+	}
+    
+    # Specify table name that we'll be inserting into
+	$table = "info.LogFileErrorMessages"
+	$schema,$tablename  = $table.Split(".")
+
+    # Connect to dbareports server
+	try
+	{
+		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
+		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
+	}
+
+    # Get columns automatically from the table on the SQL Server
+	# and creates the necessary $script:datatable with it
+	try
+	{
+		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
+		Initialize-DataTable -ErrorAction Stop 
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+	}
 	
-	$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential
-	$source = $sourceserver.DomainInstanceName
-	
+
+	$Date = Get-Date	
 }
 
 PROCESS
 {
-	$sql = "TRUNCATE TABLE [info].[LogFileErrorMessages]"
-	$null = $sourceserver[$InstallDatabase].ExecuteNonQuery($sql)
+$Regex = 'ERROR:|WARNING:'
+$Results = Get-ChildItem "$LogFileFolder\dbareports_*" |Where-Object {$_.LastWriteTime -gt (Get-Date).AddDays(-1)}|Select-String -Pattern $Regex|select FileName,LineNumber,Line
+if (!$Results)
+{
+    Write-Log -Message "No Results Found - Good Work! The Beard is happy, Your Gathering Scripts are working well"
+    break
+}
+foreach($Result in $Results)
+{
+$FileName = $Result.FileName
+$LineNumber = $Result.LineNumber
+$ErrorMsg = $Result.Line 
+$Matches = $result.Line.Split(' ')[2]
+$update = $false
+try
+{
+	$null = $datatable.rows.Add(
+        $Null, # PK
+        $Date,
+        $FileName,
+        $ErrorMsg,
+        $LineNumber,
+        $Matches,
+        $Update
+    )
+}
+catch
+{
+    Write-Log -path $LogFilePath -message "Failed to add LogFile Error to datatable - $_" -level Error
+	Write-Log -path $LogFilePath -message "Data =$Date,
+        $FileName,
+        $ErrorMsg,
+        $LineNumber,
+        $Matches,
+        $Update"
+}
+}
+
+$rowcount = $datatable.Rows.Count
 	
-	$regex = 'ERROR:|WARNING:'
-	$results = Get-ChildItem $LogFileFolder | Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-1) } | Select-String -Pattern $regex | Select-Object FileName, LineNumber, Line
-	if (!$results) { break }
-	foreach ($result in $results)
+	if ($rowcount -eq 0)
 	{
-		$filename = $result.FileName
-		$linenumber = $result.LineNumber
-		$errormsg = $result.Line
-		$matches = $result.Line.Split(' ')[2]
-		$sql = "INSERT INTO [Info].[LogFileErrorMessages]
-           ([FileName] ,[ErrorMsg], [Line] ,[Matches]) VALUES
-           ('$filename','$errormsg' ,$linenumber,'$matches')"
-		
-		$null = $sourceserver[$InstallDatabase].ExecuteNonQuery($sql)
+		Write-Log -path $LogFilePath -message "No rows returned. No update required." -level info
+		continue
+	}
+	
+	try
+	{
+		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
+		Write-Tvp -ErrorAction Stop 
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Errors and Warnings into the $InstallDatabase on $($sourceserver.name)" -level info
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
 	}
 }
 
 END
 {
+	Write-Log -path $LogFilePath -message "All Errors Finished"
 	$sourceserver.ConnectionContext.Disconnect()
 }
