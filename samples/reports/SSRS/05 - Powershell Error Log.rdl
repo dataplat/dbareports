@@ -6,24 +6,6 @@
       <SharedDataSet>
         <SharedDataSetReference>LogFileErrors</SharedDataSetReference>
       </SharedDataSet>
-      <Fields>
-        <Field Name="FileName">
-          <DataField>FileName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ErrorMsg">
-          <DataField>ErrorMsg</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Line">
-          <DataField>Line</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Matches">
-          <DataField>Matches</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
     </DataSet>
   </DataSets>
   <ReportSections>
