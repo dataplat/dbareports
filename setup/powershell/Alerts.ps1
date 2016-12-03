@@ -90,14 +90,14 @@ PROCESS
 	# Get list of all Alerts already in the database
 	try
 	{
-		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
-		$sql = "SELECT Name, DatabaseID, InstanceID, DateAdded, Inactive FROM $table"
-		$table = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
-		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
+		Write-Log -path $LogFilePath -message "Getting a list of alerts from the dbareports database" -level info
+		$sql = "SELECT AlertsID, Name, InstanceID, FROM $table"
+		$ExistingAlerts = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+		Write-Log -path $LogFilePath -message "Got the list of alerts from the dbareports database" -level info
 	}
 	catch
 	{
-		Write-Log -path $LogFilePath -message "Can't get server list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
+		Write-Log -path $LogFilePath -message "Can't get alerts list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
 	}
 	
 	foreach ($sqlserver in $sqlservers)
@@ -126,154 +126,94 @@ PROCESS
 			continue
 		}
 		
-		$reboot = $server.Databases['tempdb'].CreateDate
+		foreach($Alert in $srv.JobServer.Alerts)
 
-		try
-		{
-			$dblastused = $server.ConnectionContext.ExecuteWithResults($querylastused).Tables[0]
-		}
-		catch
-		{
-			Write-Log -path $LogFilePath -message "Failed to gather Last Used Information - $_" -level Warn
-			continue
-		}
+ 		{
 
-		foreach ($db in $server.databases)
-		{
-			$record = $table | Where-Object { $_.Name -eq $db.name -and $_.InstanceId -eq $InstanceID }
-			$key = $record.DatabaseID
-			$DateAdded = $record.DateAdded
-			$Inactive = $record.Inactive
+    		$LastOccurrenceDate = $Alert.LastOccurrenceDate
+			if ($LastOccurrenceDate -eq '01/01/0001 00:00:00') 
+			{ 
+				$LastOccurrenceDate = $null 
+			} 
+
+    		$LastResponseDate =  $Alert.LastResponseDate
+			if ($LastResponseDate -eq '01/01/0001 00:00:00') 
+			{ 
+				$LastResponseDate = $null 
+			} 
+
+    		if($Alert.WmiEventQuery)
+			{
+				$WmiEventQuery = $Alert.WmiEventQuery.Replace("'","''")
+			}
+
+			# Check for existing alerts
+			$record = $ExistingAlerts| Where-Object { $_.Name -eq $Alert.name -and $_.InstanceId -eq $InstanceID }
+			$key = $record.AlertsID
 			$update = $true
 			
 			if ($key.count -eq 0)
 			{
 				$update = $false
-				$DateAdded = $DateChecked
-				$Inactive = 0
 			}
-            $DBName = $db.Name
-            if($DB.status -eq 'Normal')
-            {
-			    try
-				{
-					$DBCCInfoSQL = "DBCC DBInfo('$DBName') With TableResults;"
-                	$dbccresults = $server.ConnectionContext.ExecuteWithResults($DBCCInfoSQL).Tables[0]
-                	$LastDBCCDate = ($dbccresults | Where-Object {$_.Field -eq 'dbi_dbccLastKnownGood'} | Sort-Object Value -Descending | Select-Object Value -First 1).Value
-				}
-				catch
-				{
-					Write-Log -path $LogFilePath -message "Failed to gather DBCC Information - $_" -level Warn
-				}
-            }
-            else
-            {
-            $LastDBCCDate = $null
-            }
-			$lastusedinfo = $dblastused | Where-Object { $_.dbname -eq $db.name }
-			$lastread = $lastusedinfo.last_read
-			$lastwrite = $lastusedinfo.last_write
+
 			try
 			{
 				$null = $datatable.rows.Add(
 				$key,
+				$Date,
 				$InstanceID,
-				$db.Name,
-				$DateAdded,
-				$DateChecked,
-				$db.AutoClose,
-				$db.AutoCreateStatisticsEnabled,
-				$db.AutoShrink,
-				$db.AutoUpdateStatisticsEnabled,
-				$db.AvailabilityDatabaseSynchronizationState,
-				$db.AvailabilityGroupName,
-				$db.CaseSensitive,
-				$db.Collation,
-				$db.CompatibilityLevel,
-				$db.CreateDate,
-				$db.DataSpaceUsage,
-				$db.EncryptionEnabled,
-				$db.IndexSpaceUsage,
-				$db.IsAccessible,
-				$db.IsFullTextEnabled,
-				$db.IsMirroringEnabled,
-				$db.IsParameterizationForced,
-				$db.IsReadCommittedSnapshotOn,
-				$db.IsSystemObject,
-				$db.IsUpdateable,
-				$db.LastBackupDate,
-				$db.LastDifferentialBackupDate,
-				$db.LastLogBackupDate,
-				$db.Owner,
-				$db.PageVerify,
-				$db.ReadOnly,
-				$db.RecoveryModel,
-				$db.ReplicationOptions,
-				$db.Size,
-				$db.SnapshotIsolationState,
-				$db.SpaceAvailable,
-				$db.Status,
-				$db.TargetRecoveryTime,
-				$InActive,
-				$lastread,
-				$lastwrite,
-				$reboot,
-                $LastDBCCDate,
-				$Update)
+				$($Alert.Name),
+				$($Alert.Category),
+ 				$($Alert.DatabaseID),
+ 				$($Alert.DelayBetweenResponses),
+ 				$($Alert.EventDescriptionKeyword),
+ 				$($Alert.EventSource),
+ 				$($Alert.HasNotification),
+ 				$($Alert.IncludeEventDescription),
+ 				$($Alert.IsEnabled),
+ 				$($Alert.AgentJobDetailID),
+ 				$($Alert.LastOccurrenceDate),
+ 				$($Alert.LastResponseDate),
+ 				$($Alert.MessageID),
+ 				$($Alert.NotificationMessage),
+ 				$($Alert.OccurrenceCount),
+ 				$($Alert.PerformanceCondition),
+ 				$($Alert.Severity),
+ 				$($Alert.WmiEventNamespace),
+ 				$($Alert.WmiEventQuery),
+				$Update
+				)
 			}
 			catch
 			{
-				Write-Log -path $LogFilePath -message "Failed to add database info for $DBName to datatable - $_" -level Error
-				Write-Log -path $LogFilePath -message "Data = $key,
+				Write-Log -Message "Failed to add Alert Information to the datatable - $_" -Level Error
+				Write-Log -Message "Data is $key,
+				$Date,
 				$InstanceID,
-				$db.Name,
-				$DateAdded,
-				$DateChecked,
-				$db.AutoClose,
-				$db.AutoCreateStatisticsEnabled,
-				$db.AutoShrink,
-				$db.AutoUpdateStatisticsEnabled,
-				$db.AvailabilityDatabaseSynchronizationState,
-				$db.AvailabilityGroupName,
-				$db.CaseSensitive,
-				$db.Collation,
-				$db.CompatibilityLevel,
-				$db.CreateDate,
-				$db.DataSpaceUsage,
-				$db.EncryptionEnabled,
-				$db.IndexSpaceUsage,
-				$db.IsAccessible,
-				$db.IsFullTextEnabled,
-				$db.IsMirroringEnabled,
-				$db.IsParameterizationForced,
-				$db.IsReadCommittedSnapshotOn,
-				$db.IsSystemObject,
-				$db.IsUpdateable,
-				$db.LastBackupDate,
-				$db.LastDifferentialBackupDate,
-				$db.LastLogBackupDate,
-				$db.Owner,
-				$db.PageVerify,
-				$db.ReadOnly,
-				$db.RecoveryModel,
-				$db.ReplicationOptions,
-				$db.Size,
-				$db.SnapshotIsolationState,
-				$db.SpaceAvailable,
-				$db.Status,
-				$db.TargetRecoveryTime,
-				$InActive,
-				$lastread,
-				$lastwrite,
-				$reboot,
-                $LastDBCCDate,
-				$Update" -level Error
+				$($Alert.Name),
+				$($Alert.Category),
+ 				$($Alert.DatabaseID),
+ 				$($Alert.DelayBetweenResponses),
+ 				$($Alert.EventDescriptionKeyword),
+ 				$($Alert.EventSource),
+ 				$($Alert.HasNotification),
+ 				$($Alert.IncludeEventDescription),
+ 				$($Alert.IsEnabled),
+ 				$($Alert.AgentJobDetailID),
+ 				$($Alert.LastOccurrenceDate),
+ 				$($Alert.LastResponseDate),
+ 				$($Alert.MessageID),
+ 				$($Alert.NotificationMessage),
+ 				$($Alert.OccurrenceCount),
+ 				$($Alert.PerformanceCondition),
+ 				$($Alert.Severity),
+ 				$($Alert.WmiEventNamespace),
+ 				$($Alert.WmiEventQuery),
+				$Update"
 				continue
 			}
-		}
-	}
-	
-	$rowcount = $datatable.Rows.Count
+			$rowcount = $datatable.Rows.Count
 	
 	if ($rowcount -eq 0)
 	{
@@ -285,7 +225,7 @@ PROCESS
 	{
 		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
 		Write-Tvp -ErrorAction Stop 
-		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Databases into the $InstallDatabase on $($sourceserver.name)" -level info
+		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of Alerts into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
 	{
@@ -295,6 +235,6 @@ PROCESS
 
 END
 {
-	Write-Log -path $LogFilePath -message "Databases Finished"
+	Write-Log -path $LogFilePath -message "Alerts Finished"
 	$sourceserver.ConnectionContext.Disconnect()
 }
