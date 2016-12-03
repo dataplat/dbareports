@@ -379,7 +379,7 @@
     {
       [CmdletBinding(SupportsShouldProcess = $true)] 
       param ()
-      $notriggers = 'info.LogFileErrorMessages.sql', 'dbo.NotEntered.sql'
+      $notriggers = 'dbo.NotEntered.sql'
       $tables = Get-ChildItem -Path "$parentPath\setup\database\Tables\*.sql" | Where-Object {
         $notriggers -notcontains $_.Name 
       }
