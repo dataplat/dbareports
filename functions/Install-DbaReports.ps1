@@ -622,6 +622,13 @@
         AND [InstanceList].[Inactive] = 0)"
       }
 			
+      $LogFileErrors = @{
+        JobName = "$jobprefix - Log File Errors"
+        Description = "This job will scrape all the log files and add the Errors and Warnings to the LogFileErrorMessages table in the $InstallDatabase database.It will log to $LogFileFolder."
+        Command = "$JobCommand '$JobFilePath\LogFileErrorMessages.ps1'"
+        Subsystem = 'PowerShell'
+      }
+
       $jobnames = $sourceserver.JobServer.Jobs.Name
 			
       $hasharray = @()
@@ -636,7 +643,8 @@
       $hasharray += $historicaldbsize
       $hasharray += $setdbinactive
       $hasharray += $testaccess
-			
+			$hasharray += $LogFileErrors 
+      
       foreach ($hash in $hasharray)
       {
         $jobname = $hash.JobName
