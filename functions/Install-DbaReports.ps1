@@ -643,7 +643,7 @@
 				
         if ($jobnames -contains $jobname)
         {
-          Write-Log -path $LogFilePath  -Level "$jobname already exists. Skipping." -Level Warn
+          Write-Log -path $LogFilePath  -message "$jobname already exists. Skipping." -Level Warn
           Continue
         }
 				
@@ -797,34 +797,41 @@
       $db = $sourceserver.Databases[$InstallDatabase]
       if ($null -ne $execaccount)
       {
-        if($null -eq $db.Users[$execaccount])
-        {
-        Write-Log -path $LogFilePath  -message "Adding $execaccount to $InstallDatabase as db_owner" -Level Info
-        try
-        {
-            $dbuser = New-Object Microsoft.SqlServer.Management.Smo.User -ArgumentList $db, $execaccount
-            $dbuser.Login = $execaccount
-            If ($PSCmdlet.ShouldProcess("Creating Database User $execaccount")) 
-            { 
-              $dbuser.Create()
-            }
-            $dbo = $db.Roles['db_owner']
-            If ($PSCmdlet.ShouldProcess("Adding $execaccount as db owner for $InstallDatabase")) 
-            { 
-              $dbo.AddMember($execaccount)
-              $dbo.Alter()
-            }
-            Write-Log -path $LogFilePath  -message "Successfully Added $execaccount to $InstallDatabase as db_owner" -Level Info
-          }
-          catch
-          {
-            Write-Log -path $LogFilePath  "Cannot add $execaccount to $InstallDatabase as db_owner. - $_" -Level Warn
-            Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
-            throw
-          }
-        }
-      }
-    }
+				if ($null -eq $db.Users[$execaccount])
+				{
+					Write-Log -path $LogFilePath  -message "Adding $execaccount to $InstallDatabase as db_owner" -Level Info
+					try
+					{
+						$dbuser = New-Object Microsoft.SqlServer.Management.Smo.User -ArgumentList $db, $execaccount
+						$dbuser.Login = $execaccount
+						If ($execaccount -eq $db.Owner)
+						{
+							write-Log -path $LogFilePath -message "$execaccount is already db_owner in $InstallDatabase" -Level Info;
+						}
+						else
+						{
+							If ($PSCmdlet.ShouldProcess("Creating Database User $execaccount"))
+							{
+								$dbuser.Create()
+							}
+							$dbo = $db.Roles['db_owner']
+							If ($PSCmdlet.ShouldProcess("Adding $execaccount as db owner for $InstallDatabase"))
+							{
+								$dbo.AddMember($execaccount)
+								$dbo.Alter()
+							}
+							Write-Log -path $LogFilePath  -message "Successfully Added $execaccount to $InstallDatabase as db_owner" -Level Info
+						}
+					}
+					catch
+					{
+						Write-Log -path $LogFilePath  "Cannot add $execaccount to $InstallDatabase as db_owner. - $_" -Level Warn
+						Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
+						throw
+					}
+				}
+			}
+		}
 		
     Function Add-JobSchedule
     {
