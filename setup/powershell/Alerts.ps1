@@ -91,7 +91,7 @@ PROCESS
 	try
 	{
 		Write-Log -path $LogFilePath -message "Getting a list of alerts from the dbareports database" -level info
-		$sql = "SELECT AlertsID, Name, InstanceID, FROM $table"
+		$sql = "SELECT AlertsID, Name, InstanceID FROM $table"
 		$ExistingAlerts = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
 		Write-Log -path $LogFilePath -message "Got the list of alerts from the dbareports database" -level info
 	}
