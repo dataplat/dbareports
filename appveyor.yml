@@ -1,5 +1,4 @@
 # See http://www.appveyor.com/docs/appveyor-yml for many more options
-<<<<<<< HEAD
 
 # Skip on updates to the readme.
 
@@ -9,12 +8,11 @@ skip_commits:
 
   message: /updated readme.*/
 
-=======
 # Skip on updates to the readme.
 # We can force this by adding [skip ci] or [ci skip] anywhere in commit message 
 skip_commits:  
   message: /updated readme.*/
->>>>>>> development
+
 install:
 
   - cinst pester
@@ -32,16 +30,14 @@ test_script:
   - ps: Install-Module -Name PSScriptAnalyzer -RequiredVersion 1.6.0 -Repository PSGallery -Force
 
   - ps: . .\Tests\appveyor.pester.ps1
-<<<<<<< HEAD
 
 # Test with PS version 3  
 
   - ps: powershell.exe -version 3.0 -executionpolicy bypass -noprofile -file .\Tests\appveyor.pester.ps1
 
-=======
 # Test with PS version 3  
   - ps: powershell.exe -version 3.0 -executionpolicy bypass -noprofile -file .\Tests\appveyor.pester.ps1
->>>>>>> development
+
 # Finalize pass - collect and upload results
 
   - ps: . .\Tests\appveyor.pester.ps1 -Finalize
