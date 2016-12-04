@@ -3,7 +3,8 @@
   <DataSet Name="">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
-      <CommandText>SELECT [FileName]
+      <CommandText>SELECT 
+[FileName]
       ,[ErrorMsg]
       ,[Line]
 	  ,[Matches]
