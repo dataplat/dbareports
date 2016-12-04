@@ -494,22 +494,43 @@ function Initialize-DataTable
 	}
 	
 	$script:datatable = New-Object System.Data.DataTable $table
-	foreach ($result in $results.Tables.rows)
-	{
-		$ColumnName = $result.column_name
-		if ($result.data_type -eq 'datetime' -or $result.data_type -eq 'datetime2')
-		{
-			$Column = New-Object system.Data.DataColumn $ColumnName, ([datetime])
-		}
-		else
-		{
-			$Column = New-Object system.Data.DataColumn $ColumnName, ([string])
-		}
-		$null = $datatable.Columns.Add($column)
-	}
-	
-	$null = $datatable.Columns.Add("U")
-}
+foreach ($result in $results.Tables.rows) 
+    { 
+       $ColumnName = $result.column_name 
+       if ($result.data_type -eq 'datetime') 
+       { 
+              $Column = New-Object system.Data.DataColumn $ColumnName, ([datetime]) 
+            Write-Output "Added $ColumnName of datetime"
+       }
+        elseif($result.data_type -eq 'int')
+        {
+            $Column = New-Object system.Data.DataColumn $ColumnName, ([int])
+            Write-Output "Added $ColumnName of int" 
+        } 
+        elseif($result.data_type -eq 'datetime2')
+        {
+            $Column = New-Object system.Data.DataColumn $ColumnName, ([datetime]) 
+            Write-Output "Added $ColumnName of datetime"
+        } 
+        elseif($result.data_type -eq 'bit')
+        {
+            $Column = New-Object system.Data.DataColumn $ColumnName, ([boolean]) 
+            Write-Output "Added $ColumnName of bit"
+        } 
+        elseif($result.data_type -eq 'float')
+        {
+            $Column = New-Object system.Data.DataColumn $ColumnName, ([float]) 
+            Write-Output "Added $ColumnName of float"
+        } 
+       else 
+       { 
+              $Column = New-Object system.Data.DataColumn $ColumnName, ([string]) 
+            Write-Output "Added $ColumnName of string"
+              } 
+    $null = $datatable.Columns.Add($Column)
+    }  #end foreach
+    $null = $datatable.Columns.Add("U")
+}# end Initialize-DataTable
 
 Function Write-BulkInsert
 {
