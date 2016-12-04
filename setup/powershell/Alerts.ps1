@@ -45,7 +45,7 @@ BEGIN
 	}
 		
 	# Specify table name that we'll be inserting into
-	$table = "info.Alertss"
+	$table = "info.Alerts"
 	$schema,$tablename = $table.Split(".")
 	
 	# Connect to dbareports server
@@ -63,12 +63,14 @@ BEGIN
 	# and creates the necessary $script:datatable with it
 	try
 	{
-		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
+        Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
 		Initialize-DataTable -ErrorAction Stop 
 	}
 	catch
 	{
-		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+		Write-Log -path $LogFilePath -message "$datatable" -level Error
+        Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
+        Break
 	}
 	
 }
@@ -98,6 +100,8 @@ PROCESS
 	catch
 	{
 		Write-Log -path $LogFilePath -message "Can't get alerts list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
+        Write-Log -path $LogFilePath -message "$_.Exception" -Level Error
+        Write-Log -path $LogFilePath -message "$_.Exception.InnerException" -Level Error
 	}
 	
 	foreach ($sqlserver in $sqlservers)
@@ -126,7 +130,7 @@ PROCESS
 			continue
 		}
 		
-		foreach($Alert in $srv.JobServer.Alerts)
+		foreach($Alert in $server.JobServer.Alerts)
 
  		{
 
@@ -161,7 +165,7 @@ PROCESS
 			{
 				$null = $datatable.rows.Add(
 				$key,
-				$Date,
+				$DateChecked,
 				$InstanceID,
 				$($Alert.Name),
 				$($Alert.Category),
@@ -173,8 +177,8 @@ PROCESS
  				$($Alert.IncludeEventDescription),
  				$($Alert.IsEnabled),
  				$($Alert.AgentJobDetailID),
- 				$($Alert.LastOccurrenceDate),
- 				$($Alert.LastResponseDate),
+ 				$($LastOccurrenceDate),
+ 				$($LastResponseDate),
  				$($Alert.MessageID),
  				$($Alert.NotificationMessage),
  				$($Alert.OccurrenceCount),
@@ -187,9 +191,9 @@ PROCESS
 			}
 			catch
 			{
-				Write-Log -Message "Failed to add Alert Information to the datatable - $_" -Level Error
-				Write-Log -Message "Data is $key,
-				$Date,
+				Write-Log -path $LogFilePath -Message "Failed to add Alert Information to the datatable - $_" -Level Error
+				Write-Log -path $LogFilePath -Message "Data is $key,
+				$DateChecked,
 				$InstanceID,
 				$($Alert.Name),
 				$($Alert.Category),
@@ -213,9 +217,9 @@ PROCESS
 				$Update"
 				continue
 			}
-	    } #End foreach ALerts
+        } #End foreach ALerts
     }#End foreach Servers
-			$rowcount = $datatable.Rows.Count
+    $rowcount = $datatable.Rows.Count
 	
 	if ($rowcount -eq 0)
 	{
@@ -232,6 +236,29 @@ PROCESS
 	catch
 	{
 		Write-Log -path $LogFilePath -message "Bulk insert failed - $_" -level Error
+Write-Log -path $LogFilePath -Message "Data is $key,
+				$DateChecked,
+				$InstanceID,
+				$($Alert.Name),
+				$($Alert.Category),
+ 				$($Alert.DatabaseID),
+ 				$($Alert.DelayBetweenResponses),
+ 				$($Alert.EventDescriptionKeyword),
+ 				$($Alert.EventSource),
+ 				$($Alert.HasNotification),
+ 				$($Alert.IncludeEventDescription),
+ 				$($Alert.IsEnabled),
+ 				$($Alert.AgentJobDetailID),
+ 				$($Alert.LastOccurrenceDate),
+ 				$($Alert.LastResponseDate),
+ 				$($Alert.MessageID),
+ 				$($Alert.NotificationMessage),
+ 				$($Alert.OccurrenceCount),
+ 				$($Alert.PerformanceCondition),
+ 				$($Alert.Severity),
+ 				$($Alert.WmiEventNamespace),
+ 				$($Alert.WmiEventQuery),
+				$Update"
 	}
 }
 
