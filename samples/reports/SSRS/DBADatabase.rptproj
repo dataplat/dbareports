@@ -80,6 +80,10 @@
       <Name>SuspectPages.rsd</Name>
       <FullPath>SuspectPages.rsd</FullPath>
     </ProjectItem>
+    <ProjectItem>
+      <Name>Get_DisksLessThan20Percent.rsd</Name>
+      <FullPath>Get_DisksLessThan20Percent.rsd</FullPath>
+    </ProjectItem>
   </DataSets>
   <Reports>
     <ProjectItem>
@@ -107,8 +111,8 @@
       <FullPath>05 - Powershell Error Log.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>12 - Databases not backed up in last 24 Hours.rdl</Name>
-      <FullPath>12 - Databases not backed up in last 24 Hours.rdl</FullPath>
+      <Name>06 - Servers With Database not used since last reboot.rdl</Name>
+      <FullPath>06 - Servers With Database not used since last reboot.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
       <Name>07 - Server Information.rdl</Name>
@@ -131,12 +135,16 @@
       <FullPath>11 - Suspect Pages.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>06 - Servers With Database not used since last reboot.rdl</Name>
-      <FullPath>06 - Servers With Database not used since last reboot.rdl</FullPath>
+      <Name>12 - Databases not backed up in last 24 Hours.rdl</Name>
+      <FullPath>12 - Databases not backed up in last 24 Hours.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
       <Name>Report1.rdl</Name>
       <FullPath>Report1.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>13 - DiskInformation.rdl</Name>
+      <FullPath>13 - DiskInformation.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>

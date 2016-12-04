@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
-  <DataSources>
-    <DataSource Name="DataSource1">
-      <DataSourceReference>DBA Database</DataSourceReference>
-      <rd:SecurityType>None</rd:SecurityType>
-      <rd:DataSourceID>e23f5f82-f5c7-44ff-abb8-3aa83004870c</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
   <DataSets>
     <DataSet Name="AgentJobServer">
       <SharedDataSet>
@@ -208,18 +201,6 @@
         <Field Name="Olderthan24">
           <DataField>Olderthan24</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
-    <DataSet Name="EnvironmentalRoles">
-      <Query>
-        <DataSourceName>DataSource1</DataSourceName>
-        <CommandText>Select distinct(Environment) from dbo.InstanceList</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="Environment">
-          <DataField>Environment</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -2206,29 +2187,10 @@ Click for more information</Value>
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParameters>
-    <ReportParameter Name="EnvironmentRole">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <DataSetReference>
-          <DataSetName>EnvironmentalRoles</DataSetName>
-          <ValueField>Environment</ValueField>
-        </DataSetReference>
-      </DefaultValue>
-      <Prompt>EnvironmentRole</Prompt>
-    </ReportParameter>
-  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
-      <CellDefinitions>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>EnvironmentRole</ParameterName>
-        </CellDefinition>
-      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <EmbeddedImages>
