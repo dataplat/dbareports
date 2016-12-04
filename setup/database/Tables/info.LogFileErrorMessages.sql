@@ -1,8 +1,14 @@
-CREATE TABLE [info].[LogFileErrorMessages]
+CREATE TABLE [info].[LogFileErrorMessages](
+	[LogFileErrorMessagesID] [int] IDENTITY(1,1) NOT NULL,
+	[Date] [date] NOT NULL,
+	[FileName] [nvarchar](100) NOT NULL,
+	[ErrorMsg] [nvarchar](500) NOT NULL,
+	[Line] [int] NOT NULL,
+	[Matches] [nvarchar](12) NULL,
+ CONSTRAINT [PK_LogFileErrorMessages] PRIMARY KEY CLUSTERED 
 (
-[FileName] [nvarchar] (100) COLLATE Latin1_General_CI_AS NOT NULL,
-[ErrorMsg] [nvarchar] (500) COLLATE Latin1_General_CI_AS NOT NULL,
-[Line] [int] NOT NULL,
-[Matches] [nvarchar] (12) COLLATE Latin1_General_CI_AS NULL
+	[LogFileErrorMessagesID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+
 GO

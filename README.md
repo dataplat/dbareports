@@ -1,7 +1,28 @@
 # DBA Reports
+[![licence badge]][licence]
+[![stars badge]][stars]
+[![forks badge]][forks]
+[![issues badge]][issues]
+
+[licence badge]:https://img.shields.io/badge/License-GPL%20v3-blue.svg
+[stars badge]:https://img.shields.io/github/stars/SQLDBAWithABeard/dbareports.svg
+[forks badge]:https://img.shields.io/github/forks/SQLDBAWithABeard/dbareports.svg
+[issues badge]:https://img.shields.io/github/issues/SQLDBAWithABeard/dbareports.svg
+
+[licence]:https://github.com/SQLDBAWithABeard/dbareports/blob/master/LICENSE.md
+[stars]:https://github.com/SQLDBAWithABeard/dbareports/stargazers
+[forks]:https://github.com/SQLDBAWithABeard/dbareports/network
+[issues]:https://github.com/SQLDBAWithABeard/dbareports/issues
+
 This repo contains the PowerShell module SSRS and PowerBi samples for you to gather, store and report on information about your SQL Server estate. You can find more details on the website https://dbareports.io 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/4ogcjt7glm5ojd73/branch/development?svg=true)](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports/branch/development)  - Development Branch 
+[![Build status](https://ci.appveyor.com/api/projects/status/j5webpirpjxid52d/branch/Development?svg=true)][- Development branch appveyor build latest](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports-duvtp/branch/Development)   
+
+[![Build status](https://ci.appveyor.com/api/projects/status/j5webpirpjxid52d/branch/master?svg=true)][- master branch appveyor build latest](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports-duvtp/branch/master)  
+
+## Installer
+We’ve tried to make the installation experience as simple as possible. Executing Install-DBAreports does the following:
+)  - Development Branch 
 
 [![Build status](https://ci.appveyor.com/api/projects/status/4ogcjt7glm5ojd73/branch/master?svg=true)](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports/branch/master)  - Master Branch 
 ## Installer

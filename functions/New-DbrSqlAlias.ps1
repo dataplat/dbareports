@@ -52,7 +52,7 @@ New-DbrSqlAlias
 			{
 				try
 				{
-					Start-Process "$psHome\powershell.exe" -Verb Runas -ArgumentList '-command "New-DbrSqlAlias"' -Wait
+					Start-Process "$psHome\powershell.exe" -noprofile -Verb Runas -ArgumentList '-command "New-DbrSqlAlias"' -Wait
 					return
 				}
 				catch

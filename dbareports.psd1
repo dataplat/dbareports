@@ -17,10 +17,10 @@
 	GUID = '654a8346-35f1-4592-a1b5-0ee472fab074'
 	
 	# Author of this module
-	Author = 'Rob Sewell'
+	Author = 'SQL Collaborative - Initial Author Rob Sewell'
 	
 	# Company or vendor of this module
-	CompanyName = 'sqldbawithabeard.com'
+	CompanyName = 'SQL Collaborative'
 	
 	# Copyright statement for this module
 	Copyright = '2016 Rob Sewell'
@@ -73,7 +73,7 @@
 		'Add-DbrServerToInventory',
 		'Get-DbrAllInfo',
 		'Remove-DbrServerFromInventory',
-		'Test-SqlPath',
+		'Test-dbrSqlPath',
 		'Install-DbaReportsClient',
 		'Set-DbrInstanceInactiveInInventory',
 		'Get-DbrConfig',

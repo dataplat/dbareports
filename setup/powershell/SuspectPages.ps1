@@ -27,6 +27,10 @@ Param (
 
 BEGIN
 {	
+		# Load up shared functions
+	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+	. "$currentdir\shared.ps1"
+	. "$currentdir\Write-Log.ps1"
 	# Create Log File 
 	$Date = Get-Date -Format yyyyMMdd_HHmmss
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_SuspectPages_' + $Date + '.txt'
@@ -43,9 +47,6 @@ BEGIN
 	# Specify table name that we'll be inserting into
 	$table = "info.SuspectPages"
 	
-	# Load up shared functions
-	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-	. "$currentdir\shared.ps1"
 	
 # Connect to dbareports server
 	try

@@ -48,6 +48,7 @@ BEGIN
 	# Load up shared functions
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
+	. "$currentdir\Write-Log.ps1"
 	
 	# Connect to dbareports server
 	try

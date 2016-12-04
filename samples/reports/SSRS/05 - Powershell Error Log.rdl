@@ -34,16 +34,16 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>6.89768cm</Width>
+                  <Width>8.72327cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>14.04143cm</Width>
+                  <Width>13.98851cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.90247cm</Width>
+                  <Width>1.68539cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.90247cm</Width>
+                  <Width>2.34685cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -59,7 +59,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>File Name - Click to open</Value>
+                                  <Value>File Name</Value>
                                   <Style>
                                     <FontFamily>Segoe UI Light</FontFamily>
                                     <FontSize>14pt</FontSize>
@@ -215,13 +215,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>FileName</rd:DefaultName>
-                          <ActionInfo>
-                            <Actions>
-                              <Action>
-                                <Hyperlink>="File://HMDBS02/LogFile/" &amp; Fields!FileName.Value</Hyperlink>
-                              </Action>
-                            </Actions>
-                          </ActionInfo>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -359,7 +352,7 @@
             <DataSetName>LogFileErrors</DataSetName>
             <Top>1.39375cm</Top>
             <Height>1.2cm</Height>
-            <Width>26.74405cm</Width>
+            <Width>26.74402cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -373,7 +366,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>This report will look at the log files for the Powershell scripts running the DBAReports Automation Scripts running on The DBA Reports Server and search for Errors or Warnigns for Log Files created in the last 24 hours. The log files are located</Value>
+                    <Value>This report will look at the log files for the Powershell scripts running the DBAReports Automation Scripts running on The DBA Reports Server and search for Errors or Warnings for Log Files created in the last 24 hours. The log files are located</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>11pt</FontSize>
@@ -532,6 +525,7 @@
                   </Action>
                 </Actions>
               </ActionInfo>
+              <Top>0cm</Top>
               <Left>21.74403cm</Left>
               <Height>0.65872cm</Height>
               <Width>5cm</Width>
