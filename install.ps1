@@ -38,7 +38,7 @@ Write-Output "Installing module to $path"
 
 
 Remove-Module dbareports -ErrorAction SilentlyContinue
-$url = 'https://github.com/sqlcollaborative/dbareports/archive/Development.zip'
+$url = 'https://github.com/sqlcollaborative/dbareports/archive/master.zip'
 
 $temp = ([System.IO.Path]::GetTempPath()).TrimEnd("\")
 $zipfile = "$temp\dbareports.zip"
