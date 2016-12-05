@@ -3,14 +3,6 @@
   <DataSet Name="DataSet1">
     <Query>
       <DataSourceReference>DBA Database</DataSourceReference>
-      <DataSetParameters>
-        <DataSetParameter Name="@EnvironmentRole">
-          <ReadOnly>false</ReadOnly>
-          <Nullable>false</Nullable>
-          <OmitFromQuery>false</OmitFromQuery>
-          <rd:DbType>Object</rd:DbType>
-        </DataSetParameter>
-      </DataSetParameters>
       <CommandText>DECLARE @CurrDate DATETIME
 SET @CurrDate = GETDATE()
 Select
@@ -50,7 +42,6 @@ FROM [dbo].[InstanceList] il
 	AND D.Status = 'Normal'
 	AND SQL.SQLVersion &lt;&gt; 'SQL 2000'
 	AND D.IsUpdateable = 1
-and il.Environment in (@EnvironmentRole)
 	ORDER BY DaysSinceBackup desc,HoursinceBackup desc</CommandText>
     </Query>
     <Fields>

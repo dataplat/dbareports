@@ -145,7 +145,7 @@ PROCESS
 			$diskname = $disk.name
 			if (!$diskname.StartsWith("\\"))
 			{
-				$update = $true
+				$update = $false
 				$row = $table | Where-Object { $_.DiskName -eq $DiskName -and $_.ServerId -eq $ServerId}
 				$key = $row.DiskSpaceID
 				
