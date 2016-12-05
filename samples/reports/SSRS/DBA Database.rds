@@ -2,7 +2,7 @@
 <RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DBA Database">
   <ConnectionProperties>
     <Extension>SQL</Extension>
-    <ConnectString>Data Source=SQL2016N1;Initial Catalog=V02dbareports</ConnectString>
+    <ConnectString>Data Source=DCSQLDBA01;Initial Catalog=dbareports</ConnectString>
     <IntegratedSecurity>true</IntegratedSecurity>
   </ConnectionProperties>
   <DataSourceID>0a0b4e1b-ebc8-45e1-9576-5b8f937a36aa</DataSourceID>
