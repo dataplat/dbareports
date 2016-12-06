@@ -361,8 +361,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 									$Environment,
 									$Location,
 									$NotContactable,
-									$nodeupdate,
-$update
+									$nodeupdate
 									)
 								  }
 						}
