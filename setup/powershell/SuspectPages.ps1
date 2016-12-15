@@ -85,7 +85,7 @@ PROCESS
 		break
 	}
 	
-	foreach ($server in $servers)
+	foreach ($server in $sqlservers)
 	{
 		$sqlservername = $server.ServerName
 		$InstanceName = $server.InstanceName
