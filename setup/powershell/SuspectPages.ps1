@@ -171,12 +171,12 @@ PROCESS
 				{
 					Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
 					Write-Log -path $LogFilePath -message "Data = $DatabaseID,
-					$suspectpages.FileName ,
-					$suspectpages.page_id,
-					$suspectpages.EventType,
-					$suspectpages.error_count,
-					$suspectpages.last_update_date,
-					$suspectpages.InstanceID " -level Warn
+					$FileName ,
+					$PageID,
+					$EventType.EventType,
+					$ErrorCount.error_count,
+					$LastUpdated.last_update_date,
+					$InstanceID.InstanceID " -level Warn
 					continue
 				}
 		}
