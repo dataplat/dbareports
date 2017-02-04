@@ -248,6 +248,14 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 			}
             
             $row = $TheServers.Rows | Where-Object {$_.ServerName -eq $ComputerName }
+
+                        if($row.Count -gt 1)
+            {
+                Write-Log -Path $LogFilePath -Message "You appear to have duplicate entries for this ComputerName. Please Check Instance List table and resolve" -Level Error
+                Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
+                break
+            }
+
 			$Serverkey = $row.ServerId
             $Exists = $false
             if($datatable.rows.count -gt 0)
@@ -330,6 +338,14 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 					if ($SqlInstance -notcontains $node -and $computername -ne $node)
 					{
 						$row = $allservers.Rows | Where-Object { $_.ComputerName -eq $node }
+
+                        if($row.Count -gt 1)
+                        {
+                            Write-Log -Path $LogFilePath -Message "You appear to have duplicate entries for this ComputerName. Please Check Instance List table and resolve" -Level Error
+                            Write-Output "Something went wrong - The Beard is sad :-( . You can find the install log here $($Logfile.FullName)"
+                            break
+                        }
+
 						$nodekey = $row.InstanceId
 												
 						if ($null -eq $nodekey)
@@ -361,8 +377,7 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 									$Environment,
 									$Location,
 									$NotContactable,
-									$nodeupdate,
-$update
+									$nodeupdate
 									)
 								  }
 						}
@@ -486,15 +501,27 @@ $update
 				{
 					Write-Log -path $LogFilePath -message "Starting Agent Job Server job" -Level Info
 					$agentserverjob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - Agent Job Server*" }
-					$agentserverjob.Start()
+					
+                    if ($agentserverjob.CurrentRunStatus -eq "Idle")
+			        {
+                        $agentserverjob.Start()
+                    }
 					
 					Write-Log -path $LogFilePath -message "Starting Windows Server Information job" -Level Info
 					$winserverInfoJob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - Windows Server Information*" }
-					$winserverInfoJob.Start()
 					
+                    if ($winserverInfoJob.CurrentRunStatus -eq "Idle")
+			        {
+                        $winserverInfoJob.Start()
+                    }
+			
 					Write-Log -path $LogFilePath -message "Starting SQL Server Information job" -Level Info
 					$sqlserverinfojob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - SQL Server Information*" }
-					$sqlserverinfojob.Start()
+					
+                    if ($sqlserverinfojob.CurrentRunStatus -eq "Idle")
+			        {
+                        $sqlserverinfojob.Start()
+                    }
 					
 					Write-Log -path $LogFilePath -message "Done!" -Level Info
 				}
