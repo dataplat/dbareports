@@ -46,7 +46,7 @@ BEGIN
 
 	# Specify table name that we'll be inserting into
 	$table = "info.SuspectPages"
-	
+	$schema,$tablename  = $table.Split(".")
 	
 # Connect to dbareports server
 	try
@@ -70,6 +70,8 @@ BEGIN
 	{
 		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
 	}
+
+	$Date = Get-Date
 }
 
 PROCESS
@@ -85,7 +87,7 @@ PROCESS
 		break
 	}
 	
-	foreach ($server in $servers)
+	foreach ($server in $sqlservers)
 	{
 		$sqlservername = $server.ServerName
 		$InstanceName = $server.InstanceName
@@ -139,33 +141,55 @@ PROCESS
 		
 		foreach ($row in $suspectpages)
 		{
+		
         $DBName = $row.DBName
+		$FileName = $row.FileName
+		$PageID = $row.page_id
+		$EventType = $row.EventType
+		$ErrorCount = $row.error_count
+		$LastUpdated = $row.last_update_date
+		$InstanceID = $row.InstanceID
+
 		$SQL = " SELECT DatabaseID From info.Databases WHERE Name = '$DBName' and InstanceID = '$InstanceId'" 
         $Results = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]	
         $DatabaseID= $Results.DatabaseID
-        # remove the null for troubleshooting to see the data
+		
+        $record = $table | Where-Object { $_.DatabaseID -eq $row.DatabaseID -and $_.InstanceId -eq $InstanceID }
+		$key = $record.DatabaseID
+		$update = $true
+			
+			if ($key.count -eq 0)
+			{
+				$update = $false
+				$DateAdded = $Date
+			}
+
+         # remove the null for troubleshooting to see the data
         		try
 				{
 					$null = $datatable.Rows.Add(
+					$Null, # PK
 					$DatabaseID,
-					$suspectpages.FileName ,
-					$suspectpages.page_id,
-					$suspectpages.EventType,
-					$suspectpages.error_count,
-					$suspectpages.last_update_date,
-					$suspectpages.InstanceID
+                    $DateAdded,
+					$FileName ,
+					$PageID,
+					$EventType,
+					$ErrorCount,
+					$LastUpdated,
+					$InstanceID,
+					$update
                     )
 				}
 				catch
 				{
 					Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
 					Write-Log -path $LogFilePath -message "Data = $DatabaseID,
-					$suspectpages.FileName ,
-					$suspectpages.page_id,
-					$suspectpages.EventType,
-					$suspectpages.error_count,
-					$suspectpages.last_update_date,
-					$suspectpages.InstanceID " -level Warn
+					$FileName ,
+					$PageID,
+					$EventType,
+					$ErrorCount,
+					$LastUpdated,
+					$InstanceID " -level Warn
 					continue
 				}
 		}
