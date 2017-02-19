@@ -158,7 +158,7 @@ PROCESS
 		if ($VersionMajor -eq 12)
 		{ $Version = 'SQL 2014' }
 		if ($VersionMajor -eq 13)
-		{ $Version = 'SQL 2014' }
+		{ $Version = 'SQL 2016' }
 		
 		if ($server.IsHadrEnabled -eq $True)
 		{
