@@ -12,7 +12,7 @@ CREATE TABLE [info].[Databases]
 [AvailabilityDatabaseSynchronizationState] [nvarchar] (16) COLLATE Latin1_General_CI_AS NULL,
 [AvailabilityGroupName] [nvarchar] (128) COLLATE Latin1_General_CI_AS NULL,
 [CaseSensitive] [bit] NULL,
-[Collation] [nvarchar] (30) COLLATE Latin1_General_CI_AS NULL,
+[Collation] [nvarchar] (40) COLLATE Latin1_General_CI_AS NULL,
 [CompatibilityLevel] [nvarchar] (15) COLLATE Latin1_General_CI_AS NULL,
 [CreateDate] [datetime2] NULL,
 [DataSpaceUsageKB] [float] NULL,
