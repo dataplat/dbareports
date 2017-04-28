@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS  
-This Script will check the Log Files in the Log File Folder for errors adn warnings and insert them into the LogFileErrorMessages table
+This Script will check the Log Files in the Log File Folder for errors and warnings and insert them into the LogFileErrorMessages table
 
 .DESCRIPTION 
-This Script will check the Log Files in the Log File Folder for errors adn warnings and insert them into the LogFileErrorMessages table
+This Script will check the Log Files in the Log File Folder for errors and warnings and insert them into the LogFileErrorMessages table
 
 .NOTES 
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
