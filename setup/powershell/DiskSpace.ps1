@@ -37,7 +37,6 @@ BEGIN
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_DiskSpace_' + $Date + '.txt'
 	try
 	{
-		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
 		Write-Log -path $LogFilePath -message "DiskSpace Job started" -level info
 	}
 	catch

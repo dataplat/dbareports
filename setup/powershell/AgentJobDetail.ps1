@@ -27,12 +27,16 @@ Param (
 
 BEGIN
 {
+	# Load up shared functions
+	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+	. "$currentdir\shared.ps1"
+	. "$currentdir\Write-Log.ps1"
+	
 	# Create Log File 
 	$Date = Get-Date -Format yyyyMMdd_HHmmss
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_AgentJobDetail_' + $Date + '.txt'
 	try
 	{
-		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
 		Write-Log -path $LogFilePath -message "Agent Job Detail Job started" -level info
 	}
 	catch
@@ -44,11 +48,6 @@ BEGIN
 	$table = "info.AgentJobDetail"
 	$schema = $table.Split(".")[0]
 	$tablename = $table.Split(".")[1]
-	
-	# Load up shared functions
-	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-	. "$currentdir\shared.ps1"
-	. "$currentdir\Write-Log.ps1"
 	
 	# Connect to dbareports server
 	try

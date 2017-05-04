@@ -36,7 +36,6 @@ BEGIN
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_Alerts_' + $Date + '.txt'
 	try
 	{
-		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
 		Write-Log -path $LogFilePath -message "Alerts Job started" -level info
 	}
 	catch
