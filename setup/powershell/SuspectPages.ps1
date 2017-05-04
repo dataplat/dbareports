@@ -36,7 +36,6 @@ BEGIN
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_SuspectPages_' + $Date + '.txt'
 	try
 	{
-		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
 		Write-Log -path $LogFilePath -message "SuspectPages Job started" -level info
 	}
 	catch

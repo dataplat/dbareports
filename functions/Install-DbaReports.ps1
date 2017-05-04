@@ -523,7 +523,7 @@
       else
       {
         #$JobFilePath = [regex]::Escape($InstallPath)
-        $JobFilePath = $InstallPath
+        $JobFilePath = $InstallPath.Replace(" ", "`` ")
         $JobCommand = "powershell.exe -ExecutionPolicy Bypass . "
       }
 			

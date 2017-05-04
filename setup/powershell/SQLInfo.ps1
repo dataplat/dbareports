@@ -38,7 +38,6 @@ BEGIN
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_SQLInfo_' + $Date + '.txt'
 	try
 	{
-		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
 		Write-Log -path $LogFilePath -message "SQLInfo Job started" -level info
 	}
 	catch
