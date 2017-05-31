@@ -144,8 +144,8 @@ PROCESS
 			$diskname = $disk.name
 			if (!$diskname.StartsWith("\\"))
 			{
-				$update = $false
-				$row = $table | Where-Object { $_.DiskName -eq $DiskName -and $_.ServerId -eq $ServerId}
+				$update = $true
+				$row = $table | Where-Object { $_.DiskName -eq $DiskName -and $_.ServerId -eq $ServerId} | Sort-Object -Property Date | Select-Object -First 1
 				$key = $row.DiskSpaceID
 				
 				if ($key.count -eq 0)
@@ -163,7 +163,7 @@ PROCESS
 					$Null = $datatable.Rows.Add(
 					$key,
 					$Date,
-					$ServerId ,
+					$ServerId,
 					$diskname,
 					$disk.Label,
 					$total,
@@ -178,9 +178,9 @@ PROCESS
 					Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
 					Write-Log -path $LogFilePath -message "Data = $key,
 					$Date,
-					$ServerId ,
+					$ServerId,
 					$diskname,
-					$disk.Label,
+					$($disk.Label),
 					$total,
 					$free,
 					$percentfree,

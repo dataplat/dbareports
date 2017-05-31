@@ -14,3 +14,9 @@ ALTER TABLE [info].[DiskSpace] ADD CONSTRAINT [PK_DiskSpace_1] PRIMARY KEY CLUST
 GO
 ALTER TABLE [info].[DiskSpace] ADD CONSTRAINT [FK_DiskSpace_ServerInfo] FOREIGN KEY ([ServerID]) REFERENCES [info].[ServerInfo] ([ServerID])
 GO
+CREATE UNIQUE NONCLUSTERED INDEX [UIX_DiskSpace_ServerID_DiskName] ON [info].[DiskSpace]
+(
+	[ServerID] ASC,
+	[DiskName] ASC
+)
+GO
