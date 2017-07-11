@@ -41,6 +41,10 @@
       <FullPath>EnvironmentGroupDaily.rsd</FullPath>
     </ProjectItem>
     <ProjectItem>
+      <Name>Get_DisksLessThan20Percent.rsd</Name>
+      <FullPath>Get_DisksLessThan20Percent.rsd</FullPath>
+    </ProjectItem>
+    <ProjectItem>
       <Name>Get_FastestGrowingDisks.rsd</Name>
       <FullPath>Get_FastestGrowingDisks.rsd</FullPath>
     </ProjectItem>
@@ -79,10 +83,6 @@
     <ProjectItem>
       <Name>SuspectPages.rsd</Name>
       <FullPath>SuspectPages.rsd</FullPath>
-    </ProjectItem>
-    <ProjectItem>
-      <Name>Get_DisksLessThan20Percent.rsd</Name>
-      <FullPath>Get_DisksLessThan20Percent.rsd</FullPath>
     </ProjectItem>
   </DataSets>
   <Reports>
@@ -139,12 +139,12 @@
       <FullPath>12 - Databases not backed up in last 24 Hours.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>Report1.rdl</Name>
-      <FullPath>Report1.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
       <Name>13 - DiskInformation.rdl</Name>
       <FullPath>13 - DiskInformation.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Report1.rdl</Name>
+      <FullPath>Report1.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>
@@ -167,7 +167,7 @@
       <Options>
         <OutputPath>bin\DebugLocal</OutputPath>
         <TargetServerVersion>SSRS2016</TargetServerVersion>
-        <TargetServerURL>http://sql2016n1/reportserver/</TargetServerURL>
+        <TargetServerURL>http://rob-xps:8082/reportserver/</TargetServerURL>
         <TargetFolder>/DBA Reports</TargetFolder>
         <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
         <TargetDatasetFolder>Datasets</TargetDatasetFolder>
