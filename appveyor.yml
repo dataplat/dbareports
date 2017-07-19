@@ -23,6 +23,9 @@ test_script:
   # - ps: Import-PackageProvider NuGet -MinimumVersion '2.8.5.201' -Force
 
   - ps: Install-Module -Name PSScriptAnalyzer -RequiredVersion 1.6.0 -Repository PSGallery -Force
+  
+  # "Get Latest Pester"
+  - ps: Install-Module -Name Pester -Repository PSGallery -Force 
 
   - ps: . .\Tests\appveyor.pester.ps1
 
@@ -41,4 +44,4 @@ notifications:
   - provider: Slack
 
     incoming_webhook:
-        secure: ir9e5/F85FEMc+Yj6MgsodgMfEwLY0oxg2zemy4Tl3eEsrcztgBBFS/a9rNHUg4vtszBuSMwCOqBnWrEjtzeZlhVtvufVwrOi0LKaslrm74=  
+        secure: KZIBT1mQ9haiVMAWAMGDKBafVzZc2HT886BPd9hF7IjspFRFeI90d/tlkyXCc7lFryHegOgXRe+h790zM5CODoDYq517L+Y7QyKw4MkNnjk=
