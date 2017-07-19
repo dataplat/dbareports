@@ -563,7 +563,7 @@ Main Page</Value>
       <DataType>String</DataType>
       <DefaultValue>
         <Values>
-          <Value>HMDBS02</Value>
+          <Value>ServerName</Value>
         </Values>
       </DefaultValue>
       <Prompt>Server Name</Prompt>

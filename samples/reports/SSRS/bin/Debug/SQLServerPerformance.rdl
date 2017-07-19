@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner"><AutoRefresh>0</AutoRefresh><DataSources><DataSource Name="HMDBS02"><ConnectionProperties><DataProvider>SQL</DataProvider><ConnectString>Data Source=HMDBS02;Initial Catalog=MDW</ConnectString><IntegratedSecurity>true</IntegratedSecurity></ConnectionProperties><rd:SecurityType>Integrated</rd:SecurityType><rd:DataSourceID>ae20cb59-a82a-416e-8f63-aadd028320f1</rd:DataSourceID></DataSource></DataSources><DataSets><DataSet Name="Counters"><Query><DataSourceName>HMDBS02</DataSourceName><CommandText>SELECT
+﻿<?xml version="1.0" encoding="utf-8"?><Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner"><AutoRefresh>0</AutoRefresh><DataSources><DataSource Name="HServerName><ConnectionProperties><DataProvider>SQL</DataProvider><ConnectString>Data Source=HServerNameInitial Catalog=MDW</ConnectString><IntegratedSecurity>true</IntegratedSecurity></ConnectionProperties><rd:SecurityType>Integrated</rd:SecurityType><rd:DataSourceID>ae20cb59-a82a-416e-8f63-aadd028320f1</rd:DataSourceID></DataSource></DataSources><DataSets><DataSet Name="Counters"><Query><DataSourceName>HServerName/DataSourceName><CommandText>SELECT
   DISTINCT(Perfmon.CounterName)
 FROM
-  Perfmon</CommandText><rd:DesignerState>&amp;lt;QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational"&amp;gt;&amp;lt;SelectedColumns&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Perfmon" ColumnName="CounterName" /&amp;gt;&amp;lt;/SelectedColumns&amp;gt;&amp;lt;/QueryDefinition&amp;gt;</rd:DesignerState></Query><Fields><Field Name="CounterName"><DataField>CounterName</DataField><rd:TypeName>System.String</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageLifeExpectancy"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+  Perfmon</CommandText><rd:DesignerState>&amp;lt;QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational"&amp;gt;&amp;lt;SelectedColumns&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Perfmon" ColumnName="CounterName" /&amp;gt;&amp;lt;/SelectedColumns&amp;gt;&amp;lt;/QueryDefinition&amp;gt;</rd:DesignerState></Query><Fields><Field Name="CounterName"><DataField>CounterName</DataField><rd:TypeName>System.String</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageLifeExpectancy"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -11,12 +11,12 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'page life expectancy'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText><rd:DesignerState>&amp;lt;QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational"&amp;gt;&amp;lt;SelectedColumns&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Perfmon" ColumnName="Timestamp" /&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Perfmon" ColumnName="Value" /&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Servers" ColumnName="ServerName" /&amp;gt;&amp;lt;/SelectedColumns&amp;gt;&amp;lt;Joins&amp;gt;&amp;lt;Join Type="CROSS JOIN" ColumnOwner="Servers" /&amp;gt;&amp;lt;Join Type="INNER JOIN" ColumnOwner="Perfmon"&amp;gt;&amp;lt;On&amp;gt;&amp;lt;From ColumnOwner="Servers" ColumnName="ServerID" /&amp;gt;&amp;lt;To ColumnOwner="Perfmon" ColumnName="ServerID" /&amp;gt;&amp;lt;/On&amp;gt;&amp;lt;/Join&amp;gt;&amp;lt;/Joins&amp;gt;&amp;lt;/QueryDefinition&amp;gt;</rd:DesignerState></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="ServerName"><Query><DataSourceName>HMDBS02</DataSourceName><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText><rd:DesignerState>&amp;lt;QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational"&amp;gt;&amp;lt;SelectedColumns&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Perfmon" ColumnName="Timestamp" /&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Perfmon" ColumnName="Value" /&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Servers" ColumnName="ServerName" /&amp;gt;&amp;lt;/SelectedColumns&amp;gt;&amp;lt;Joins&amp;gt;&amp;lt;Join Type="CROSS JOIN" ColumnOwner="Servers" /&amp;gt;&amp;lt;Join Type="INNER JOIN" ColumnOwner="Perfmon"&amp;gt;&amp;lt;On&amp;gt;&amp;lt;From ColumnOwner="Servers" ColumnName="ServerID" /&amp;gt;&amp;lt;To ColumnOwner="Perfmon" ColumnName="ServerID" /&amp;gt;&amp;lt;/On&amp;gt;&amp;lt;/Join&amp;gt;&amp;lt;/Joins&amp;gt;&amp;lt;/QueryDefinition&amp;gt;</rd:DesignerState></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="ServerName"><Query><DataSourceName>ServerName</DataSourceName><CommandText>SELECT
   DISTINCT(Servers.ServerName)
 FROM
   Servers
   INNER JOIN Perfmon
-    ON Servers.ServerID = Perfmon.ServerID</CommandText><rd:DesignerState>&amp;lt;QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational"&amp;gt;&amp;lt;SelectedColumns&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Perfmon" ColumnName="ServerID" /&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Servers" ColumnName="ServerName" /&amp;gt;&amp;lt;/SelectedColumns&amp;gt;&amp;lt;Joins&amp;gt;&amp;lt;Join Type="CROSS JOIN" ColumnOwner="Servers" /&amp;gt;&amp;lt;Join Type="INNER JOIN" ColumnOwner="Perfmon"&amp;gt;&amp;lt;On&amp;gt;&amp;lt;From ColumnOwner="Servers" ColumnName="ServerID" /&amp;gt;&amp;lt;To ColumnOwner="Perfmon" ColumnName="ServerID" /&amp;gt;&amp;lt;/On&amp;gt;&amp;lt;/Join&amp;gt;&amp;lt;/Joins&amp;gt;&amp;lt;/QueryDefinition&amp;gt;</rd:DesignerState></Query><Fields><Field Name="ServerName"><DataField>ServerName</DataField><rd:TypeName>System.String</rd:TypeName></Field></Fields></DataSet><DataSet Name="FreeSpaceScansPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+    ON Servers.ServerID = Perfmon.ServerID</CommandText><rd:DesignerState>&amp;lt;QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational"&amp;gt;&amp;lt;SelectedColumns&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Perfmon" ColumnName="ServerID" /&amp;gt;&amp;lt;ColumnExpression ColumnOwner="Servers" ColumnName="ServerName" /&amp;gt;&amp;lt;/SelectedColumns&amp;gt;&amp;lt;Joins&amp;gt;&amp;lt;Join Type="CROSS JOIN" ColumnOwner="Servers" /&amp;gt;&amp;lt;Join Type="INNER JOIN" ColumnOwner="Perfmon"&amp;gt;&amp;lt;On&amp;gt;&amp;lt;From ColumnOwner="Servers" ColumnName="ServerID" /&amp;gt;&amp;lt;To ColumnOwner="Perfmon" ColumnName="ServerID" /&amp;gt;&amp;lt;/On&amp;gt;&amp;lt;/Join&amp;gt;&amp;lt;/Joins&amp;gt;&amp;lt;/QueryDefinition&amp;gt;</rd:DesignerState></Query><Fields><Field Name="ServerName"><DataField>ServerName</DataField><rd:TypeName>System.String</rd:TypeName></Field></Fields></DataSet><DataSet Name="FreeSpaceScansPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -26,7 +26,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'FreeSpace Scans/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="TableLockEscalationsPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="TableLockEscalationsPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -36,7 +36,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Table Lock Escalations/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="WorkfilesCreatedPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="WorkfilesCreatedPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -46,7 +46,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'worktables created/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="AvailableBytes"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="AvailableBytes"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -56,7 +56,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Available Bytes'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="TotalLatchWaitTimePerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="TotalLatchWaitTimePerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -66,7 +66,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Total Latch Wait Time (ms)'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="LockTimeoutsPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="LockTimeoutsPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -76,7 +76,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Lock Timeouts/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="LockWaitTime"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="LockWaitTime"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -86,7 +86,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Lock wait time (ms)'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="BatchRequestsPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="BatchRequestsPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -96,7 +96,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'batch requests/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="SQLCompilationsPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="SQLCompilationsPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -106,7 +106,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'SQL Compilations/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="SQLReCompilationsPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="SQLReCompilationsPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -116,7 +116,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'sql re-compilations/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="ProcessesBlocked"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="ProcessesBlocked"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -126,7 +126,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Processes Blocked'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="UserConnections"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="UserConnections"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -136,7 +136,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'User Connections'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageFaultsPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageFaultsPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -146,7 +146,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Page Faults/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageInputePerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageInputePerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -156,7 +156,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Pages Input/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageOutPutsPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageOutPutsPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -166,7 +166,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Pages Output/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PagesPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PagesPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -176,7 +176,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Pages/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="BufferCacheHitRatio"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="BufferCacheHitRatio"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -186,7 +186,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'buffer cache hit ratio'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="CheckpointPagesPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="CheckpointPagesPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -196,7 +196,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Checkpoint Pages/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="LazyWritesPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="LazyWritesPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -206,7 +206,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Lazy writes/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="MemoryGrantsPending"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="MemoryGrantsPending"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -216,7 +216,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Memory Grants Pending'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="TargetServerMemoryKB"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="TargetServerMemoryKB"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -226,7 +226,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Target Server Memory (KB)'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="TotalServerMemoryKB"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="TotalServerMemoryKB"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -236,7 +236,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Total Server Memory (KB)'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="Timestamps"><Query><DataSourceName>HMDBS02</DataSourceName><CommandText>Select Distinct(Timestamp) from perfmon</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field></Fields></DataSet><DataSet Name="PercentProcessorTime"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="Timestamps"><Query><DataSourceName>ServerName</DataSourceName><CommandText>Select Distinct(Timestamp) from perfmon</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field></Fields></DataSet><DataSet Name="PercentProcessorTime"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -246,7 +246,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = '% Processor Time'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PercentPriviledgedTime"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PercentPriviledgedTime"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -256,7 +256,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = '% Privileged Time'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="ProcessorQueueLength"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="ProcessorQueueLength"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -266,7 +266,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Processor Queue Length'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="ContextSwitchesPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="ContextSwitchesPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -276,7 +276,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Context Switches/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="FullScansPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="FullScansPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -286,7 +286,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Full Scans/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="WorktablesCreatedPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="WorktablesCreatedPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -296,7 +296,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Worktables Created/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageSplitsPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PageSplitsPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -306,7 +306,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Page Splits/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PercentDiskTime"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="PercentDiskTime"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -316,7 +316,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = '% Disk Time'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="AvgDiskQueueLength"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="AvgDiskQueueLength"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -326,7 +326,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Avg. Disk Queue Length'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="CurrentDiskQueueLength"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="CurrentDiskQueueLength"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -336,7 +336,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Current Disk Queue Length'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="DiskTransferPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="DiskTransferPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -346,7 +346,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Disk Transfers/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="DiskBytesPerSec"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="DiskBytesPerSec"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -356,7 +356,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Disk Bytes/sec'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="AvgDiskSecRead"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="AvgDiskSecRead"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM
@@ -366,7 +366,7 @@ FROM
 Where ServerName = @ServerName
 AND CounterName = 'Avg. Disk Sec/Read'
 AND Timestamp &gt;= @TimeRangeStart
-AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="AvgDiskSecWrite"><Query><DataSourceName>HMDBS02</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
+AND Timestamp &lt;= @TimeRangeEnd</CommandText></Query><Fields><Field Name="Timestamp"><DataField>Timestamp</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="Value"><DataField>Value</DataField><rd:TypeName>System.Decimal</rd:TypeName></Field></Fields></DataSet><DataSet Name="AvgDiskSecWrite"><Query><DataSourceName>ServerName</DataSourceName><QueryParameters><QueryParameter Name="@ServerName"><Value>=Parameters!ServerName.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeStart"><Value>=Parameters!TimeRangeStart.Value</Value></QueryParameter><QueryParameter Name="@TimeRangeEnd"><Value>=Parameters!TimeRangeEnd.Value</Value></QueryParameter></QueryParameters><CommandText>SELECT
   Perfmon.[Timestamp]
   ,Perfmon.[Value]
 FROM

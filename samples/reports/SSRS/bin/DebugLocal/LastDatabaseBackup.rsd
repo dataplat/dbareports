@@ -42,7 +42,7 @@ FROM [DBADatabase].[dbo].[InstanceList] il
 	AND D.Inactive &amp;lt;&amp;gt; 1
 	AND D.Status = 'Normal'
 	AND SQL.SQLVersion &amp;lt;&amp;gt; 'SQL 2000'
-	AND IL.ServerName &amp;lt;&amp;gt; 'HDBS1016'
+	AND IL.ServerName &amp;lt;&amp;gt; 'ServerName1016'
 	AND D.Name NOT IN ('WSS_Content_Template dev','WSS_Content_TemplateDev','WSS_Content_TemplateTest','Copyright2008R2','Tempdb')
 	AND D.IsUpdateable = 1
 	ORDER BY DaysSinceBackup desc,HoursinceBackup desc</CommandText>

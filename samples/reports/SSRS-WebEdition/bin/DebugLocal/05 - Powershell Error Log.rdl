@@ -395,7 +395,7 @@
             <ActionInfo>
               <Actions>
                 <Action>
-                  <Hyperlink>file://HMDBS02/LogFile</Hyperlink>
+                  <Hyperlink>file://ServerName/LogFile</Hyperlink>
                 </Action>
               </Actions>
             </ActionInfo>

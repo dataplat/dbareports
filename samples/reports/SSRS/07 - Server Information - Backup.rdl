@@ -2116,6 +2116,6 @@ END
     </ReportParameter>
   </ReportParameters>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportServerUrl>http://hmdbs02/ReportServer</rd:ReportServerUrl>
+  <rd:ReportServerUrl>http://ServerName/ReportServer</rd:ReportServerUrl>
   <rd:ReportID>4097ebbc-7b6b-48db-8a78-a4d9e8d11a30</rd:ReportID>
 </Report>
