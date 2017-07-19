@@ -18,9 +18,9 @@ test_script:
 
 # Test with native PS version
 
-  - ps: Install-PackageProvider NuGet -MinimumVersion '2.8.5.201' -Force
+  # - ps: Install-PackageProvider NuGet -MinimumVersion '2.8.5.201' -Force
 
-  - ps: Import-PackageProvider NuGet -MinimumVersion '2.8.5.201' -Force
+  # - ps: Import-PackageProvider NuGet -MinimumVersion '2.8.5.201' -Force
 
   - ps: Install-Module -Name PSScriptAnalyzer -RequiredVersion 1.6.0 -Repository PSGallery -Force
 
@@ -41,9 +41,4 @@ notifications:
   - provider: Slack
 
     incoming_webhook:
-<<<<<<< HEAD
       secure: ir9e5/F85FEMc+Yj6MgsodgMfEwLY0oxg2zemy4Tl3eQFRXbQ3Pz1VbjGekWMOATKxHefjPzYvUeiePmUbPJuZ8EN+sqD+QnU4A6C3n95Fs=
-=======
-
-      secure: KZIBT1mQ9haiVMAWAMGDKBafVzZc2HT886BPd9hF7IjspFRFeI90d/tlkyXCc7lFDH127pcvKHmrx8zSdqqfJjurMfdErxGU3oqdI6MtQM4=
->>>>>>> 261a41f58adf88250f99efc96b6c8f8879d1452c
