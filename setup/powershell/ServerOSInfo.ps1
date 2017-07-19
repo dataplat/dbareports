@@ -50,7 +50,6 @@ BEGIN
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_ServerOSInfo_' + $Date + '.txt'
 	try
 	{
-		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
 		Write-Log -path $LogFilePath -message "ServerOSInfo Job started" -level info
 	}
 	catch
@@ -93,7 +92,7 @@ PROCESS
 	try
 	{
 		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
-		$sql = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
+		$sql = "SELECT DISTINCT ServerID, ServerName, InstanceName FROM dbo.instancelist"
 		$sqlservers = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
 		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
 	

@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "DBADatabase", "DBADatabase.rptproj", "{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		DebugLocal|Default = DebugLocal|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.Debug|Default.ActiveCfg = Debug
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.Debug|Default.Build.0 = Debug
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.Debug|Default.Deploy.0 = Debug
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.DebugLocal|Default.ActiveCfg = DebugLocal
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.DebugLocal|Default.Build.0 = DebugLocal
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.DebugLocal|Default.Deploy.0 = DebugLocal
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.Release|Default.ActiveCfg = Release
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.Release|Default.Build.0 = Release
+		{62C11417-CCF3-4FF9-BEA7-46FAF0F652C5}.Release|Default.Deploy.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 1
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://dbawithabeard.visualstudio.com/
+		SccProjectUniqueName0 = DBADatabase.rptproj
+		SccProjectName0 = .
+		SccAuxPath0 = https://dbawithabeard.visualstudio.com
+		SccLocalPath0 = .
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+	EndGlobalSection
+EndGlobal

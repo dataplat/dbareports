@@ -207,7 +207,7 @@
                           <ActionInfo>
                             <Actions>
                               <Action>
-                                <Hyperlink>="File://HMDBS02/LogFile/" &amp; Fields!FileName.Value</Hyperlink>
+                                <Hyperlink>="File://ServerName/LogFile/" &amp; Fields!FileName.Value</Hyperlink>
                               </Action>
                             </Actions>
                           </ActionInfo>
@@ -354,17 +354,17 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>This report will look at the log files for the Powershell scripts running the DBADatabase Automation Scripts running on HMDBS02 and search for Errors or Warnigns for Log Files created in the last 24 hours. The log files are located </Value>
+                    <Value>This report will look at the log files for the Powershell scripts running the DBADatabase Automation Scripts running on ServerName and search for Errors or Warnigns for Log Files created in the last 24 hours. The log files are located </Value>
                     <Style>
                       <FontSize>12pt</FontSize>
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>\\HMDBS02\K$\SQLBACKUP\LogFile</Value>
+                    <Value>\\ServerName\K$\SQLBACKUP\LogFile</Value>
                     <ActionInfo>
                       <Actions>
                         <Action>
-                          <Hyperlink>file://HMDBS02/LogFile</Hyperlink>
+                          <Hyperlink>file://ServerName/LogFile</Hyperlink>
                         </Action>
                       </Actions>
                     </ActionInfo>
@@ -384,7 +384,7 @@
             <ActionInfo>
               <Actions>
                 <Action>
-                  <Hyperlink>file://HMDBS02/LogFile</Hyperlink>
+                  <Hyperlink>file://ServerName/LogFile</Hyperlink>
                 </Action>
               </Actions>
             </ActionInfo>

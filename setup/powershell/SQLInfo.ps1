@@ -38,7 +38,6 @@ BEGIN
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_SQLInfo_' + $Date + '.txt'
 	try
 	{
-		New-item -Path $LogFilePath -itemtype File -ErrorAction Stop 
 		Write-Log -path $LogFilePath -message "SQLInfo Job started" -level info
 	}
 	catch
@@ -158,7 +157,7 @@ PROCESS
 		if ($VersionMajor -eq 12)
 		{ $Version = 'SQL 2014' }
 		if ($VersionMajor -eq 13)
-		{ $Version = 'SQL 2014' }
+		{ $Version = 'SQL 2016' }
 		
 		if ($server.IsHadrEnabled -eq $True)
 		{

@@ -61,7 +61,7 @@ Describe "Checking Estate SQL Services" {
 		It "$ServerName should have SQLSERVERAGENT Service Running"{
 			$SQLAgent.State | Should Be "Running"
 		}
-		If ($ServerName -notin) # dont check start mode of old clusters
+		If ($ServerName -notin '') # dont check start mode of specified clusters
 		{
 			It "$ServerName DBEngine Service should be Auto Start" {
 				$SQLDBEngine.StartMode | Should Be "Auto"

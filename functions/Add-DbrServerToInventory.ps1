@@ -501,15 +501,27 @@ Adds the SQL Server instances sql2016 and sql2014 to the inventory then takes ad
 				{
 					Write-Log -path $LogFilePath -message "Starting Agent Job Server job" -Level Info
 					$agentserverjob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - Agent Job Server*" }
-					$agentserverjob.Start()
+					
+                    if ($agentserverjob.CurrentRunStatus -eq "Idle")
+			        {
+                        $agentserverjob.Start()
+                    }
 					
 					Write-Log -path $LogFilePath -message "Starting Windows Server Information job" -Level Info
 					$winserverInfoJob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - Windows Server Information*" }
-					$winserverInfoJob.Start()
 					
+                    if ($winserverInfoJob.CurrentRunStatus -eq "Idle")
+			        {
+                        $winserverInfoJob.Start()
+                    }
+			
 					Write-Log -path $LogFilePath -message "Starting SQL Server Information job" -Level Info
 					$sqlserverinfojob = $sourceserver.JobServer.Jobs | Where-Object { $_.Name -like "*dbareports - SQL Server Information*" }
-					$sqlserverinfojob.Start()
+					
+                    if ($sqlserverinfojob.CurrentRunStatus -eq "Idle")
+			        {
+                        $sqlserverinfojob.Start()
+                    }
 					
 					Write-Log -path $LogFilePath -message "Done!" -Level Info
 				}
