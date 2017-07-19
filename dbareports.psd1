@@ -5,13 +5,15 @@
 #
 # Generated on: 8th December 2016
 #
+# Updated on: 19 July 2017
+#
 @{
 	
 	# Script module or binary module file associated with this manifest.
 	RootModule = 'dbareports.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '0.2.54'
+	ModuleVersion = '0.9.0'
 	
 	# ID used to uniquely identify this module
 	GUID = '654a8346-35f1-4592-a1b5-0ee472fab074'
