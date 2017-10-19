@@ -41,9 +41,9 @@ We’ve tried to make the installation experience as simple as possible. Executi
 * Writes a client config file to your local PowerShell directory so that you don’t have to specify your dbareports server and database each time you run a command
 
 ![Alt Text](https://dbareports.io/wp-content/uploads/2016/07/agents-1.png "Agents")
-##Experience
+## Experience
 Adding and modifying SQL Servers is performed through PowerShell commands, while PowerBI and SSRS are used to visualize the data that the Agent Jobs collect.
-##Goals
+## Goals
 The ultimate goal of dbareports is to enable SQL Server DBAs to provide up to date, accurate information about the SQL Server Estate (It can easily be expanded for other technologies) to other parties.
 The other parties could be
 * technical teams: DBA Team, DataCenter, Systems Teams, Developers, IT Security
