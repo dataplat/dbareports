@@ -16,15 +16,10 @@
 
 This repo contains the PowerShell module SSRS and PowerBi samples for you to gather, store and report on information about your SQL Server estate. You can find more details on the website https://dbareports.io 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/j5webpirpjxid52d/branch/Development?svg=true)][- Development branch appveyor build latest](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports-duvtp/branch/Development)   
+[![Build status](https://ci.appveyor.com/api/projects/status/j5webpirpjxid52d/branch/Development?svg=true)][- Development branch appveyor build latest](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports-duvtp/branch/Development)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/j5webpirpjxid52d/branch/master?svg=true)][- master branch appveyor build latest](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports-duvtp/branch/master)  
+[![Build status](https://ci.appveyor.com/api/projects/status/j5webpirpjxid52d/branch/master?svg=true)][- master branch appveyor build latest](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports-duvtp/branch/master)
 
-## Installer
-We’ve tried to make the installation experience as simple as possible. Executing Install-DBAreports does the following:
-)  - Development Branch 
-
-[![Build status](https://ci.appveyor.com/api/projects/status/4ogcjt7glm5ojd73/branch/master?svg=true)](https://ci.appveyor.com/project/SQLDBAWithABeard/dbareports/branch/master)  - Master Branch 
 ## Installer
 We’ve tried to make the installation experience as simple as possible. Executing Install-DBAreports does the following:
 
