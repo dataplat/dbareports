@@ -8,64 +8,64 @@
 # Updated on: 19 July 2017
 #
 @{
-	
+
 	# Script module or binary module file associated with this manifest.
 	RootModule = 'dbareports.psm1'
-	
+
 	# Version number of this module.
 	ModuleVersion = '0.9.0'
-	
+
 	# ID used to uniquely identify this module
 	GUID = '654a8346-35f1-4592-a1b5-0ee472fab074'
-	
+
 	# Author of this module
 	Author = 'SQL Collaborative - Initial Author Rob Sewell'
-	
+
 	# Company or vendor of this module
 	CompanyName = 'SQL Collaborative'
-	
+
 	# Copyright statement for this module
 	Copyright = '2016 Rob Sewell'
-	
+
 	# Description of the functionality provided by this module
 	Description = 'Dopest dba dashboards ever'
-	
+
 	# Minimum version of the Windows PowerShell engine required by this module
 	PowerShellVersion = '3.0'
-	
+
 	# Name of the Windows PowerShell host required by this module
 	PowerShellHostName = ''
-	
+
 	# Minimum version of the Windows PowerShell host required by this module
 	PowerShellHostVersion = ''
-	
+
 	# Minimum version of the .NET Framework required by this module
 	DotNetFrameworkVersion = ''
-	
+
 	# Minimum version of the common language runtime (CLR) required by this module
 	CLRVersion = ''
-	
+
 	# Processor architecture (None, X86, Amd64, IA64) required by this module
 	ProcessorArchitecture = ''
-	
+
 	# Modules that must be imported into the global environment prior to importing this module
-	RequiredModules = @()
-	
+	RequiredModules = @('dbatools')
+
 	# Assemblies that must be loaded prior to importing this module
 	RequiredAssemblies= @('Microsoft.SqlServer.Smo','Microsoft.SqlServer.SmoExtended')
-	
+
 	# Script files () that are run in the caller's environment prior to importing this module
 	ScriptsToProcess = @()
-	
+
 	# Type files (xml) to be loaded when importing this module
 	TypesToProcess = @()
-	
+
 	# Format files (xml) to be loaded when importing this module
 	FormatsToProcess = @()
-	
+
 	# Modules to import as nested modules of the module specified in ModuleToProcess
 	NestedModules = @()
-	
+
 	# Functions to export from this module
 	FunctionsToExport = @('Install-DbaReports',
 		'Add-DbrCredential',
@@ -79,28 +79,26 @@
 		'Install-DbaReportsClient',
 		'Set-DbrInstanceInactiveInInventory',
 		'Get-DbrConfig',
-		'Get-DbrAgentJob',
 		'Get-DbrInstanceList',
 		'New-DbrSqlAlias',
-		'Get-DbrNewJob',
         'Write-Log'
 	)
-	
+
 	# Cmdlets to export from this module
 	CmdletsToExport = '*'
-	
+
 	# Variables to export from this module
 	VariablesToExport = '*'
-	
+
 	# Aliases to export from this module
 	AliasesToExport = 'Update-DbaReportsClient'
-	
+
 	# List of all modules packaged with this module
 	ModuleList = @()
-	
+
 	# List of all files packaged with this module
 	FileList = ''
-	
+
 	PrivateData = @{
     # PSData is module packaging and gallery metadata embedded in PrivateData
     # It's for rebuilding PowerShellGet (and PoshCode) NuGet-style packages
