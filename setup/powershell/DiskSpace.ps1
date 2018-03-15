@@ -32,7 +32,6 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	. "$currentdir\Write-Log.ps1"
-
 	# Create Log File
 	$Date = Get-Date -Format yyyyMMdd_HHmmss
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_DiskSpace_' + $Date + '.txt'
@@ -55,8 +54,6 @@ BEGIN
 	{
 		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
 	}
-
-	$data = @()
 }
 
 PROCESS
@@ -85,27 +82,20 @@ PROCESS
 		break
 	}
 
-	foreach ($server in $sqlservers)
-	{
-		Write-Log -path $LogFilePath -message "Processing $($server.ServerName)" -level info
-
-		try {
-			$disks = dbatools\Get-DbaDiskSpace -ComputerName $server.ServerName -EnableException
-
-			$data += $disks | Select-Object -Property @(
-				@{Name = 'DiskSpaceID'; Expression = { $null }},
-				@{Name = 'Date'; Expression = { Get-Date }},
-				@{Name = 'ServerID'; Expression = { $server.ServerId }},
-				@{Name = 'DiskName'; Expression = { $_.Name }},
-				@{Name = 'Label'; Expression = { $_.Label }},
-				@{Name = 'Capacity'; Expression = { [decimal]("{0:n2}" -f  $_.SizeInGB) }},
-				@{Name = 'FreeSpace'; Expression = { [decimal]("{0:n2}" -f $_.FreeInGB) }},
-				@{Name = 'Percentage'; Expression = { [decimal]("{0:n2}" -f $_.PercentFree) }}
-			)
-		}
-		catch {
-			Write-Log -Path $LogFilePath -Message " Failed to get disk space" -Level Error
-		}
+	try {
+		$data = dbatools\Get-DbaDiskSpace -ComputerName $sqlservers.ServerName -EnableException -ErrorAction 'Continue' | Select-Object -Property @(
+			@{Name = 'DiskSpaceID'; Expression = { $null }},
+			@{Name = 'Date'; Expression = { Get-Date }},
+			@{Name = 'ServerID'; Expression = { $server.ServerId }},
+			@{Name = 'DiskName'; Expression = { $_.Name }},
+			@{Name = 'Label'; Expression = { $_.Label }},
+			@{Name = 'Capacity'; Expression = { [decimal]("{0:n2}" -f  $_.SizeInGB) }},
+			@{Name = 'FreeSpace'; Expression = { [decimal]("{0:n2}" -f $_.FreeInGB) }},
+			@{Name = 'Percentage'; Expression = { [decimal]("{0:n2}" -f $_.PercentFree) }}
+		)
+	}
+	catch {
+		Write-Log -Path $LogFilePath -Message $_.Message -Level Error
 	}
 
 	$datatable = dbatools\ConvertTo-DbaDataTable -InputObject $data
