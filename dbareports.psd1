@@ -49,7 +49,7 @@
 	ProcessorArchitecture = ''
 
 	# Modules that must be imported into the global environment prior to importing this module
-	RequiredModules = @()
+	RequiredModules = @('dbatools')
 
 	# Assemblies that must be loaded prior to importing this module
 	RequiredAssemblies= @('Microsoft.SqlServer.Smo','Microsoft.SqlServer.SmoExtended')
