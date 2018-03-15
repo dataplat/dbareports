@@ -58,7 +58,21 @@ BEGIN
 
 PROCESS
 {
-	$sqlservers = Get-DbrInstanceList
+	try
+	{
+		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
+
+		$sql = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
+		$sqlservers = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+
+		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
+
+	}
+	catch
+	{
+		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
+		break
+	}
 
 	try {
 		$data = dbatools\Get-DbaDiskSpace -ComputerName $sqlservers.ServerName -EnableException -ErrorAction 'Continue' | Select-Object -Property @(
