@@ -53,25 +53,14 @@ BEGIN
 	try
 	{
 		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
-		$sourceserver = dbatools\Connect-DbaSqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop
+		$sourceserver = dbatools\Connect-DbaInstance -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop
 	}
 	catch
 	{
 		Write-Log -path $LogFilePath -message "Failed to connect to $sqlserver - $_" -level Error
 	}
 
-	# Get columns automatically from the table on the SQL Server
-	# and creates the necessary $script:datatable with it
-	try
-	{
-		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
-		Initialize-DataTable -ErrorAction Stop
-	}
-	catch
-	{
-		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
-	}
-
+	$data = @()
 }
 
 PROCESS
@@ -112,68 +101,30 @@ PROCESS
 		$date = Get-Date
 
 		Write-Log -path $LogFilePath -message "Processing $ServerName" -level info
-		try
-		{
-			$ipaddr = Resolve-SqlIpAddress $ServerName
-		}
-		catch
-		{
-			$ipaddr = Resolve-IpAddress $servername
-		}
 
-		if ($ipaddr -eq $null)
-		{
-			Write-Log -path $LogFilePath -message "Could not resolve IP address for $ServerName. Moving on." -level info
-			Write-Log -path $LogFilePath -message "Tried Resolve-SqlIpAddress $ServerName and Resolve-IpAddress $servername"
-			continue
-		}
-
-		$disks = dbatools\Get-DbaDiskSpace -ComputerName $ipaddr
-
+		$disks = dbatools\Get-DbaDiskSpace -ComputerName $ServerName
 		foreach ($disk in $disks)
 		{
-			$update = $true
-			$row = $table | Where-Object { $_.DiskName -eq $DiskName -and $_.ServerId -eq $ServerId} | Sort-Object -Property Date | Select-Object -First 1
-			$key = $row.DiskSpaceID
+			# TODO: Figure out how to merge/update if already exists for that day
 
-			if ($key.count -eq 0)
-			{
-				$update = $false
-			}
+			$size = [decimal]("{0:n2}" -f  $disk.SizeInGB)
+			$free = [decimal]("{0:n2}" -f $disk.FreeInGB)
+			$percent = [decimal]("{0:n2}" -f $disk.PercentFree)
 
-			# to see results as they come in, skip $null=
-			try
-			{
-				$Null = $datatable.Rows.Add(
-				$key,
-				$Date,
-				$ServerId,
-				$disk.Name,
-				$disk.Label,
-				$disk.SizeInGB,
-				$disk.FreeInGB,
-				$disk.PercentFree,
-				$Update)
-
-				Write-Log -path $LogFilePath -message "Adding $($disk.Name) for $ServerName" -level info
-			}
-			catch
-			{
-				Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
-				Write-Log -path $LogFilePath -message "Data = $key,
-				$Date,
-				$ServerId,
-				$($disk.Name),
-				$($disk.Label),
-				$($disk.SizeInGB),
-				$($disk.FreeInGB),
-				$($disk.PercentFree),
-				$Update" -level Warn
-				continue
+			$data += [PSCustomObject]@{
+				'DiskSpaceID' = $null
+				'Date' = $Date
+				'ServerID' = $ServerId
+				'DiskName' = $disk.Name
+				'Label' = $disk.Label
+				'Capacity' = $size
+				'FreeSpace' = $free
+				'Percentage' = $percent
 			}
 		}
-
 	}
+
+	$datatable = dbatools\ConvertTo-DbaDataTable -InputObject $data
 
 	$rowcount = $datatable.Rows.Count
 
@@ -186,7 +137,22 @@ PROCESS
 	try
 	{
 		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
-		Write-Tvp -ErrorAction Stop
+
+		$params = @{
+			'SqlInstance' = $SqlServer
+			'Database' = $InstallDatabase
+			'Schema' = 'info'
+			'Table' = 'DiskSpace'
+			'InputObject' = $datatable
+			'EnableException' = $true
+		}
+
+		if ($SqlCredential) {
+			$params['SqlCredential'] = $SqlCredential
+		}
+
+		dbatools\Write-DbaDataTable @params
+
 		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of DiskSpace into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
@@ -198,4 +164,5 @@ PROCESS
 END
 {
 	Write-Log -path $LogFilePath -message "DiskSpace Finished"
+	$sourceserver.ConnectionContext.Disconnect()
 }
