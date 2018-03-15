@@ -1,11 +1,11 @@
 <#
-.SYNOPSIS  
+.SYNOPSIS
 This Script will check all of the instances in the InstanceList and gather the Windows Info and save to the Info.ServerInfo table
 
-.DESCRIPTION 
+.DESCRIPTION
 This Script will check all of the instances in the InstanceList and gather the Windows Info and save to the Info.ServerInfo table
 
-.NOTES 
+.NOTES
 dbareports PowerShell module (https://dbareports.io, SQLDBAWithABeard.com)
 Copyright (C) 2016 Rob Sewell
 
@@ -32,7 +32,7 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	. "$currentdir\Write-Log.ps1"
-	# Create Log File 
+	# Create Log File
 	$Date = Get-Date -Format yyyyMMdd_HHmmss
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_DiskSpace_' + $Date + '.txt'
 	try
@@ -48,12 +48,12 @@ BEGIN
 	$table = "info.DiskSpace"
 	$schema = $table.Split(".")[0]
 	$tablename = $table.Split(".")[1]
-	
+
 	# Connect to dbareports server
 	try
 	{
 		Write-Log -path $LogFilePath -message "Connecting to $sqlserver" -level info
-		$sourceserver = Connect-SqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop 
+		$sourceserver = dbatools\Connect-DbaSqlServer -SqlServer $sqlserver -SqlCredential $SqlCredential -ErrorAction Stop
 	}
 	catch
 	{
@@ -65,13 +65,13 @@ BEGIN
 	try
 	{
 		Write-Log -path $LogFilePath -message "Intitialising Datatable" -level info
-		Initialize-DataTable -ErrorAction Stop 
+		Initialize-DataTable -ErrorAction Stop
 	}
 	catch
 	{
 		Write-Log -path $LogFilePath -message "Failed to initialise Data Table - $_" -level Error
 	}
-	
+
 }
 
 PROCESS
@@ -84,7 +84,7 @@ PROCESS
 		$sql = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
 		$sqlservers = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
 		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
-	
+
 	}
 	catch
 	{
@@ -104,13 +104,13 @@ PROCESS
 	{
 		Write-Log -path $LogFilePath -message "Can't get server list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
 	}
-	
+
 	foreach ($server in $sqlservers)
 	{
 		$ServerName = $server.ServerName
 		$ServerId = $server.ServerId
 		$date = Get-Date
-		
+
 		Write-Log -path $LogFilePath -message "Processing $ServerName" -level info
 		try
 		{
@@ -120,90 +120,73 @@ PROCESS
 		{
 			$ipaddr = Resolve-IpAddress $servername
 		}
-		
+
 		if ($ipaddr -eq $null)
 		{
 			Write-Log -path $LogFilePath -message "Could not resolve IP address for $ServerName. Moving on." -level info
 			Write-Log -path $LogFilePath -message "Tried Resolve-SqlIpAddress $ServerName and Resolve-IpAddress $servername"
 			continue
 		}
-		
-		try
-		{
-			$query = "Select SystemName, Name, DriveType, FileSystem, FreeSpace, Capacity, Label, BlockSize from Win32_Volume where DriveType = 2 or DriveType = 3"
-			$disks = Get-WmiObject -ComputerName $ipaddr -Query $query | Sort-Object -Property Name
-		}
-		catch
-		{
-			Write-Log -path $LogFilePath -message "Could not connect to WMI on $ServerName. " -level Warn
-			continue
-		}
-		
+
+		$disks = dbatools\Get-DbaDiskSpace -ComputerName $ipaddr
+
 		foreach ($disk in $disks)
 		{
-			$diskname = $disk.name
-			if (!$diskname.StartsWith("\\"))
-			{
-				$update = $true
-				$row = $table | Where-Object { $_.DiskName -eq $DiskName -and $_.ServerId -eq $ServerId} | Sort-Object -Property Date | Select-Object -First 1
-				$key = $row.DiskSpaceID
-				
-				if ($key.count -eq 0)
-				{
-					$update = $false
-				}
-				
-				$total = "{0:f2}" -f ($disk.Capacity/1gb)
-				$free = "{0:f2}" -f ($disk.Freespace/1gb)
-				$percentfree = "{0:n0}" -f (($disk.Freespace / $disk.Capacity) * 100)
-				
-				# to see results as they come in, skip $null=
-				try
-				{
-					$Null = $datatable.Rows.Add(
-					$key,
-					$Date,
-					$ServerId,
-					$diskname,
-					$disk.Label,
-					$total,
-					$free,
-					$percentfree,
-					$Update)
+			$update = $true
+			$row = $table | Where-Object { $_.DiskName -eq $DiskName -and $_.ServerId -eq $ServerId} | Sort-Object -Property Date | Select-Object -First 1
+			$key = $row.DiskSpaceID
 
-					Write-Log -path $LogFilePath -message "Adding $diskname for $ServerName" -level info
-				}
-				catch
-				{
-					Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
-					Write-Log -path $LogFilePath -message "Data = $key,
-					$Date,
-					$ServerId,
-					$diskname,
-					$($disk.Label),
-					$total,
-					$free,
-					$percentfree,
-					$Update" -level Warn
-					continue
-				}
+			if ($key.count -eq 0)
+			{
+				$update = $false
+			}
+
+			# to see results as they come in, skip $null=
+			try
+			{
+				$Null = $datatable.Rows.Add(
+				$key,
+				$Date,
+				$ServerId,
+				$disk.Name,
+				$disk.Label,
+				$disk.SizeInGB,
+				$disk.FreeInGB,
+				$disk.PercentFree,
+				$Update)
+
+				Write-Log -path $LogFilePath -message "Adding $($disk.Name) for $ServerName" -level info
+			}
+			catch
+			{
+				Write-Log -path $LogFilePath -message "Failed to add Job to datatable - $_" -level Error
+				Write-Log -path $LogFilePath -message "Data = $key,
+				$Date,
+				$ServerId,
+				$($disk.Name),
+				$($disk.Label),
+				$($disk.SizeInGB),
+				$($disk.FreeInGB),
+				$($disk.PercentFree),
+				$Update" -level Warn
+				continue
 			}
 		}
 
 	}
-	
+
 	$rowcount = $datatable.Rows.Count
-	
+
 	if ($rowcount -eq 0)
 	{
 		Write-Log -path $LogFilePath -message "No rows returned. No update required." -level info
 		continue
 	}
-	
+
 	try
 	{
 		Write-Log -path $LogFilePath -message "Attempting Import of $rowcount row(s)" -level info
-		Write-Tvp -ErrorAction Stop 
+		Write-Tvp -ErrorAction Stop
 		Write-Log -path $LogFilePath -message "Successfully Imported $rowcount row(s) of DiskSpace into the $InstallDatabase on $($sourceserver.name)" -level info
 	}
 	catch
