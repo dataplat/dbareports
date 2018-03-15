@@ -32,6 +32,7 @@ BEGIN
 	$currentdir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 	. "$currentdir\shared.ps1"
 	. "$currentdir\Write-Log.ps1"
+
 	# Create Log File
 	$Date = Get-Date -Format yyyyMMdd_HHmmss
 	$LogFilePath = $LogFileFolder + '\' + 'dbareports_DiskSpace_' + $Date + '.txt'
@@ -43,11 +44,6 @@ BEGIN
 	{
 		Write-error "Failed to create Log File at $LogFilePath"
 	}
-
-	# Specify table name that we'll be inserting into
-	$table = "info.DiskSpace"
-	$schema = $table.Split(".")[0]
-	$tablename = $table.Split(".")[1]
 
 	# Connect to dbareports server
 	try
@@ -65,13 +61,21 @@ BEGIN
 
 PROCESS
 {
-	$DateChecked = Get-Date
-
 	try
 	{
 		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
-		$sql = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
-		$sqlservers = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
+
+		$params = @{
+			'ServerInstance' = $SqlServer
+			'Database' = $InstallDatabase
+			'Query' = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
+		}
+
+		if ($SqlCredential) {
+			$params['Credential'] = $SqlCredential
+		}
+		$sqlservers = Invoke-Sqlcmd2 @params
+
 		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
 
 	}
@@ -81,46 +85,26 @@ PROCESS
 		break
 	}
 
-	# Get list of all servers already in the database
-	try
-	{
-		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
-		$sql = "SELECT a.DiskSpaceID, a.DiskName, b.ServerID, b.ServerName FROM $table a JOIN info.Serverinfo b on a.ServerId = b.ServerId"
-		$table = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
-		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
-	}
-	catch
-	{
-		Write-Log -path $LogFilePath -message "Can't get server list from $InstallDatabase on $($sourceserver.name). - $_" -level Error
-	}
-
 	foreach ($server in $sqlservers)
 	{
-		$ServerName = $server.ServerName
-		$ServerId = $server.ServerId
-		$date = Get-Date
+		Write-Log -path $LogFilePath -message "Processing $($server.ServerName)" -level info
 
-		Write-Log -path $LogFilePath -message "Processing $ServerName" -level info
+		try {
+			$disks = dbatools\Get-DbaDiskSpace -ComputerName $server.ServerName -EnableException
 
-		$disks = dbatools\Get-DbaDiskSpace -ComputerName $ServerName
-		foreach ($disk in $disks)
-		{
-			# TODO: Figure out how to merge/update if already exists for that day
-
-			$size = [decimal]("{0:n2}" -f  $disk.SizeInGB)
-			$free = [decimal]("{0:n2}" -f $disk.FreeInGB)
-			$percent = [decimal]("{0:n2}" -f $disk.PercentFree)
-
-			$data += [PSCustomObject]@{
-				'DiskSpaceID' = $null
-				'Date' = $Date
-				'ServerID' = $ServerId
-				'DiskName' = $disk.Name
-				'Label' = $disk.Label
-				'Capacity' = $size
-				'FreeSpace' = $free
-				'Percentage' = $percent
-			}
+			$data += $disks | Select-Object -Property @(
+				@{Name = 'DiskSpaceID'; Expression = { $null }},
+				@{Name = 'Date'; Expression = { Get-Date }},
+				@{Name = 'ServerID'; Expression = { $server.ServerId }},
+				@{Name = 'DiskName'; Expression = { $_.Name }},
+				@{Name = 'Label'; Expression = { $_.Label }},
+				@{Name = 'Capacity'; Expression = { [decimal]("{0:n2}" -f  $_.SizeInGB) }},
+				@{Name = 'FreeSpace'; Expression = { [decimal]("{0:n2}" -f $_.FreeInGB) }},
+				@{Name = 'Percentage'; Expression = { [decimal]("{0:n2}" -f $_.PercentFree) }}
+			)
+		}
+		catch {
+			Write-Log -Path $LogFilePath -Message " Failed to get disk space" -Level Error
 		}
 	}
 
