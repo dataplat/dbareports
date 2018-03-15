@@ -62,16 +62,8 @@ PROCESS
 	{
 		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
 
-		$params = @{
-			'ServerInstance' = $SqlServer
-			'Database' = $InstallDatabase
-			'Query' = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
-		}
-
-		if ($SqlCredential) {
-			$params['Credential'] = $SqlCredential
-		}
-		$sqlservers = Invoke-Sqlcmd2 @params
+		$sql = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
+		$sqlservers = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
 
 		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
 
