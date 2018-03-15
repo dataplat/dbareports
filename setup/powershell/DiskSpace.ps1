@@ -20,10 +20,10 @@ You should have received a copy of the GNU General Public License along with thi
 [CmdletBinding()]
 Param (
 	[Alias("ServerInstance", "SqlInstance")]
-	[object]$SqlServer = "--installserver--",
+	[object]$SqlServer = "SVPSQLDBA",
 	[object]$SqlCredential,
-	[string]$InstallDatabase = "--installdb--",
-	[string]$LogFileFolder = "--logdir--"
+	[string]$InstallDatabase = "dbareports",
+	[string]$LogFileFolder = "Q:\Backups\dbareports\logs"
 )
 
 BEGIN
@@ -58,21 +58,7 @@ BEGIN
 
 PROCESS
 {
-	try
-	{
-		Write-Log -path $LogFilePath -message "Getting a list of servers from the dbareports database" -level info
-
-		$sql = "SELECT DISTINCT ServerID, ServerName FROM dbo.instancelist"
-		$sqlservers = $sourceserver.Databases[$InstallDatabase].ExecuteWithResults($sql).Tables[0]
-
-		Write-Log -path $LogFilePath -message "Got the list of servers from the dbareports database" -level info
-
-	}
-	catch
-	{
-		Write-Log -path $LogFilePath -message " Failed to get instances - $_" -level Error
-		break
-	}
+	$sqlservers = Get-DbrInstanceList
 
 	try {
 		$data = dbatools\Get-DbaDiskSpace -ComputerName $sqlservers.ServerName -EnableException -ErrorAction 'Continue' | Select-Object -Property @(
