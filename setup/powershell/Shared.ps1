@@ -521,6 +521,11 @@ foreach ($result in $results.Tables.rows)
         {
             $Column = New-Object system.Data.DataColumn $ColumnName, ([float]) 
             Write-Output "Added $ColumnName of float"
+        }
+	 elseif($result.data_type -eq 'decimal')
+        {
+            $Column = New-Object system.Data.DataColumn $ColumnName, ([decimal]) 
+            Write-Output "Added $ColumnName of float"
         } 
        else 
        { 
